@@ -162,12 +162,11 @@
 <h3 id="颜色选取"><a href="#颜色选取" class="headerlink" title="颜色选取"></a>颜色选取</h3><p><a target="_blank" rel="noopener" href="https://www.sioe.cn/yingyong/yanse-rgb-16/">RGB颜色值与十六进制颜色码转换工具 (sioe.cn)</a></p>
 <h2 id="编写博客"><a href="#编写博客" class="headerlink" title="编写博客"></a>编写博客</h2><p>新建博客</p>
 <figure class="highlight axapta"><table><tr><td class="code"><pre><span class="line">hexo <span class="keyword">new</span> <span class="string">&quot;文件名&quot;</span>  <span class="meta"># 新建文章</span></span><br></pre></td></tr></table></figure>
-
 <p>推荐用<a target="_blank" rel="noopener" href="https://www.typora.io/">Typora</a>编写markdown文件</p>
 <p>参考：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ff2a99dd3903">Typora搭配Hexo写文章</a></p>
 <p>上传、提交博客</p>
 <h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ol>
-<li>在GitHub上创建博客仓库时，如果仓库名.github.io的仓库名不和用户名一样的话，会出现访问<a target="_blank" rel="noopener" href="https://仓库名.github.io/">https://仓库名.github.io</a> 404的情况，需要用<a target="_blank" rel="noopener" href="https://username.github.io/%E4%BB%93%E5%BA%93%E5%90%8D.github.io">https://username.github.io/仓库名.github.io</a> 才能正常访问。</li>
+<li>在GitHub上创建博客仓库时，如果仓库名.github.io的仓库名不和用户名一样的话，会出现访问<a target="_blank" rel="noopener" href="https://仓库名.github.io">https://仓库名.github.io</a> 404的情况，需要用<a target="_blank" rel="noopener" href="https://username.github.io/仓库名.github.io">https://username.github.io/仓库名.github.io</a> 才能正常访问。</li>
 <li>hexo g 代替 hexo generate</li>
 <li>hexo d 代替 hexo deploy</li>
 <li>hexo s 代替 hexo server</li>
@@ -177,7 +176,7 @@
 <p><a target="_blank" rel="noopener" href="https://jingyan.baidu.com/article/c275f6ba15097fe33c756779.html">https://jingyan.baidu.com/article/c275f6ba15097fe33c756779.html</a></p>
 </li>
 <li><p>hexo本地测试运行重启后页面空白,提示 : WARN No layout: index.html?</p>
-<p>其实是因为我在themes文件夹下面git的主题包，只需要保证目录为&lt;**Blogname/themes/主题名**&gt;就可以正常显示了。</p>
+<p>其实是因为我在themes文件夹下面git的主题包，只需要保证目录为&lt;<strong>Blogname/themes/主题名</strong>&gt;就可以正常显示了。</p>
 <p><img src="/../image-20210526133608384.png" alt="路径"></p>
 <p>如果还有其他问题可以参考：</p>
 <p>Hexo博客开发之——No Layout:index.html</p>
@@ -192,13 +191,15 @@
 </li>
 <li><p>OpenSSL SSL_read: Connection was reset, errno 10054</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43945983/article/details/110882074">https://blog.csdn.net/weixin_43945983/article/details/110882074</a></p>
-<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> <span class="keyword">http</span>.sslVerify <span class="string">&quot;false&quot;</span></span><br></pre></td></tr></table></figure></li>
-<li><p>fatal: unable to access ‘<a target="_blank" rel="noopener" href="https://github.com/...&#39;">https://github.com/...&#39;</a></p>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> <span class="keyword">http</span>.sslVerify <span class="string">&quot;false&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>fatal: unable to access ‘<a target="_blank" rel="noopener" href="https://github.com/">https://github.com/</a>…’</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/dashi_lu/article/details/89641778">https://blog.csdn.net/dashi_lu/article/details/89641778</a></p>
 </li>
 <li><p>Failed to connect to github.com port 443: Timed out</p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/code1992/p/11220261.html">https://www.cnblogs.com/code1992/p/11220261.html</a></p>
-<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --<span class="keyword">unset</span> <span class="keyword">http</span>.proxy</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight tcl"><table><tr><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> --<span class="keyword">unset</span> <span class="keyword">http</span>.proxy</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>Failed to connect to 127.0.0.1 port 1080: Connection refused</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_41010198/article/details/87929622">https://blog.csdn.net/weixin_41010198/article/details/87929622</a></p>
 </li>
