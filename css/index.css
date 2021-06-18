@@ -6032,6 +6032,144 @@ blockquote.pullquote.right {
 .read-mode #article-container .note .note-icon {
   color: var(--font-color);
 }
+.search-dialog {
+  position: fixed;
+  top: 5rem;
+  left: 50%;
+  z-index: 1001;
+  display: none;
+  margin-left: -15rem;
+  padding: 1rem;
+  width: 30rem;
+  background: var(--search-bg);
+}
+@media screen and (max-width: 768px) {
+  .search-dialog {
+    top: 0;
+    left: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+.search-dialog hr {
+  margin: 1rem auto;
+}
+.search-dialog span.search-close-button {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  color: #858585;
+  font-size: 1.4em;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-transition: color 0.2s ease-in-out;
+  -moz-transition: color 0.2s ease-in-out;
+  -o-transition: color 0.2s ease-in-out;
+  -ms-transition: color 0.2s ease-in-out;
+  transition: color 0.2s ease-in-out;
+}
+.search-dialog span.search-close-button:hover {
+  color: #008b8b;
+}
+.search-dialog__title {
+  padding: 0 0 0.7rem;
+  color: #008b8b;
+  font-size: 1.4em;
+  line-height: 1;
+}
+#search-mask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  background: rgba(0,0,0,0.6);
+}
+#algolia-search .search-dialog {
+  -webkit-animation: titlescale 0.5s;
+  -moz-animation: titlescale 0.5s;
+  -o-animation: titlescale 0.5s;
+  -ms-animation: titlescale 0.5s;
+  animation: titlescale 0.5s;
+}
+#algolia-search .search-dialog .ais-search-box {
+  margin: 0 auto;
+  max-width: 100%;
+  width: 100%;
+}
+#algolia-search .search-dialog .ais-search-box input {
+  padding: 0.25rem 0.7rem;
+  outline: none;
+  border: 2px solid #008b8b;
+  border-radius: 2rem;
+  background: var(--search-bg);
+  color: var(--search-input-color);
+}
+#algolia-search .search-dialog .ais-hits--item.algolia-hit-item {
+  position: relative;
+  padding-left: 1.2rem;
+}
+#algolia-search .search-dialog .ais-hits--item.algolia-hit-item:hover:before {
+  border-color: #ff7242;
+}
+#algolia-search .search-dialog .ais-hits--item.algolia-hit-item:before {
+  position: absolute;
+  top: 0.53em;
+  left: 0;
+  width: 0.5em;
+  height: 0.5em;
+  border: 0.15rem solid #008b8b;
+  border-radius: 0.5em;
+  background: transparent;
+  content: '';
+  line-height: 0.5em;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+#algolia-search .search-dialog .ais-hits--item.algolia-hit-item a {
+  display: block;
+  color: var(--search-result-title);
+  cursor: pointer;
+}
+#algolia-search .search-dialog .ais-hits--item.algolia-hit-item a:hover {
+  color: #008b8b;
+}
+#algolia-search .search-dialog .ais-hits--item.algolia-hit-item em {
+  color: #f47466;
+  font-weight: bold;
+}
+#algolia-search .search-dialog .ais-pagination.pagination {
+  margin: 0.8rem 0 0;
+  padding: 0;
+  text-align: center;
+}
+#algolia-search .search-dialog .ais-pagination.pagination .ais-pagination--item {
+  margin: 0 0.2rem;
+  padding: 0;
+}
+#algolia-search .search-dialog .ais-pagination.pagination .ais-pagination--item a {
+  display: inline-block;
+  min-width: 1.2rem;
+  height: 1.2rem;
+  text-align: center;
+  line-height: 1.2rem;
+}
+#algolia-search .search-dialog .ais-pagination.pagination .ais-pagination--item.current a {
+  background: #00c4b6;
+  color: #eee;
+  cursor: default;
+}
+#algolia-search .search-dialog .algolia-logo {
+  padding-top: 2px;
+  width: 4rem;
+  height: 1.5rem;
+}
 html {
   height: 100%;
   font-size: 20px;
