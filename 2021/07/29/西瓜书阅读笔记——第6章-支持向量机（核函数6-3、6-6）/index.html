@@ -1,0 +1,364 @@
+<!DOCTYPE html><html class="hide-aside" lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>西瓜书阅读笔记——第6章-支持向量机(核函数6.3、6.6) | 冬于的博客</title><meta name="keywords" content="机器学习,machine learning"><meta name="author" content="冬于"><meta name="copyright" content="冬于"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="西瓜书阅读笔记——第6章-支持向量机(核函数6.3、6.6) 引言 在现实任务中，原始样本空间内许并不存在一个能正确划分两类样本的超平面。 将样本从原始空间映射到一个更高维的特征空间，使得样本在这个特征空间内线性可分。  令\(\phi(\mathbf x)\)表示将\(\mathbf x\)​映射后的特征向量。那么，在特征空间中划分超平面所对应的模型可表示为： \[ f(\mathb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="西瓜书阅读笔记——第6章-支持向量机(核函数6.3、6.6)">
+<meta property="og:url" content="http://example.com/2021/07/29/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC6%E7%AB%A0-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%EF%BC%88%E6%A0%B8%E5%87%BD%E6%95%B06-3%E3%80%816-6%EF%BC%89/index.html">
+<meta property="og:site_name" content="冬于的博客">
+<meta property="og:description" content="西瓜书阅读笔记——第6章-支持向量机(核函数6.3、6.6) 引言 在现实任务中，原始样本空间内许并不存在一个能正确划分两类样本的超平面。 将样本从原始空间映射到一个更高维的特征空间，使得样本在这个特征空间内线性可分。  令\(\phi(\mathbf x)\)表示将\(\mathbf x\)​映射后的特征向量。那么，在特征空间中划分超平面所对应的模型可表示为： \[ f(\mathb">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg">
+<meta property="article:published_time" content="2021-07-29T12:49:14.000Z">
+<meta property="article:modified_time" content="2021-07-29T15:59:54.477Z">
+<meta property="article:author" content="冬于">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="machine learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2021/07/29/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC6%E7%AB%A0-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%EF%BC%88%E6%A0%B8%E5%87%BD%E6%95%B06-3%E3%80%816-6%EF%BC%89/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="manifest" href="/img/pwa/manifest.json"/><link rel="apple-touch-icon" sizes="180x180" href="/img/pwa/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/img/pwa/32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/img/pwa/16.png"/><link rel="mask-icon" href="/img/pwa/safari-pinned-tab.svg" color="#5bbad5"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"1DURBA9CCN","apiKey":"19fa9e07eba03403c4805744eb7b9b49","indexName":"DongYuBlog","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '西瓜书阅读笔记——第6章-支持向量机(核函数6.3、6.6)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-29 23:59:54'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">25</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">23</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">冬于的博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">西瓜书阅读笔记——第6章-支持向量机(核函数6.3、6.6)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-07-29T12:49:14.000Z" title="发表于 2021-07-29 20:49:14">2021-07-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-07-29T15:59:54.477Z" title="更新于 2021-07-29 23:59:54">2021-07-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">776</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="西瓜书阅读笔记——第6章-支持向量机(核函数6.3、6.6)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="西瓜书阅读笔记第6章-支持向量机核函数6.36.6">西瓜书阅读笔记——第6章-支持向量机(核函数6.3、6.6)</h1>
+<h2 id="引言">引言</h2>
+<p>在现实任务中，原始样本空间内许并不存在一个能正确划分两类样本的超平面。</p>
+<p>将样本从原始空间映射到一个更高维的特征空间，使得样本在这个特征空间内线性可分。</p>
+<p><img src="/2021/07/29/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC6%E7%AB%A0-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%EF%BC%88%E6%A0%B8%E5%87%BD%E6%95%B06-3%E3%80%816-6%EF%BC%89/异或问题与非线性映射.png" style="zoom:80%;"></p>
+<p>令<span class="math inline">\(\phi(\mathbf x)\)</span>表示将<span class="math inline">\(\mathbf x\)</span>​映射后的特征向量。那么，在特征空间中划分超平面所对应的模型可表示为： <span class="math display">\[
+f(\mathbf x)=\mathbf w^T\phi(\mathbf x)+b
+\]</span> 则其策略为： <span class="math display">\[
+\begin{align} 
+&amp;\min_{\mathbf w,b}\space \frac{1}{2}||\mathbf w||^2
+\\&amp;s.t. \space 1-y_i(\mathbf w^T\phi(\mathbf x_i)+b)≤0,\space i=1,2,...,m
+\end{align}
+\]</span> 其对偶问题为： <span class="math display">\[
+\begin{align} 
+&amp;\max_{\mathbf α}\space \sum_{i=1}^mα_i-\frac{1}{2}\sum_{i=1}^m\sum_{j=1}^mα_iα_jy_iy_j\phi(\mathbf x_i)^T\phi(\mathbf x_j)
+\\&amp;s.t. \space \sum_{i=1}^mα_iy_i,
+\\
+&amp;\space\space\space\space\space\space\space\space α_i≥0,\space i=1,2,...,m
+\end{align}
+\]</span> 可以看到上述涉及计算<span class="math inline">\(\phi(\mathbf x_i)^T\phi(\mathbf x_j)\)</span>​，也就是需要计算样本<span class="math inline">\(\mathbf x_i,\mathbf x_j\)</span>​​映射到特征空间之后的内积。由于特征空间维数可能很高，甚至可能是无穷维，因此直接计算该值通常是困难的。</p>
+<h2 id="核函数kernel-function">核函数kernel function</h2>
+<p>设想这样一个函数： <span class="math display">\[
+\kappa(\mathbf x_i,\mathbf x_j)=&lt;\phi(\mathbf x_i),\phi(\mathbf x_j)&gt;=\phi(\mathbf x_i)^T\phi(\mathbf x_j)
+\]</span> 样本<span class="math inline">\(\mathbf x_i,\mathbf x_j\)</span>在特征空间的内积等于它们在原始样本空间中通过函数<span class="math inline">\(κ(·,·)\)</span>​计算的结果。<span class="math inline">\(κ(·,·)\)</span>​​​称为核函数。</p>
+<p>可得到： <span class="math display">\[
+\begin{align} 
+f(\mathbf x)&amp;=\mathbf w^T\phi(\mathbf x)+b
+\\&amp;=\sum_{i=1}^mα_iy_i\phi(\mathbf x_i)^T\phi(\mathbf x_j)+b
+\\&amp;=\sum_{i=1}^mα_iy_i\kappa(\mathbf x_i,\mathbf x_j)+b
+\end{align}
+\]</span> 此显示出模型最优解可通过训练样本的核函数展开，这一展式亦称&quot;支持向量展式&quot;(support vector expansion)。</p>
+<h3 id="核函数定理">核函数（定理）</h3>
+<p>只要一个对称函数所对应的核矩阵半正定，它就能作为核函数使用。</p>
+<p><img src="/2021/07/29/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC6%E7%AB%A0-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%EF%BC%88%E6%A0%B8%E5%87%BD%E6%95%B06-3%E3%80%816-6%EF%BC%89/核函数定理.png" style="zoom:80%;"></p>
+<h3 id="常用核函数">常用核函数</h3>
+<p><img src="/2021/07/29/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC6%E7%AB%A0-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%EF%BC%88%E6%A0%B8%E5%87%BD%E6%95%B06-3%E3%80%816-6%EF%BC%89/常用核函数.png" style="zoom:80%;"></p>
+<h3 id="核函数的意义">核函数的意义</h3>
+<p>硬间隔支持向量机希望样本在特征空间内线性可分，&quot;核函数&quot;的选择决定特征空间的好坏，从而对支持向量机的性能至关重要。若核函数选择不合适，则意味着将样本映射到了一个不合适的特征空间，很可能导致模型性能不佳。</p>
+<h2 id="核方法">核方法</h2>
+<p>基于核函数的学习方法，统称为&quot;核方法&quot;(kernel methods)。</p>
+<p>由SVM和SVR的学习模型可以发现，给定训练样本，若不考虑偏移项，总能表示成核函数的线性组合。</p>
+<p>进一步可得到表示定理：</p>
+<p><img src="/2021/07/29/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC6%E7%AB%A0-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%EF%BC%88%E6%A0%B8%E5%87%BD%E6%95%B06-3%E3%80%816-6%EF%BC%89/表示定理.png" style="zoom:80%;"></p>
+<p>最常见的，是通过&quot;核化&quot;(即引入核函数)来将线性学习器拓展为非线性学习器。</p>
+<p>西瓜书(p137-139)以线性判别分析为例来演示如何通过核化来对其进行非线性拓展从而得到&quot;核线性判别分析&quot;(Kernelized Linear Discriminant Analysis，KLDA)。</p>
+<h2 id="参考文献">参考文献</h2>
+<p><a target="_blank" rel="noopener" href="https://item.jd.com/11867803.html">《机器学习》——周志华</a></p>
+<p><a target="_blank" rel="noopener" href="https://datawhalechina.github.io/pumpkin-book/#/chapter6/chapter6">南瓜书 第6章 支持向量机 (datawhalechina.github.io)</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">冬于</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/07/29/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC6%E7%AB%A0-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%EF%BC%88%E6%A0%B8%E5%87%BD%E6%95%B06-3%E3%80%816-6%EF%BC%89/">http://example.com/2021/07/29/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC6%E7%AB%A0-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%EF%BC%88%E6%A0%B8%E5%87%BD%E6%95%B06-3%E3%80%816-6%EF%BC%89/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">冬于的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><a class="post-meta__tags" href="/tags/machine-learning/">machine learning</a></div><div class="post_share"><div class="social-share" data-image="/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/07/29/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC6%E7%AB%A0-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%EF%BC%88%E8%BD%AF%E9%97%B4%E9%9A%946-4%E3%80%816-5%EF%BC%89/"><img class="next-cover" src="/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">西瓜书阅读笔记——第6章-支持向量机(软间隔6.4、6.5)</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/07/24/西瓜书阅读笔记——第5章-神经网络/" title="西瓜书阅读笔记——第5章-神经网络"><img class="cover" src="/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-24</div><div class="title">西瓜书阅读笔记——第5章-神经网络</div></div></a></div><div><a href="/2021/07/18/西瓜书阅读笔记——第3章-线性判别分析（3-4）/" title="西瓜书阅读笔记——第3章-线性判别分析（3.4）"><img class="cover" src="/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-18</div><div class="title">西瓜书阅读笔记——第3章-线性判别分析（3.4）</div></div></a></div><div><a href="/2021/07/13/西瓜书阅读笔记——第2章-模型评估与选择（到2-3-2）/" title="西瓜书阅读笔记——第2章-模型评估与选择（到2.3.2）"><img class="cover" src="/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">西瓜书阅读笔记——第2章-模型评估与选择（到2.3.2）</div></div></a></div><div><a href="/2021/07/18/西瓜书阅读笔记——第3章-多分类学习和类别不平衡问题（3-5、3-6）/" title="西瓜书阅读笔记——第3章-多分类学习和类别不平衡问题（3.5、3.6）"><img class="cover" src="/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-18</div><div class="title">西瓜书阅读笔记——第3章-多分类学习和类别不平衡问题（3.5、3.6）</div></div></a></div><div><a href="/2021/07/13/西瓜书阅读笔记——第1章-绪论/" title="西瓜书阅读笔记——第1章-绪论"><img class="cover" src="/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-13</div><div class="title">西瓜书阅读笔记——第1章-绪论</div></div></a></div><div><a href="/2021/07/18/西瓜书阅读笔记——第3章-线性回归（3-1、3-2）/" title="西瓜书阅读笔记——第3章-线性回归（3.1-3.2）"><img class="cover" src="/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-07-18</div><div class="title">西瓜书阅读笔记——第3章-线性回归（3.1-3.2）</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E7%AC%AC6%E7%AB%A0-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA%E6%A0%B8%E5%87%BD%E6%95%B06.36.6"><span class="toc-number">1.</span> <span class="toc-text">西瓜书阅读笔记——第6章-支持向量机(核函数6.3、6.6)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%87%BD%E6%95%B0kernel-function"><span class="toc-number">1.2.</span> <span class="toc-text">核函数kernel function</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%87%BD%E6%95%B0%E5%AE%9A%E7%90%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">核函数（定理）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%A0%B8%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.2.</span> <span class="toc-text">常用核函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%87%BD%E6%95%B0%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-number">1.2.3.</span> <span class="toc-text">核函数的意义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text">核方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">1.4.</span> <span class="toc-text">参考文献</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 冬于</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: '',
+      appKey: '',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener toc scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
