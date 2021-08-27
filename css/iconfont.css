@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2772274 */
+  src: url('//at.alicdn.com/t/font_2772274_8rsdjl5clrc.woff2?t=1630029983063') format('woff2'),
+       url('//at.alicdn.com/t/font_2772274_8rsdjl5clrc.woff?t=1630029983063') format('woff'),
+       url('//at.alicdn.com/t/font_2772274_8rsdjl5clrc.ttf?t=1630029983063') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tubiao-:before {
+  content: "\e63c";
+}
+
+.icon-sparkles:before {
+  content: "\ea28";
+}
+
