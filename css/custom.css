@@ -28,3 +28,40 @@
 #footer #footer-wrap a {
     color: var(--font-color)
 }
+
+#content-inner.layout h1::before {
+    color: #008B8B ;
+    margin-left: -1.55rem;
+    font-size: 1.3rem;
+    margin-top: -0.23rem;
+}
+#content-inner.layout h2::before {
+    color: #008B8B ;
+    margin-left: -1.35rem;
+    font-size: 1.2rem;
+    margin-top: -0.12rem;
+}
+#content-inner.layout h3::before {
+    color: #008B8B ;
+    margin-left: -1.22rem;
+    font-size: 1.1rem;
+    margin-top: -0.09rem;
+}
+#content-inner.layout h4::before {
+    color: #008B8B ;
+    margin-left: -1.05rem;
+    font-size: 1.0rem;
+    margin-top: -0.09rem;
+}
+#content-inner.layout h5::before {
+    color: #008B8B ;
+    margin-left: -0.9rem;
+    font-size: 0.9rem;
+    margin-top: 0.0rem;
+}
+#content-inner.layout h6::before {
+    color: #008B8B ;
+    margin-left: -0.9rem;
+    font-size: 0.8rem;
+    margin-top: 0.0rem;
+}
