@@ -1,9 +1,9 @@
-<!DOCTYPE html><html class="hide-aside" lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Task1&amp;Task2 数据读取与数据分析 | 冬于的博客</title><meta name="keywords" content="深度学习,NLP,机器学习,文本分类"><meta name="author" content="冬于"><meta name="copyright" content="冬于"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Task1&amp;Task2 数据读取与数据分析 赛题数据是文本数据，每个新闻是不定长的，使用csv格式进行存储。因此可以直接用Pandas完成数据读取的操作。 import pandas as pdtrain_df &#x3D; pd.read_csv(r&amp;#x27;train_set.csv&amp;#x27;, sep&#x3D;&amp;#x27;\t&amp;#x27;) pd.read_csv常用参数： - 读取的文件路">
+<!DOCTYPE html><html class="hide-aside" lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Task1&amp;Task2 数据读取与数据分析 | 冬于的博客</title><meta name="keywords" content="深度学习,NLP,机器学习,文本分类"><meta name="author" content="冬于"><meta name="copyright" content="冬于"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Task1&amp;Task2 数据读取与数据分析 赛题数据是文本数据，每个新闻是不定长的，使用csv格式进行存储。因此可以直接用Pandas完成数据读取的操作。 import pandas as pdtrain_df &#x3D; pd.read_csv(r&amp;#x27;train_set.csv&amp;#x27;, sep&#x3D;&amp;#x27;\t&amp;#x27;) pd.read_csv常用参数：  读取的文件路径，这">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Task1&amp;Task2 数据读取与数据分析">
 <meta property="og:url" content="https://ifwind.github.io/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="冬于的博客">
-<meta property="og:description" content="Task1&amp;Task2 数据读取与数据分析 赛题数据是文本数据，每个新闻是不定长的，使用csv格式进行存储。因此可以直接用Pandas完成数据读取的操作。 import pandas as pdtrain_df &#x3D; pd.read_csv(r&amp;#x27;train_set.csv&amp;#x27;, sep&#x3D;&amp;#x27;\t&amp;#x27;) pd.read_csv常用参数： - 读取的文件路">
+<meta property="og:description" content="Task1&amp;Task2 数据读取与数据分析 赛题数据是文本数据，每个新闻是不定长的，使用csv格式进行存储。因此可以直接用Pandas完成数据读取的操作。 import pandas as pdtrain_df &#x3D; pd.read_csv(r&amp;#x27;train_set.csv&amp;#x27;, sep&#x3D;&amp;#x27;\t&amp;#x27;) pd.read_csv常用参数：  读取的文件路径，这">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ifwind.github.io/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg">
 <meta property="article:published_time" content="2021-09-29T13:17:15.000Z">
@@ -143,140 +143,87 @@
           document.documentElement.classList.remove('hide-aside')
         }
       }
-    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">63</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-compass"></i><span> 分类</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 类别</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-star"></i><span> Spark</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-duotone fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">冬于的博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-compass"></i><span> 分类</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 类别</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-star"></i><span> Spark</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-duotone fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Task1&amp;Task2 数据读取与数据分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-29T13:17:15.000Z" title="发表于 2021-09-29 21:17:15">2021-09-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-16T10:43:49.406Z" title="更新于 2021-10-16 18:43:49">2021-10-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2,237</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Task1&amp;Task2 数据读取与数据分析"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="task1task2-数据读取与数据分析"><strong>Task1&amp;Task2 数据读取与数据分析</strong></h1>
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">63</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">50</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-compass"></i><span> 分类</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 类别</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-star"></i><span> Spark</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-duotone fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">冬于的博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-compass"></i><span> 分类</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 类别</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-star"></i><span> Spark</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-duotone fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Task1&amp;Task2 数据读取与数据分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-09-29T13:17:15.000Z" title="发表于 2021-09-29 21:17:15">2021-09-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-10-16T10:43:49.406Z" title="更新于 2021-10-16 18:43:49">2021-10-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2,253</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Task1&amp;Task2 数据读取与数据分析"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="task1task2-数据读取与数据分析"><a class="markdownIt-Anchor" href="#task1task2-数据读取与数据分析"></a> <strong>Task1&amp;Task2 数据读取与数据分析</strong></h1>
 <p>赛题数据是文本数据，每个新闻是不定长的，使用csv格式进行存储。因此可以直接用<code>Pandas</code>完成数据读取的操作。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">train_df = pd.read_csv(<span class="string">r&#x27;train_set.csv&#x27;</span>, sep=<span class="string">&#x27;\t&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p><code>pd.read_csv</code>常用参数： - 读取的文件路径，这里需要根据改成你本地的路径，可以使用相对路径或绝对路径； - 分隔符<code>sep</code>，为每列分割的字符，设置为<code>\t</code>即可； - 读取行数<code>nrows</code>，为此次读取文件的函数，是数值类型（由于数据集比较大，可以先设置为100）；</p>
+<p><code>pd.read_csv</code>常用参数：</p>
+<ul>
+<li>读取的文件路径，这里需要根据改成你本地的路径，可以使用相对路径或绝对路径；</li>
+<li>分隔符<code>sep</code>，为每列分割的字符，设置为<code>\t</code>即可；</li>
+<li>读取行数<code>nrows</code>，为此次读取文件的函数，是数值类型（由于数据集比较大，可以先设置为100）；</li>
+</ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">train_df.head(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th>
-</th>
-<th>
-label
-</th>
-<th>
-text
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>
-0
-</th>
-<td>
-2
-</td>
-<td>
-2967 6758 339 2021 1854 3731 4109 3792 4149 15...
-</td>
-</tr>
-<tr>
-<th>
-1
-</th>
-<td>
-11
-</td>
-<td>
-4464 486 6352 5619 2465 4802 1452 3137 5778 54...
-</td>
-</tr>
-<tr>
-<th>
-2
-</th>
-<td>
-3
-</td>
-<td>
-7346 4068 5074 3747 5681 6093 1777 2226 7354 6...
-</td>
-</tr>
-<tr>
-<th>
-3
-</th>
-<td>
-2
-</td>
-<td>
-7159 948 4866 2109 5520 2490 211 3956 5520 549...
-</td>
-</tr>
-<tr>
-<th>
-4
-</th>
-<td>
-3
-</td>
-<td>
-3646 3055 3055 2490 4659 6065 3370 5814 2465 5...
-</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>label</th>
+      <th>text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+      <td>2967 6758 339 2021 1854 3731 4109 3792 4149 15...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>11</td>
+      <td>4464 486 6352 5619 2465 4802 1452 3137 5778 54...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>7346 4068 5074 3747 5681 6093 1777 2226 7354 6...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2</td>
+      <td>7159 948 4866 2109 5520 2490 211 3956 5520 549...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3</td>
+      <td>3646 3055 3055 2490 4659 6065 3370 5814 2465 5...</td>
+    </tr>
+  </tbody>
 </table>
-<p>同样的方法加载测试集数据。</p>
+同样的方法加载测试集数据。
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">test_df = pd.read_csv(<span class="string">r&#x27;test_a.csv&#x27;</span>, sep=<span class="string">&#x27;\t&#x27;</span>)</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">test_df.head(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th>
-</th>
-<th>
-text
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>
-0
-</th>
-<td>
-5399 3117 1070 4321 4568 2621 5466 3772 4516 2...
-</td>
-</tr>
-<tr>
-<th>
-1
-</th>
-<td>
-2491 4109 1757 7539 648 3695 3038 4490 23 7019...
-</td>
-</tr>
-<tr>
-<th>
-2
-</th>
-<td>
-2673 5076 6835 2835 5948 5677 3247 4124 2465 5...
-</td>
-</tr>
-<tr>
-<th>
-3
-</th>
-<td>
-4562 4893 2210 4761 3659 1324 2595 5949 4583 2...
-</td>
-</tr>
-<tr>
-<th>
-4
-</th>
-<td>
-4269 7134 2614 1724 4464 1324 3370 3370 2106 2...
-</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5399 3117 1070 4321 4568 2621 5466 3772 4516 2...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2491 4109 1757 7539 648 3695 3038 4490 23 7019...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2673 5076 6835 2835 5948 5677 3247 4124 2465 5...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4562 4893 2210 4761 3659 1324 2595 5949 4583 2...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4269 7134 2614 1724 4464 1324 3370 3370 2106 2...</td>
+    </tr>
+  </tbody>
 </table>
-<h3 id="数据分析"><strong>数据分析</strong></h3>
-<p>读取完训练集后，初步查看数据格式后，可以对数据集进行数据分析的操作。</p>
+### **数据分析**
+读取完训练集后，初步查看数据格式后，可以对数据集进行数据分析的操作。
 <p>读取了所有的训练集数据，从下面几个角度对数据集进行数据分析：</p>
 <ul>
 <li>赛题数据中，新闻文本的长度是多少？</li>
@@ -285,366 +232,233 @@ text
 <li>赛题数据中，不同类别的文本长度分布如何？</li>
 <li>赛题数据中，不同类别的字符分布是怎么样的？</li>
 </ul>
-<h4 id="统计数据集中所有句子所包含字符的平均个数"><strong>统计数据集中所有句子所包含字符的平均个数</strong></h4>
+<h4 id="统计数据集中所有句子所包含字符的平均个数"><a class="markdownIt-Anchor" href="#统计数据集中所有句子所包含字符的平均个数"></a> <strong>统计数据集中所有句子所包含字符的平均个数</strong></h4>
 <p>由上面的表格可以知道，训练集的每行句子的字符使用空格进行隔开，所以可以分割，然后统计单词的个数来得到每个句子的长度。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">%pylab inline</span><br><span class="line">train_df[<span class="string">&#x27;text_len&#x27;</span>] = train_df[<span class="string">&#x27;text&#x27;</span>].apply(<span class="keyword">lambda</span> x: <span class="built_in">len</span>(x.split(<span class="string">&#x27; &#x27;</span>)))</span><br><span class="line"><span class="built_in">print</span>(train_df[<span class="string">&#x27;text_len&#x27;</span>].describe())</span><br></pre></td></tr></table></figure>
-<p>Populating the interactive namespace from numpy and matplotlib count 200000.000000 mean 907.207110 std 996.029036 min 2.000000 25% 374.000000 50% 676.000000 75% 1131.000000 max 57921.000000 Name: text_len, dtype: float64</p>
+<pre><code>Populating the interactive namespace from numpy and matplotlib
+count    200000.000000
+mean        907.207110
+std         996.029036
+min           2.000000
+25%         374.000000
+50%         676.000000
+75%        1131.000000
+max       57921.000000
+Name: text_len, dtype: float64
+</code></pre>
 <p>对新闻句子的统计可以得出，赛题的训练数据总共20w条，给定的文本比较长，每个句子平均由907个字符构成，最短的句子长度为2，最长的句子长度为57921。其中75%以下的数据长度在1131以下。</p>
 <p>下图将句子长度绘制了直方图，可见大部分训练集的句子的长度都几种在2000以内。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">_ = plt.hist(train_df[<span class="string">&#x27;text_len&#x27;</span>], bins=<span class="number">200</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Text char count in train dataset&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;Histogram of char count&quot;</span>)</span><br></pre></td></tr></table></figure>
-<p>Text(0.5, 1.0, 'Histogram of char count')</p>
-<p><img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_11_1.png"></p>
+<pre><code>Text(0.5, 1.0, 'Histogram of char count')
+</code></pre>
+<p><img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_11_1.png" alt></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">_ = plt.hist(train_df[train_df[<span class="string">&#x27;text_len&#x27;</span>]&lt;<span class="number">5000</span>][<span class="string">&#x27;text_len&#x27;</span>], bins=<span class="number">200</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Text char count in train dataset&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;Histogram of char count&quot;</span>)</span><br></pre></td></tr></table></figure>
-<p>Text(0.5, 1.0, 'Histogram of char count')</p>
-<p><img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_12_1.png"></p>
+<pre><code>Text(0.5, 1.0, 'Histogram of char count')
+</code></pre>
+<p><img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_12_1.png" alt></p>
 <p>同样统计测试集文本长度：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">%pylab inline</span><br><span class="line">test_df[<span class="string">&#x27;text_len&#x27;</span>] = test_df[<span class="string">&#x27;text&#x27;</span>].apply(<span class="keyword">lambda</span> x: <span class="built_in">len</span>(x.split(<span class="string">&#x27; &#x27;</span>)))</span><br><span class="line"><span class="built_in">print</span>(test_df[<span class="string">&#x27;text_len&#x27;</span>].describe())</span><br></pre></td></tr></table></figure>
-<p>Populating the interactive namespace from numpy and matplotlib count 50000.000000 mean 909.844960 std 1032.313375 min 14.000000 25% 370.000000 50% 676.000000 75% 1133.000000 max 41861.000000 Name: text_len, dtype: float64</p>
+<pre><code>Populating the interactive namespace from numpy and matplotlib
+count    50000.000000
+mean       909.844960
+std       1032.313375
+min         14.000000
+25%        370.000000
+50%        676.000000
+75%       1133.000000
+max      41861.000000
+Name: text_len, dtype: float64
+</code></pre>
 <p>可见测试集共50,000条新闻，每条新闻平均909个字符，最短句子长度为14，最长句子41861,75%以下的数据长度在1133以下。</p>
 <p>将测试集句子长度绘制了直方图：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">_ = plt.hist(test_df[<span class="string">&#x27;text_len&#x27;</span>], bins=<span class="number">200</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Text char count in test dataset&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;Histogram of char count&quot;</span>)</span><br></pre></td></tr></table></figure>
-<p>Text(0.5, 1.0, 'Histogram of char count')</p>
-<p><img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_16_1.png"></p>
+<pre><code>Text(0.5, 1.0, 'Histogram of char count')
+</code></pre>
+<p><img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_16_1.png" alt></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">_ = plt.hist(test_df[test_df[<span class="string">&#x27;text_len&#x27;</span>]&lt;<span class="number">5000</span>][<span class="string">&#x27;text_len&#x27;</span>], bins=<span class="number">200</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Text char count in test dataset&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;Histogram of char count&quot;</span>)</span><br></pre></td></tr></table></figure>
-<p>Text(0.5, 1.0, 'Histogram of char count')</p>
-<p><img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_17_1.png"></p>
+<pre><code>Text(0.5, 1.0, 'Histogram of char count')
+</code></pre>
+<p><img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_17_1.png" alt></p>
 <p>可以看到训练集和测试集的文本长度分布接近。</p>
-<h4 id="字符分布统计"><strong>字符分布统计</strong></h4>
+<h4 id="字符分布统计"><a class="markdownIt-Anchor" href="#字符分布统计"></a> <strong>字符分布统计</strong></h4>
 <p>接下来可以统计每个字符出现的次数，首先可以将训练集中所有的句子进行拼接进而划分为字符，并统计每个字符的个数。</p>
 <p>从统计结果中可以看出，在训练集中总共包括6869个字，其中编号3750的字出现的次数最多，编号3133的字出现的次数最少。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">all_lines = <span class="string">&#x27; &#x27;</span>.join(<span class="built_in">list</span>(train_df[<span class="string">&#x27;text&#x27;</span>]))</span><br><span class="line">word_count = Counter(all_lines.split(<span class="string">&quot; &quot;</span>))</span><br><span class="line">word_count = <span class="built_in">sorted</span>(word_count.items(), key=<span class="keyword">lambda</span> d:d[<span class="number">1</span>], reverse = <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(word_count))</span><br><span class="line"><span class="built_in">print</span>(word_count[<span class="number">0</span>])</span><br><span class="line"><span class="built_in">print</span>(word_count[-<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
-<p>6869 ('3750', 7482224) ('3133', 1)</p>
+<pre><code>6869
+('3750', 7482224)
+('3133', 1)
+</code></pre>
 <p>还可以根据字在语料中的出现情况，反推出标点符号。下面代码统计了不同字符在句子中出现的次数，其中字符3750，字符900和字符648在20w新闻的覆盖率接近99%，很有可能是标点符号。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">train_df[<span class="string">&#x27;text_unique&#x27;</span>] = train_df[<span class="string">&#x27;text&#x27;</span>].apply(<span class="keyword">lambda</span> x: <span class="string">&#x27; &#x27;</span>.join(<span class="built_in">list</span>(<span class="built_in">set</span>(x.split(<span class="string">&#x27; &#x27;</span>)))))</span><br><span class="line">all_lines = <span class="string">&#x27; &#x27;</span>.join(<span class="built_in">list</span>(train_df[<span class="string">&#x27;text_unique&#x27;</span>]))</span><br><span class="line">word_count = Counter(all_lines.split(<span class="string">&quot; &quot;</span>))</span><br><span class="line">word_count = <span class="built_in">sorted</span>(word_count.items(), key=<span class="keyword">lambda</span> d:<span class="built_in">int</span>(d[<span class="number">1</span>]), reverse = <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(word_count[<span class="number">0</span>])</span><br><span class="line"><span class="built_in">print</span>(word_count[<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(word_count[<span class="number">2</span>])</span><br></pre></td></tr></table></figure>
-<p>('3750', 197997) ('900', 197653) ('648', 191975)</p>
+<pre><code>('3750', 197997)
+('900', 197653)
+('648', 191975)
+</code></pre>
 <p>同样统计一下测试集的字符分布：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">all_lines = <span class="string">&#x27; &#x27;</span>.join(<span class="built_in">list</span>(test_df[<span class="string">&#x27;text&#x27;</span>]))</span><br><span class="line">word_count = Counter(all_lines.split(<span class="string">&quot; &quot;</span>))</span><br><span class="line">word_count = <span class="built_in">sorted</span>(word_count.items(), key=<span class="keyword">lambda</span> d:d[<span class="number">1</span>], reverse = <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">len</span>(word_count))</span><br><span class="line"><span class="built_in">print</span>(word_count[<span class="number">0</span>])</span><br><span class="line"><span class="built_in">print</span>(word_count[-<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
-<p>6203 ('3750', 1879488) ('1224', 1)</p>
+<pre><code>6203
+('3750', 1879488)
+('1224', 1)
+</code></pre>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">test_df[<span class="string">&#x27;text_unique&#x27;</span>] = test_df[<span class="string">&#x27;text&#x27;</span>].apply(<span class="keyword">lambda</span> x: <span class="string">&#x27; &#x27;</span>.join(<span class="built_in">list</span>(<span class="built_in">set</span>(x.split(<span class="string">&#x27; &#x27;</span>)))))</span><br><span class="line">all_lines = <span class="string">&#x27; &#x27;</span>.join(<span class="built_in">list</span>(test_df[<span class="string">&#x27;text_unique&#x27;</span>]))</span><br><span class="line">word_count = Counter(all_lines.split(<span class="string">&quot; &quot;</span>))</span><br><span class="line">word_count = <span class="built_in">sorted</span>(word_count.items(), key=<span class="keyword">lambda</span> d:<span class="built_in">int</span>(d[<span class="number">1</span>]), reverse = <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(word_count[<span class="number">0</span>])</span><br><span class="line"><span class="built_in">print</span>(word_count[<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(word_count[<span class="number">2</span>])</span><br></pre></td></tr></table></figure>
-<p>('3750', 49455) ('900', 49366) ('648', 47966)</p>
-<h4 id="统计数据集中类别分布的规律"><strong>统计数据集中类别分布的规律</strong></h4>
-<p>接下来对数据集的类别进行分布统计，具体统计每类新闻的样本个数。 标签和对应的类别为： {'科技': 0, '股票': 1, '体育': 2, '娱乐': 3, '时政': 4, '社会': 5, '教育': 6, '财经': 7, '家居': 8, '游戏': 9, '房产': 10, '时尚': 11, '彩票': 12, '星座': 13}</p>
+<pre><code>('3750', 49455)
+('900', 49366)
+('648', 47966)
+</code></pre>
+<h4 id="统计数据集中类别分布的规律"><a class="markdownIt-Anchor" href="#统计数据集中类别分布的规律"></a> <strong>统计数据集中类别分布的规律</strong></h4>
+<p>接下来对数据集的类别进行分布统计，具体统计每类新闻的样本个数。<br>
+标签和对应的类别为：<br>
+{‘科技’: 0, ‘股票’: 1, ‘体育’: 2, ‘娱乐’: 3, ‘时政’: 4, ‘社会’: 5, ‘教育’: 6, ‘财经’: 7, ‘家居’: 8, ‘游戏’: 9, ‘房产’: 10, ‘时尚’: 11, ‘彩票’: 12, ‘星座’: 13}</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">label2id=&#123;<span class="string">&#x27;科技&#x27;</span>: <span class="number">0</span>, <span class="string">&#x27;股票&#x27;</span>: <span class="number">1</span>, <span class="string">&#x27;体育&#x27;</span>: <span class="number">2</span>, <span class="string">&#x27;娱乐&#x27;</span>: <span class="number">3</span>, <span class="string">&#x27;时政&#x27;</span>: <span class="number">4</span>, <span class="string">&#x27;社会&#x27;</span>: <span class="number">5</span>, <span class="string">&#x27;教育&#x27;</span>: <span class="number">6</span>,</span><br><span class="line">          <span class="string">&#x27;财经&#x27;</span>: <span class="number">7</span>, <span class="string">&#x27;家居&#x27;</span>: <span class="number">8</span>, <span class="string">&#x27;游戏&#x27;</span>: <span class="number">9</span>, <span class="string">&#x27;房产&#x27;</span>: <span class="number">10</span>, <span class="string">&#x27;时尚&#x27;</span>: <span class="number">11</span>, <span class="string">&#x27;彩票&#x27;</span>: <span class="number">12</span>, <span class="string">&#x27;星座&#x27;</span>: <span class="number">13</span>&#125;</span><br><span class="line">id2label=&#123;&#125;</span><br><span class="line"><span class="keyword">for</span> label,labelid <span class="keyword">in</span> label2id.items():</span><br><span class="line">    id2label[labelid]=label</span><br><span class="line">train_df[<span class="string">&#x27;type&#x27;</span>]=<span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">for</span> labelid <span class="keyword">in</span> np.unique(train_df[<span class="string">&#x27;label&#x27;</span>].values):</span><br><span class="line">    train_df.loc[train_df[<span class="string">&#x27;label&#x27;</span>]==labelid,<span class="string">&#x27;type&#x27;</span>]=id2label[labelid]</span><br><span class="line">train_df[<span class="string">&#x27;type&#x27;</span>].value_counts().plot(kind=<span class="string">&#x27;bar&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#注意这两行是为了正确显示中文设置的</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>]=[<span class="string">&quot;SimHei&quot;</span>] <span class="comment">#用来正常显示中文标签</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>]=<span class="literal">False</span> <span class="comment">#用来正常显示负号</span></span><br><span class="line"></span><br><span class="line">plt.title(<span class="string">&#x27;News class count&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;category&quot;</span>)</span><br></pre></td></tr></table></figure>
-<p>Text(0.5, 0, 'category')</p>
-<figure>
-<img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_27_1.png" alt="png"><figcaption>png</figcaption>
-</figure>
+<pre><code>Text(0.5, 0, 'category')
+</code></pre>
+<p><img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_27_1.png" alt="png"></p>
 <p>从统计结果可以看出，赛题的数据集类别分布存在较为不均匀的情况。在训练集中科技类新闻最多，其次是股票类新闻，最少的新闻是星座新闻。</p>
-<h4 id="统计数据集中不同类别下句子平均字符的个数"><strong>统计数据集中不同类别下句子平均字符的个数</strong></h4>
+<h4 id="统计数据集中不同类别下句子平均字符的个数"><a class="markdownIt-Anchor" href="#统计数据集中不同类别下句子平均字符的个数"></a> <strong>统计数据集中不同类别下句子平均字符的个数</strong></h4>
 <p>再统计一下训练集中不同类别下句子平均长度。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">text_len_each_label=train_df.groupby(<span class="string">&#x27;type&#x27;</span>).agg(<span class="string">&#x27;mean&#x27;</span>,<span class="string">&#x27;text_len&#x27;</span>)[<span class="string">&#x27;text_len&#x27;</span>]</span><br><span class="line">text_len_each_label.plot(kind=<span class="string">&#x27;bar&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Text char count in each label&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;category&quot;</span>)</span><br></pre></td></tr></table></figure>
-<p>Text(0.5, 0, 'category')</p>
-<figure>
-<img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_30_1.png" alt="png"><figcaption>png</figcaption>
-</figure>
-<p>可以看到各个类别的平均句子长度，教育类、caipiao的句子长度最长，时尚类的比较短。 #### <strong>统计数据集中不同类别下句子中最常见的5个字符</strong></p>
+<pre><code>Text(0.5, 0, 'category')
+</code></pre>
+<p><img src="/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/output_30_1.png" alt="png"></p>
+<p>可以看到各个类别的平均句子长度，教育类、caipiao的句子长度最长，时尚类的比较短。</p>
+<h4 id="统计数据集中不同类别下句子中最常见的5个字符"><a class="markdownIt-Anchor" href="#统计数据集中不同类别下句子中最常见的5个字符"></a> <strong>统计数据集中不同类别下句子中最常见的5个字符</strong></h4>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line">label_groups=train_df.groupby(<span class="string">&#x27;type&#x27;</span>)</span><br><span class="line"></span><br><span class="line">word_count_each_label=&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> groupid <span class="keyword">in</span> label_groups.groups.keys():</span><br><span class="line">    group=label_groups.get_group(groupid)</span><br><span class="line">    lines = <span class="string">&#x27; &#x27;</span>.join(<span class="built_in">list</span>(group[<span class="string">&#x27;text&#x27;</span>]))</span><br><span class="line">    word_count = Counter(lines.split(<span class="string">&quot; &quot;</span>))</span><br><span class="line">    word_count = <span class="built_in">sorted</span>(word_count.items(), key=<span class="keyword">lambda</span> d:d[<span class="number">1</span>], reverse = <span class="literal">True</span>)</span><br><span class="line">    word_count_each_label[groupid]=word_count</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">word_count_df_each_label=pd.DataFrame.from_dict(word_count_each_label,orient=<span class="string">&#x27;index&#x27;</span>).T</span><br><span class="line"></span><br><span class="line">word_count_df_each_label.head(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
 <table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th>
-</th>
-<th>
-体育
-</th>
-<th>
-娱乐
-</th>
-<th>
-家居
-</th>
-<th>
-彩票
-</th>
-<th>
-房产
-</th>
-<th>
-教育
-</th>
-<th>
-时尚
-</th>
-<th>
-时政
-</th>
-<th>
-星座
-</th>
-<th>
-游戏
-</th>
-<th>
-社会
-</th>
-<th>
-科技
-</th>
-<th>
-股票
-</th>
-<th>
-财经
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>
-0
-</th>
-<td>
-(3750, 1458331)
-</td>
-<td>
-(3750, 774668)
-</td>
-<td>
-(3750, 242367)
-</td>
-<td>
-(3750, 87412)
-</td>
-<td>
-(3750, 180259)
-</td>
-<td>
-(3750, 469540)
-</td>
-<td>
-(3750, 83834)
-</td>
-<td>
-(3750, 360839)
-</td>
-<td>
-(3750, 33796)
-</td>
-<td>
-(3750, 178783)
-</td>
-<td>
-(3750, 715740)
-</td>
-<td>
-(3750, 1267331)
-</td>
-<td>
-(3750, 1200686)
-</td>
-<td>
-(3750, 428638)
-</td>
-</tr>
-<tr>
-<th>
-1
-</th>
-<td>
-(648, 974639)
-</td>
-<td>
-(648, 494477)
-</td>
-<td>
-(648, 202399)
-</td>
-<td>
-(4464, 51426)
-</td>
-<td>
-(648, 114512)
-</td>
-<td>
-(648, 345372)
-</td>
-<td>
-(648, 67353)
-</td>
-<td>
-(648, 231863)
-</td>
-<td>
-(648, 26867)
-</td>
-<td>
-(648, 157291)
-</td>
-<td>
-(648, 329051)
-</td>
-<td>
-(648, 967653)
-</td>
-<td>
-(648, 714152)
-</td>
-<td>
-(648, 262220)
-</td>
-</tr>
-<tr>
-<th>
-2
-</th>
-<td>
-(900, 618294)
-</td>
-<td>
-(900, 298663)
-</td>
-<td>
-(900, 92207)
-</td>
-<td>
-(3370, 45815)
-</td>
-<td>
-(900, 75185)
-</td>
-<td>
-(900, 222488)
-</td>
-<td>
-(900, 37240)
-</td>
-<td>
-(900, 190842)
-</td>
-<td>
-(900, 11263)
-</td>
-<td>
-(900, 70680)
-</td>
-<td>
-(900, 305241)
-</td>
-<td>
-(900, 577742)
-</td>
-<td>
-(3370, 626708)
-</td>
-<td>
-(900, 184131)
-</td>
-</tr>
-<tr>
-<th>
-3
-</th>
-<td>
-(7399, 351894)
-</td>
-<td>
-(6122, 187933)
-</td>
-<td>
-(6122, 57345)
-</td>
-<td>
-(648, 37041)
-</td>
-<td>
-(3370, 67780)
-</td>
-<td>
-(6248, 193757)
-</td>
-<td>
-(4939, 18591)
-</td>
-<td>
-(4411, 120442)
-</td>
-<td>
-(4939, 9651)
-</td>
-<td>
-(7328, 46477)
-</td>
-<td>
-(6122, 159125)
-</td>
-<td>
-(3370, 503768)
-</td>
-<td>
-(900, 542884)
-</td>
-<td>
-(3370, 159156)
-</td>
-</tr>
-<tr>
-<th>
-4
-</th>
-<td>
-(6122, 343850)
-</td>
-<td>
-(4939, 173606)
-</td>
-<td>
-(4939, 56147)
-</td>
-<td>
-(2465, 36610)
-</td>
-<td>
-(2465, 45163)
-</td>
-<td>
-(2555, 175234)
-</td>
-<td>
-(6122, 18438)
-</td>
-<td>
-(7399, 86190)
-</td>
-<td>
-(669, 8925)
-</td>
-<td>
-(6122, 43411)
-</td>
-<td>
-(5598, 136713)
-</td>
-<td>
-(4464, 307431)
-</td>
-<td>
-(4464, 445525)
-</td>
-<td>
-(5296, 132136)
-</td>
-</tr>
-</tbody>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>体育</th>
+      <th>娱乐</th>
+      <th>家居</th>
+      <th>彩票</th>
+      <th>房产</th>
+      <th>教育</th>
+      <th>时尚</th>
+      <th>时政</th>
+      <th>星座</th>
+      <th>游戏</th>
+      <th>社会</th>
+      <th>科技</th>
+      <th>股票</th>
+      <th>财经</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>(3750, 1458331)</td>
+      <td>(3750, 774668)</td>
+      <td>(3750, 242367)</td>
+      <td>(3750, 87412)</td>
+      <td>(3750, 180259)</td>
+      <td>(3750, 469540)</td>
+      <td>(3750, 83834)</td>
+      <td>(3750, 360839)</td>
+      <td>(3750, 33796)</td>
+      <td>(3750, 178783)</td>
+      <td>(3750, 715740)</td>
+      <td>(3750, 1267331)</td>
+      <td>(3750, 1200686)</td>
+      <td>(3750, 428638)</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>(648, 974639)</td>
+      <td>(648, 494477)</td>
+      <td>(648, 202399)</td>
+      <td>(4464, 51426)</td>
+      <td>(648, 114512)</td>
+      <td>(648, 345372)</td>
+      <td>(648, 67353)</td>
+      <td>(648, 231863)</td>
+      <td>(648, 26867)</td>
+      <td>(648, 157291)</td>
+      <td>(648, 329051)</td>
+      <td>(648, 967653)</td>
+      <td>(648, 714152)</td>
+      <td>(648, 262220)</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>(900, 618294)</td>
+      <td>(900, 298663)</td>
+      <td>(900, 92207)</td>
+      <td>(3370, 45815)</td>
+      <td>(900, 75185)</td>
+      <td>(900, 222488)</td>
+      <td>(900, 37240)</td>
+      <td>(900, 190842)</td>
+      <td>(900, 11263)</td>
+      <td>(900, 70680)</td>
+      <td>(900, 305241)</td>
+      <td>(900, 577742)</td>
+      <td>(3370, 626708)</td>
+      <td>(900, 184131)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>(7399, 351894)</td>
+      <td>(6122, 187933)</td>
+      <td>(6122, 57345)</td>
+      <td>(648, 37041)</td>
+      <td>(3370, 67780)</td>
+      <td>(6248, 193757)</td>
+      <td>(4939, 18591)</td>
+      <td>(4411, 120442)</td>
+      <td>(4939, 9651)</td>
+      <td>(7328, 46477)</td>
+      <td>(6122, 159125)</td>
+      <td>(3370, 503768)</td>
+      <td>(900, 542884)</td>
+      <td>(3370, 159156)</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>(6122, 343850)</td>
+      <td>(4939, 173606)</td>
+      <td>(4939, 56147)</td>
+      <td>(2465, 36610)</td>
+      <td>(2465, 45163)</td>
+      <td>(2555, 175234)</td>
+      <td>(6122, 18438)</td>
+      <td>(7399, 86190)</td>
+      <td>(669, 8925)</td>
+      <td>(6122, 43411)</td>
+      <td>(5598, 136713)</td>
+      <td>(4464, 307431)</td>
+      <td>(4464, 445525)</td>
+      <td>(5296, 132136)</td>
+    </tr>
+  </tbody>
 </table>
-<h4 id="假设字符3750字符900和字符648是句子的标点符号请分析赛题每篇新闻平均由多少个句子构成"><strong>假设字符3750，字符900和字符648是句子的标点符号，请分析赛题每篇新闻平均由多少个句子构成？</strong></h4>
-<p>利用re正则表达式实现多个字符对一个字符串进行分割。</p>
+#### **假设字符3750，字符900和字符648是句子的标点符号，请分析赛题每篇新闻平均由多少个句子构成？**
+利用re正则表达式实现多个字符对一个字符串进行分割。
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">train_df[<span class="string">&#x27;sentence_count&#x27;</span>]=train_df[<span class="string">&#x27;text&#x27;</span>].apply(<span class="keyword">lambda</span> x: re.split(<span class="string">&#x27;3750|900|648&#x27;</span>,x)).<span class="built_in">str</span>.<span class="built_in">len</span>()</span><br><span class="line">train_df[<span class="string">&#x27;sentence_count&#x27;</span>].describe()</span><br></pre></td></tr></table></figure>
-<p>count 200000.000000 mean 80.802370 std 86.955448 min 1.000000 25% 29.000000 50% 57.000000 75% 103.000000 max 3460.000000 Name: sentence_count, dtype: float64</p>
+<pre><code>count    200000.000000
+mean         80.802370
+std          86.955448
+min           1.000000
+25%          29.000000
+50%          57.000000
+75%         103.000000
+max        3460.000000
+Name: sentence_count, dtype: float64
+</code></pre>
 <p>可以看到平均每个文本都由80个句子组成。</p>
-<h3 id="数据分析的结论"><strong>数据分析的结论</strong></h3>
+<h3 id="数据分析的结论"><a class="markdownIt-Anchor" href="#数据分析的结论"></a> <strong>数据分析的结论</strong></h3>
 <p>通过上述分析可以知道数据集的大致状况：</p>
-<ol type="1">
+<ol>
 <li>赛题中每个新闻包含的字符个数平均为1000个，还有一些新闻字符较长；</li>
 <li>赛题中新闻类别分布不均匀，科技类新闻样本量接近4w，星座类新闻样本量不到1k；</li>
 <li>赛题总共包括7000-8000个字符；</li>
 </ol>
 <p>还可以得出以下对训练有价值的结论：</p>
-<ol type="1">
+<ol>
 <li>每个新闻平均字符个数较多，可能需要截断；</li>
 <li>由于类别不均衡，会严重影响模型的精度。</li>
 </ol>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">冬于</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ifwind.github.io/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/">https://ifwind.github.io/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ifwind.github.io" target="_blank">冬于的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><a class="post-meta__tags" href="/tags/NLP/">NLP</a><a class="post-meta__tags" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><a class="post-meta__tags" href="/tags/%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/">文本分类</a></div><div class="post_share"><div class="social-share" data-image="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/"><img class="prev-cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Task3-基于机器学习的文本分类</div></div></a></div><div class="next-post pull-right"><a href="/2021/09/27/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC8%E7%AB%A0-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/"><img class="next-cover" src="/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">西瓜书阅读笔记——第8章-集成学习</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/10/04/Task3-基于机器学习的文本分类/" title="Task3-基于机器学习的文本分类"><img class="cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-04</div><div class="title">Task3-基于机器学习的文本分类</div></div></a></div><div><a href="/2021/10/11/Task4-基于深度学习的文本分类2.1-利用Word2Vec训练词向量/" title="Task4-基于深度学习的文本分类2-Word2Vec"><img class="cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-11</div><div class="title">Task4-基于深度学习的文本分类2-Word2Vec</div></div></a></div><div><a href="/2021/10/11/Task4-基于深度学习的文本分类1-FastText/" title="Task4-基于深度学习的文本分类1-FastText"><img class="cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-11</div><div class="title">Task4-基于深度学习的文本分类1-FastText</div></div></a></div><div><a href="/2021/10/16/Task4-基于深度学习的文本分类3-基于Bert的预训练和微调进行文本分类/" title="Task4-基于深度学习的文本分类3-基于Bert预训练和微调进行文本分类"><img class="cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-16</div><div class="title">Task4-基于深度学习的文本分类3-基于Bert预训练和微调进行文本分类</div></div></a></div><div><a href="/2021/10/13/Task4-基于深度学习的文本分类2.2-Word2Vec+TextCNN分类/" title="Task4-基于深度学习的文本分类2.2-Word2Vec+TextCNN+BiLSTM+Attention分类"><img class="cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-13</div><div class="title">Task4-基于深度学习的文本分类2.2-Word2Vec+TextCNN+BiLSTM+Attention分类</div></div></a></div><div><a href="/2021/08/16/Transformer相关——（2）Seq2Seq模型/" title="Transformer相关——（2）Seq2Seq模型"><img class="cover" src="/2021/08/15/Transformer%E7%9B%B8%E5%85%B3%E2%80%94%E2%80%94%EF%BC%881%EF%BC%89Encoder-Decoder%E6%A1%86%E6%9E%B6/Transformer1.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-16</div><div class="title">Transformer相关——（2）Seq2Seq模型</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#task1task2-%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">Task1&amp;Task2 数据读取与数据分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">1.0.1.</span> <span class="toc-text">数据分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%AD%E6%89%80%E6%9C%89%E5%8F%A5%E5%AD%90%E6%89%80%E5%8C%85%E5%90%AB%E5%AD%97%E7%AC%A6%E7%9A%84%E5%B9%B3%E5%9D%87%E4%B8%AA%E6%95%B0"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">统计数据集中所有句子所包含字符的平均个数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E5%88%86%E5%B8%83%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.0.1.2.</span> <span class="toc-text">字符分布统计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%AD%E7%B1%BB%E5%88%AB%E5%88%86%E5%B8%83%E7%9A%84%E8%A7%84%E5%BE%8B"><span class="toc-number">1.0.1.3.</span> <span class="toc-text">统计数据集中类别分布的规律</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%AD%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%88%AB%E4%B8%8B%E5%8F%A5%E5%AD%90%E5%B9%B3%E5%9D%87%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0"><span class="toc-number">1.0.1.4.</span> <span class="toc-text">统计数据集中不同类别下句子平均字符的个数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%81%87%E8%AE%BE%E5%AD%97%E7%AC%A63750%E5%AD%97%E7%AC%A6900%E5%92%8C%E5%AD%97%E7%AC%A6648%E6%98%AF%E5%8F%A5%E5%AD%90%E7%9A%84%E6%A0%87%E7%82%B9%E7%AC%A6%E5%8F%B7%E8%AF%B7%E5%88%86%E6%9E%90%E8%B5%9B%E9%A2%98%E6%AF%8F%E7%AF%87%E6%96%B0%E9%97%BB%E5%B9%B3%E5%9D%87%E7%94%B1%E5%A4%9A%E5%B0%91%E4%B8%AA%E5%8F%A5%E5%AD%90%E6%9E%84%E6%88%90"><span class="toc-number">1.0.1.5.</span> <span class="toc-text">假设字符3750，字符900和字符648是句子的标点符号，请分析赛题每篇新闻平均由多少个句子构成？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E7%9A%84%E7%BB%93%E8%AE%BA"><span class="toc-number">1.0.2.</span> <span class="toc-text">数据分析的结论</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 冬于</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">冬于</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ifwind.github.io/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/">https://ifwind.github.io/2021/09/29/Task1-Task2%E6%95%B0%E6%8D%AE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%88%86%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ifwind.github.io" target="_blank">冬于的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><a class="post-meta__tags" href="/tags/NLP/">NLP</a><a class="post-meta__tags" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><a class="post-meta__tags" href="/tags/%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/">文本分类</a></div><div class="post_share"><div class="social-share" data-image="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/"><img class="prev-cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Task3-基于机器学习的文本分类</div></div></a></div><div class="next-post pull-right"><a href="/2021/09/27/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC8%E7%AB%A0-%E9%9B%86%E6%88%90%E5%AD%A6%E4%B9%A0/"><img class="next-cover" src="/2021/07/13/%E8%A5%BF%E7%93%9C%E4%B9%A6%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E7%AC%AC1%E7%AB%A0-%E7%BB%AA%E8%AE%BA/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">西瓜书阅读笔记——第8章-集成学习</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/10/04/Task3-基于机器学习的文本分类/" title="Task3-基于机器学习的文本分类"><img class="cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-04</div><div class="title">Task3-基于机器学习的文本分类</div></div></a></div><div><a href="/2021/10/11/Task4-基于深度学习的文本分类1-FastText/" title="Task4-基于深度学习的文本分类1-FastText"><img class="cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-11</div><div class="title">Task4-基于深度学习的文本分类1-FastText</div></div></a></div><div><a href="/2021/10/11/Task4-基于深度学习的文本分类2.1-利用Word2Vec训练词向量/" title="Task4-基于深度学习的文本分类2-Word2Vec"><img class="cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-11</div><div class="title">Task4-基于深度学习的文本分类2-Word2Vec</div></div></a></div><div><a href="/2021/10/16/Task4-基于深度学习的文本分类3-基于Bert的预训练和微调进行文本分类/" title="Task4-基于深度学习的文本分类3-基于Bert预训练和微调进行文本分类"><img class="cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-16</div><div class="title">Task4-基于深度学习的文本分类3-基于Bert预训练和微调进行文本分类</div></div></a></div><div><a href="/2021/10/13/Task4-基于深度学习的文本分类2.2-Word2Vec+TextCNN分类/" title="Task4-基于深度学习的文本分类2.2-Word2Vec+TextCNN+BiLSTM+Attention分类"><img class="cover" src="/2021/10/04/Task3-%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB/text%20classification.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-13</div><div class="title">Task4-基于深度学习的文本分类2.2-Word2Vec+TextCNN+BiLSTM+Attention分类</div></div></a></div><div><a href="/2021/08/15/Transformer相关——（1）Encoder-Decoder框架/" title="Transformer相关——（1）Encoder-Decoder框架"><img class="cover" src="/2021/08/15/Transformer%E7%9B%B8%E5%85%B3%E2%80%94%E2%80%94%EF%BC%881%EF%BC%89Encoder-Decoder%E6%A1%86%E6%9E%B6/Transformer1.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-15</div><div class="title">Transformer相关——（1）Encoder-Decoder框架</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#task1task2-%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E4%B8%8E%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text"> Task1&amp;Task2 数据读取与数据分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%AD%E6%89%80%E6%9C%89%E5%8F%A5%E5%AD%90%E6%89%80%E5%8C%85%E5%90%AB%E5%AD%97%E7%AC%A6%E7%9A%84%E5%B9%B3%E5%9D%87%E4%B8%AA%E6%95%B0"><span class="toc-number">1.0.0.1.</span> <span class="toc-text"> 统计数据集中所有句子所包含字符的平均个数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E5%88%86%E5%B8%83%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.0.0.2.</span> <span class="toc-text"> 字符分布统计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%AD%E7%B1%BB%E5%88%AB%E5%88%86%E5%B8%83%E7%9A%84%E8%A7%84%E5%BE%8B"><span class="toc-number">1.0.0.3.</span> <span class="toc-text"> 统计数据集中类别分布的规律</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%AD%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%88%AB%E4%B8%8B%E5%8F%A5%E5%AD%90%E5%B9%B3%E5%9D%87%E5%AD%97%E7%AC%A6%E7%9A%84%E4%B8%AA%E6%95%B0"><span class="toc-number">1.0.0.4.</span> <span class="toc-text"> 统计数据集中不同类别下句子平均字符的个数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E6%95%B0%E6%8D%AE%E9%9B%86%E4%B8%AD%E4%B8%8D%E5%90%8C%E7%B1%BB%E5%88%AB%E4%B8%8B%E5%8F%A5%E5%AD%90%E4%B8%AD%E6%9C%80%E5%B8%B8%E8%A7%81%E7%9A%845%E4%B8%AA%E5%AD%97%E7%AC%A6"><span class="toc-number">1.0.0.5.</span> <span class="toc-text"> 统计数据集中不同类别下句子中最常见的5个字符</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E7%9A%84%E7%BB%93%E8%AE%BA"><span class="toc-number">1.0.1.</span> <span class="toc-text"> 数据分析的结论</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 冬于</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
   endLoading: () => {
     document.body.style.overflow = 'auto';
     document.getElementById('loading-box').classList.add("loaded")
