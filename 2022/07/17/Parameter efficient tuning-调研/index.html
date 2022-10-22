@@ -1,0 +1,791 @@
+<!DOCTYPE html><html class="hide-aside" lang="zh-CN" data-theme="light"><head><meta name="referrer" content="no-referrer"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>冬于的博客 | 冬于的博客</title><meta name="author" content="冬于"><meta name="copyright" content="冬于"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Parameter efficient tuning-调研 概述 Spirit：仅微调模型参数的一小部分，而其余部分保持不变，大大降低了计算和存储成本，可以媲美全参数微调的性能。 一篇很牛的综述：Delta Tuning: A Comprehensive Study of Parameter Efficient Methods for Pre-trained Language Models">
+<meta property="og:type" content="article">
+<meta property="og:title" content="冬于的博客">
+<meta property="og:url" content="https://ifwind.github.io/2022/07/17/Parameter%20efficient%20tuning-%E8%B0%83%E7%A0%94/index.html">
+<meta property="og:site_name" content="冬于的博客">
+<meta property="og:description" content="Parameter efficient tuning-调研 概述 Spirit：仅微调模型参数的一小部分，而其余部分保持不变，大大降低了计算和存储成本，可以媲美全参数微调的性能。 一篇很牛的综述：Delta Tuning: A Comprehensive Study of Parameter Efficient Methods for Pre-trained Language Models">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ifwind.github.io/img/fish.jpg">
+<meta property="article:published_time" content="2022-07-17T08:58:14.868Z">
+<meta property="article:modified_time" content="2022-07-17T08:58:14.868Z">
+<meta property="article:author" content="冬于">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ifwind.github.io/img/fish.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://ifwind.github.io/2022/07/17/Parameter%20efficient%20tuning-%E8%B0%83%E7%A0%94/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"LVK1P2D38K","apiKey":"8cbbb0bcbb5c7448f68b4fae01d4ccd5","indexName":"DongYu","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '冬于的博客',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-17 16:58:14'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">91</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-compass"></i><span> 分类</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 类别</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-star"></i><span> Spark</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-duotone fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/fish.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">冬于的博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-compass"></i><span> 分类</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 类别</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-star"></i><span> Spark</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-duotone fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">无题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-17T08:58:14.868Z" title="发表于 2022-07-17 16:58:14">2022-07-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-17T08:58:14.868Z" title="更新于 2022-07-17 16:58:14">2022-07-17</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2,987</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="parameter-efficient-tuning-调研">Parameter efficient tuning-调研</h2>
+<h3 id="概述">概述</h3>
+<p><strong>Spirit：仅微调模型参数的一小部分，而其余部分保持不变，大大降低了计算和存储成本，可以媲美全参数微调的性能。</strong></p>
+<p>一篇很牛的综述：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.06904">Delta Tuning: A Comprehensive Study of Parameter Efficient Methods for Pre-trained Language Models</a></p>
+<p>论文把Parameter efficient tuning for Pre-trained Language Models相关的方法分成了三类：</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=N2FmOTA3N2M0MjIyZjhmODczMTA1MjU5YWI3ZTIwMmFfbFJEelgzb2E4TXU4ZGZNb3dGd2pJWkRCTmlTcFR3WTdfVG9rZW46Ym94Y25LQkFjcmg4Uk1Wc2k2aTlIanJ1VFNnXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<ol type="1">
+<li><strong>增量式（Addition-based）：</strong>
+<ol type="1">
+<li>在原始模型中增加额外可训练神经模块或参数，将小规模的神经模块或者可调参数插入到模型中，并且通过只微调这一小部分参数来达到模型高效适配的效果。</li>
+<li>代表方法：Adapter Tuning，Prefix Tuning，Prompt Tuning 等。</li>
+</ol></li>
+<li><strong>指定式（Specification-based）：</strong>
+<ol type="1">
+<li>不会在模型中引入任何新参数，也不改变模型的结构，而是直接指定要优化的部分参数。</li>
+<li>代表方法/策略：BitFit（仅通过优化模型内部的bias）、只微调 BERT 和 RoBERTa 最后一层的四分之一、Masking Tuning（学习如何指定）、Diff Tuning等。</li>
+</ol></li>
+<li><strong>重参数化（Reparameterization）：</strong>
+<ol type="1">
+<li>假设：预训练模型的适配过程本质上是低秩或者低维的。因此可以将这个过程等效为Parameter efficient的范式，通过将微调过程重参数化为一个低维子空间的优化过程，可以仅仅通过微调子空间内的参数就达到令人满意的性能，降低计算和内存成本。</li>
+<li>可以适配多任务；</li>
+<li>代表方法：LoRA、IPL等。</li>
+</ol></li>
+</ol>
+<h3 id="增量式addition-based">增量式Addition-based</h3>
+<h4 id="adapter-parameter-efficient-transfer-learning-for-nlp-2019">Adapter-<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1902.00751">Parameter-Efficient Transfer Learning for NLP</a>-2019</h4>
+<ol type="1">
+<li><strong>Spirit</strong></li>
+</ol>
+<p>在已有的transformer模型中，插⼊一个额外的组件(adapter)， 然后在训练时，freeze原有参数，只对adapter进⾏更新，这样就大幅减少了在不同下游任务训练时所产生的开销。</p>
+<ol type="1">
+<li><strong>Approach</strong></li>
+</ol>
+<p>每一个EncoderLayer内接入Adapter结构如下图：</p>
+<p><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=Y2I2MTg1ODQ1OTQwZTA2MGYwYzE0MDkzYWU3MGM1OTRfSm9HVmFKYUdZRzRkTkRXT0ZxTXhJcnZ0SnFxVHRtOXVfVG9rZW46Ym94Y253a1pCbGkyekY0SGY1RTE4aFhvOHBlXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NmE0MGRmMTQzNDlkZDcyMzgwN2U4ZmUxNDBlNTBiMjlfbDFJcWRHajRzVTF5OEluZm1jMUZaSmRMWk1qMnU5emFfVG9rZW46Ym94Y25VdkVpd0xIdVJiTG1VOGRPNDdZM1RkXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"></p>
+<p>Adapter结构的数学表达：</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MjRmZjI3YjZhZTk5OTcxZGNiM2IyZGI0YjM2ZTgzM2JfNFp4aGF5bUlQQndVUVF2ZlVHaXk2U3dMb05xYVRJbHVfVG9rZW46Ym94Y25QbEZ3RjYxVGZSR2pZZGRtelFTM0lnXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>f是非线性激活函数，relu, relu6, leaky relu, swish, sigmoid, tanh。</p>
+<ol type="1">
+<li><strong>Results</strong></li>
+</ol>
+<p>效果接近full fine-tune的结果。adapter_size∈{8,64,256}</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTJhMjBjMTk5N2NjMzFmYTRhZWM2ODdjN2I0YmYwMTdfVFRWZW5qcVRPZFJSVlRLNzNlQnlmNVdLSEUxQVFJaXVfVG9rZW46Ym94Y25Db2NCaXFoTUFpQ1M1RVJWNW1lQ1RnXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>Bert-base variable指的是微调top n层参数的结果，n ∈ {1, 2, 3, 5, 7, 9, 11, 12}。</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWNjNGI4MmZkNzJjYTc3YzViZTQxNTg5ZTc2ZTUwYTNfMTlkY0ZLd3dwZWN6WjZpQjlqOEhWeVh4RHd6S1lTQ3RfVG9rZW46Ym94Y25vQWdTUHdqQ0QzYVRSVkRNaEpibnZlXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h4 id="prefix--tuning-prefix-tuning-optimizing-continuous-prompts-for-generation-semantic-2021">Prefix- tuning-<a target="_blank" rel="noopener" href="https://www.semanticscholar.org/paper/Prefix-Tuning%3A-Optimizing-Continuous-Prompts-for-Li-Liang/53d8b356551a2361020a948f64454a6d599af69f">Prefix-Tuning: Optimizing Continuous Prompts for Generation | Semantic</a>-2021</h4>
+<ol type="1">
+<li><strong>Spirit</strong></li>
+</ol>
+<p>采用连续的任务相关向量作为输入前缀（prefix），在微调时不训练模型参数，只训练这些前缀向量，并利用这些连续可训练的Prefix Embedding提示模型生成正确的输出。</p>
+<ol type="1">
+<li><strong>Approach</strong></li>
+</ol>
+<ul>
+<li><p>每一层预训练模型的attention层中K、V前分别拼上prefix embedding：</p></li>
+<li><ul>
+<li><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=OGNmY2UxZDU0MzBmMmNmNjU1NWQ2YjAzMWNkNjVhZjhfNFAzbERTMWFBcWNvVHFmbWRLenNack1QS1dzY05Rd1hfVG9rZW46Ym94Y241YWpZMlFod0N0ZnBHRGwyMFZMRTBnXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" title="fig:" alt="img"></li>
+</ul></li>
+</ul>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MTYxOTgwMDNhYWZjY2I0YTAxNGNmZmI2MzQxOGIzM2ZfckJvYlU1azkzUGJYVndyS01kUzRRUVh4ajA2VWNSdFlfVG9rZW46Ym94Y25pZGxQeU5tZ1VKVzcyZVpRaE1FbHpoXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>直接更新前缀向量的参数会导致训练的不稳定与结果的略微下降，因此采用了重参数化的方法，通过一个若干较小的前缀向量经过单层MLP生成正常规模的前缀向量：</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NDlhMGFkN2IyMjhiZTc1MDQxODY2NzNlZDBlYWFjMzdfSlpteU1GenN6SDA5Wml0azdLcFRXQmpsbVhFNUlpZ2VfVG9rZW46Ym94Y25KOXNOcWs2UlpjQ0RUdmRGbXJMZ2JiXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>训练完后，用于重参数化的较小前缀向量会被丢弃，只保留目标前缀向量的参数。</p>
+<h5 id="和prompt-learning的区别">和prompt learning的区别</h5>
+<p>prompt learning几乎不改变原始预训练模型的结构，在input的时候通过在正文tokens的某些位置插入特殊的占位符组成的模板，然后利用预训练模型的输出做不同的下游任务，只是这部分增加的内容只在输入部分影响。</p>
+<p>prompt learning非常match我们第一种线上推理状态，但是大部分研究的效果表明prompt learning在中小模型上的效果很差，只有大模型（比如100亿）才有比较好的效果。</p>
+<ol type="1">
+<li><strong>Results</strong></li>
+</ol>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MTRlY2Q1NDdmY2QzMmI1NmI3MjMwYmFjNTk5MWE0NzBfY3FwQUZ6Q0dLemdibGRGbVlsaVp6d09xTVNkWUlZVjVfVG9rZW46Ym94Y25NVDYyaHpUMWV0a0ZHVGxqUEI4SHFmXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h4 id="adapteradapter-fusion-adapterfusion-non-destructive-task-composition-for-transfer-learning-2021">Adapter+Adapter fusion-<a target="_blank" rel="noopener" href="https://aclanthology.org/2021.eacl-main.39/">AdapterFusion: Non-Destructive Task Composition for Transfer Learning</a>-2021</h4>
+<ol type="1">
+<li><strong>Spirit</strong></li>
+</ol>
+<p>不同Adapter可以用于不同任务，在多个Adapter后面再接一个Adapter fusion，可以达到结合多个Adapter信息的目的。</p>
+<ol type="1">
+<li><strong>Approach</strong></li>
+</ol>
+<p>分两个阶段：</p>
+<ul>
+<li><p>第一阶段：利用m个训练数据单任务/多任务训练出多个Adapter；</p></li>
+<li><p>第二阶段：fix已训练的Adapter，用某个task m相同的数据，训练一个Adapter Fusion。</p></li>
+</ul>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=Zjk3MWMzZTVjNzA1ODMzODBhZjViZTE2ZjZlYjBhMGRfbFlJWWhJZ2xXWnA1bXJUd0RXbmdqQ0NUQjNkaHpua2ZfVG9rZW46Ym94Y25LYndTWUw4VjdMM2ZRajRsWFFnWWZiXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>数学表达：</p>
+<p><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZjQyMmM1YzUzYjI0M2IyMWMzZDFhMGE2NWFlZDM3OTVfVm9lekJBWjl1cXV2UGxGUXBSV1pnaHNNMDdobGJRa2dfVG9rZW46Ym94Y25uMjd3MUxLd2xLMUFhSmE4QU1PSTNmXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NzcxNzRlYjg4NzRmMjIyYWFjYWRiODkxOThhN2UwMmJfbTk1NUR2S3lPYzJPM2M0N2dvNzh2Q1dJTVh1UFl6eEFfVG9rZW46Ym94Y251V2hKWmNQQkp3SElHOXZCbHgyRk9jXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"></p>
+<p>Adapter Fusion数学表达</p>
+<ol type="1">
+<li><strong>Results</strong></li>
+</ol>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NWY4NTc4MWNhZjRiMTQ3MjQ4MTAwNDRlOTc1MjZmZWVfMVhYNUhFMzhQTlpwUFg2am5RdWhqcG9STGxMNUcydmtfVG9rZW46Ym94Y240clpFMmlnSFZzRHU1WkpEYUVyZFRnXzE2NTgwNDgxNTk6MTY1ODA1MTc1OV9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h5 id="important-conclusion">Important Conclusion</h5>
+<ol type="1">
+<li><p>AdapterFusion的下游任务如果和多个Adapter训练任务之间没有什么关联，可能Adapter Fusion不会带来很大的增益；</p></li>
+<li><p>如果Task m是小数据集训练的Adapter Fusion，可能可以在大数据集训练的Adapter中获得更多的增益；</p></li>
+<li><p>AdapterFusion可以给当前任务更相关的Adapter更大的权重。</p></li>
+</ol>
+<h3 id="指定式specification-based">指定式（Specification-based）</h3>
+<h4 id="bitfit">BitFit</h4>
+<p>只微调预训练模型的bias，在模型部署的时候比较麻烦，感觉不太符合我们的场景。</p>
+<h4 id="masking-tuning">Masking Tuning</h4>
+<ol type="1">
+<li><strong>Spirit</strong></li>
+</ol>
+<p>为每个下游任务学习一个“掩码矩阵”，让model自己mask掉一部分参数，做预测的时候用pretrained BERT直接乘上对应的mask，元素为0表示当前参数不参与推理过程。相比常规的微调操作，这种方法不需要在内存中存储32位浮点数值。</p>
+<ol type="1">
+<li><strong>Approach</strong></li>
+</ol>
+<p>训练第$<span class="math display">\[$l \]</span><span class="math display">\[层参数\]</span><span class="math display">\[W^l=\{W^l_K,W^l_Q,W^l_V,W^l_AO,W^l_I,W^l_O\} \]</span><span class="math display">\[的mask矩阵\]</span><span class="math display">\[M^l \]</span>$$：</p>
+<p><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MTE2OTEwNTZkYzc3OTIxZDc2OWI1NDY2N2U3MTljMTVfSFNwRnJqOUNPZzFyQnJwN0NQM3NFaGNQY09SMHFCQW5fVG9rZW46Ym94Y25wUzJDVHZzbjlRSHRXclZhdXhTSzdrXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=Y2ZlNDgxZDM0ODA1MDYzMTc1YmZiZTM0YmE5YTRhZDdfUDI1UnVrb25Hem9WSWt5RXdJWk9UdDhmSTg0UGxXVEJfVG9rZW46Ym94Y25yRWZTTEZqVnBScjNiZTVwMmlpUXhmXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"></p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MzVhZTIyMTg1NDEzNDEwNGRiYTY5NGE5NDJkZGM4ZjhfQ2hrRTl0Tkw2ZTlUUnlSVTRiMk9sc0xRZlQzVkN1WlZfVG9rZW46Ym94Y25pQjhySklPZnNQNkR2SDhjNExNVEZkXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTU0N2FiZTE4NWY3MGUyMjk2ZDAwMTRkMWI2NjUxMGFfZUlSRExTZzZrSWlJYll5bnYzc0phbUp4bVFuQ1NLMHBfVG9rZW46Ym94Y25nZzhYQjZZNEVRTTVxUVptM0N4am9jXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>Binary matrix不可导，增加噪声估计进行反向传播更新梯度：</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDdiYTU3YjdjOTdlMDAzNjg0ZTM1MjlhNTM3OWM2YzJfWmpDOXRLblJRQVByOXQzaUJ0dks3ZUhzS3V4MWh1QVFfVG9rZW46Ym94Y25JMm50M0ZFTGJSQkw0SFk4S2F4S0VjXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<ol type="1">
+<li><strong>Results</strong></li>
+</ol>
+<p>对每个任务掩去3%-10%的参数可以实现和微调相当的效果。</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDgwZTk5NjFmMTY3MTQwN2MzNGM2NTlhZDg3ZmI2MTVfWWZzckRVQzZ4S053ZnJjT1AzdzFuZ0QyMmFQRDJXMllfVG9rZW46Ym94Y25kdkpHTGpVQ2xhMjI2SGtvT1lFbnBkXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h3 id="重参数化reparameterization">重参数化Reparameterization</h3>
+<h4 id="lora-lora-low-rank-adaptation-of-large-language-models-2021">LoRA-<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2106.09685">LoRA: Low-Rank Adaptation of Large Language Models</a>-2021</h4>
+<ol type="1">
+<li><strong>Spirit</strong></li>
+</ol>
+<p>预训练模型的适配过程本质上是低秩或者低维的。通过将微调过程重参数化为一个低维子空间的优化过程，可以仅仅通过微调子空间内的参数就达到令人满意的性能。</p>
+<ol type="1">
+<li><strong>Approach</strong></li>
+</ol>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=Njg4ZWU3MGM1NmExNmNiMWRhNjQ5N2UzYTQ3MTIyYTFfdXFEakpsdDR6b3JseFZKVHN5cmEybTFoOFRpZDFodFdfVG9rZW46Ym94Y25pUlJBMENCRFNFS0I2MzB2UXQzY1hqXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>数学表达：</p>
+<p>LoRA用低秩分解$<span class="math display">\[$W+\Delta W=W+W_{down}W_{up} \]</span><span class="math display">\[表示其更新，\]</span><span class="math display">\[W_{down}、W_{up} \]</span>$$可调整的参数。LoRA将这种更新应用于多头注意子层中的 Query 和 Key 投影矩阵:</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTc4ZjAwODVjNzM4MTE4ODIxYjRhYzUwNmU1MjFlNGRfbkFyZE9QVzhYMDlTdXpQT3BLVmcyQmd2QVVDUTc1WDZfVG9rZW46Ym94Y25WZFkyMzZhazdLYmlhc3VxNU9XbzllXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>其中$<span class="math display">\[$s\geq 1 \]</span>$$是可调标量超参数。</p>
+<ol type="1">
+<li><strong>Result</strong></li>
+</ol>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MTcyYmZiNmM1MWExMTE1YzdhODU1MmYxY2ZlMzc5NDJfekV4eVB4VFA3WE1MSVZGOXJpaFM1dXMyaWxQNFRQQk1fVG9rZW46Ym94Y25zYnJMWnJoZWU1UmdkRjU3REswRjhmXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h3 id="混合方法">混合方法</h3>
+<h4 id="mam-adapter-towards-a-unified-view-of-parameter-efficient-transfer-learning-2021">MAM-Adapter-<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2110.04366.pdf">Towards a Unified View of Parameter-Efficient Transfer Learning</a>-2021</h4>
+<ol type="1">
+<li><strong>Spirit</strong></li>
+</ol>
+<p>发现Adapter、prefix-tuning、LoRA实际上可以表达成一种通用的形式，结合insertion form、modified representation、composition function不同设计维度的排列组合，可以形成多种模型结构。</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MjA4NDAxZjVjODRlYTUwODQ1ZmJlNWQ4YTZhYWQwZDhfdGIwdnhLejh0dkFna29KYkpUQ1l6Y201aVBqek12aDFfVG9rZW46Ym94Y25GS0NsdWRBWnpEeUpoMjdsUno2YW1jXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTViYzk2YjMwOGY0ZDRhYjI1NjNhNzJiYzUxMGRmOThfZGRRTGRXOWJqdlBSSUtWSDhSZ3pwUm85NFc5VXJ0MTNfVG9rZW46Ym94Y25icU9LZjl2eVd4UDJuOEVMMjMyOHBjXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h5 id="推导">推导</h5>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Adapter</th>
+<th>LoRA</th>
+<th>Prefix Tuning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=YzhkMDIyNjRmODQ4NjE4MmViYmI3ZGJjMGRiYTljMjRfWUJKZ0tCSW9GQkJxT200SmNDREJjOUJMQjNzVzJvb0xfVG9rZW46Ym94Y255bDZycHBLMkxDdEJIbVVQUjQ3T0kwXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"></td>
+<td><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MTJlNmNjNGMyYmQzZmIxZTdjODU1Njc3MjRiM2I5YzdfTndxeWxBcjRmcEY4RVMwYmxJcjU5MnlpYWFFZHUyaThfVG9rZW46Ym94Y25mY2VZcDUyVjI1WUNMOTM2TlBOUmNoXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"></td>
+<td><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MDEyOTA2MzRmNzJiYTg0NzFjYzk1ZTBhOTMxN2ExNWZfVUZia0c3RU54eERvWklrSFZHTEVkWXpJVHNwbnVQWERfVG9rZW46Ym94Y253SlNnQ1VJZExtdHRieXY0bjRGaFBiXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img">Prefix Tuning本质上可以转化成：对Hidden state的线性插值：<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NWI3NGQ4OTA5ODM2M2Y2NDA3MTYyNGI0NGVmMWU4YmNfZlVjVzRVcE1yamZHS3NLbTFiTndYY2VvNXhGRTFoZUpfVG9rZW46Ym94Y25ET1pua0daU1ZOYXlTTXZXQzdrYnE1XzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img">$<span class="math display">\[$\Delta h \]</span><span class="math display">\[的rank取决于\]</span><span class="math display">\[P_v \]</span><span class="math display">\[（\]</span><span class="math display">\[\leq Rank(P_v) \]</span><span class="math display">\[），是低秩的，\]</span><span class="math display">\[P_v \]</span><span class="math display">\[约束了\]</span><span class="math display">\[h \]</span>$$的变化方向。进一步转化可以发现，Prefix tuning其实是Adapter的特殊形式：<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NjY5MjVhYjA2NmJjYzZkOTQzZWFjOWFiMzk4NTBlZjNfOXBuUUZKbEJDTlRCZWZZY3hDVDRoUk5XRkhoZ2dPY1RfVG9rZW46Ym94Y25kVENYRFpaN1pKeG5iWWtFUnVaNWdjXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MDA0ZTA0ZTAwN2MzOTk2NzRlY2FlZGM5N2U4OWQ1OThfNE13WW01SE1qSTA0QTllbmc1N0o4VGhpQ1hjSXNnRVNfVG9rZW46Ym94Y24yYTY3V2lNdElUY2oySTlwNzdDNGFmXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"></td>
+</tr>
+</tbody>
+</table>
+<h5 id="important-conclusion-1"><strong>Important conclusion</strong></h5>
+<ul>
+<li><p>对于一些简单的任务（比如分类）可能各种方法效果都差不多</p></li>
+<li><p>parallel形式的adapter普遍比sequential的表现更好；</p></li>
+<li><p>一般来说，modify在FFN比attn要好，prefix tuning中在attn部分增加prefix的dim不一定效果会变得更好，而prefix tuning没办法把prefix加到ffn，导致prefix tuning存在弊端 。</p></li>
+</ul>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZGM2ZjZkMTg3NDAwZjY4ODllNTM3YzQyNDViMGYzNzBfQkZiTTJ1MUdMZWt4U3ZKa1RUUGhENWZzNG5wTWZDUWJfVG9rZW46Ym94Y25GN2l0Z2JTbU1XMkphM1R0eEJOS1ZmXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<ul>
+<li><p>当微调参数非常少的时候（0.1%），multi-head attn的修改相比单头的adapter会有更好的表现；</p></li>
+<li><p>LoRA中scaled addition是很简单有效的提升效果的方法：</p></li>
+</ul>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NzczNzg2ZDM3NjQwNTcxYzJiOWUzOTQ2ZGE3Nzg4OTlfQUpPRkIxcVhnZm16M0xBVzFzdmVuM0xGeHF0R3M0aTBfVG9rZW46Ym94Y25SekRScVFNcEVreVVZZW1BcGRSSE5oXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<ol type="1">
+<li><strong>Approach</strong></li>
+</ol>
+<p>经过对比实验得到不同结构下的优缺点，最后取长补短，综合三个模型长处提出了一个MAM-Adapter结构：</p>
+<ul>
+<li><p>insertion form：Parallel；</p></li>
+<li><p>modified representation：0.1%params multi-head attn，rest on ffn；</p></li>
+<li><p>composition function：$<span class="math display">\[$h \leftarrow h+s· \Delta h \]</span>$$</p></li>
+</ul>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=YTI5MGI1MmU0NDQ5OWRkNDYwYTQ0NGFiNGNlNWFlMmFfMkwwRWt3dHFMWlFYbm9CVjVZV2F3NTdlRnRHTllKQVlfVG9rZW46Ym94Y25BTGhBWm5GWnhyUWtZWVRDRGM3ZFVoXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<ol type="1">
+<li><strong>Results</strong></li>
+</ol>
+<p>效果接近/超过full fine-tune。</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NWVjNTM2ZWY4MDY2MmY2OWI0ZjNhMDhmNzQxNGI0YWJfdnlyTzNtMWZGc0IzY1I0bVdnNDFGNmZJOHZGWlBvYnJfVG9rZW46Ym94Y25IVlNzZHN1Y2NwbnUxQmRZdm1IY0hoXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MmE4OTdkZmYzNGE5MjJiZDQ4MGZkOTg0MTQzMTk0NmRfYXhkcE5mQ3dobEJodjJqMFVqZzMxR3VnNm9vVDgySFBfVG9rZW46Ym94Y25JV3R2M1F3RlhqVm9SeHhDajlZa3piXzE2NTgwNDgyMDQ6MTY1ODA1MTgwNF9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h3 id="adapterhub"><a target="_blank" rel="noopener" href="https://github.com/Adapter-Hub/adapter-transformers">AdapterHub</a></h3>
+<p>基于huggingface transformers实现的Adapter库，上述中关键模型的实现可以参考。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.adapterhub.ml/">AdapterHub Documentation — adapter-transformers documentation</a></p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 37%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Paper(s)</th>
+<th>Quick Links</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bottleneck adapters</td>
+<td><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1902.00751.pdf">Houlsby et al. (2019)</a> <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1909.08478.pdf">Bapna and Firat (2019)</a></td>
+<td><a target="_blank" rel="noopener" href="https://docs.adapterhub.ml/quickstart.html">Quickstart</a>, <a target="_blank" rel="noopener" href="https://colab.research.google.com/github/Adapter-Hub/adapter-transformers/blob/master/notebooks/01_Adapter_Training.ipynb">Notebook</a></td>
+</tr>
+<tr class="even">
+<td>AdapterFusion</td>
+<td><a target="_blank" rel="noopener" href="https://aclanthology.org/2021.eacl-main.39.pdf">Pfeiffer et al. (2021)</a></td>
+<td><a target="_blank" rel="noopener" href="https://docs.adapterhub.ml/training.html#train-adapterfusion">Docs: Training</a>, <a target="_blank" rel="noopener" href="https://colab.research.google.com/github/Adapter-Hub/adapter-transformers/blob/master/notebooks/03_Adapter_Fusion.ipynb">Notebook</a></td>
+</tr>
+<tr class="odd">
+<td>MAD-X, Invertible adapters</td>
+<td><a target="_blank" rel="noopener" href="https://aclanthology.org/2020.emnlp-main.617/">Pfeiffer et al. (2020)</a></td>
+<td><a target="_blank" rel="noopener" href="https://colab.research.google.com/github/Adapter-Hub/adapter-transformers/blob/master/notebooks/04_Cross_Lingual_Transfer.ipynb">Notebook</a></td>
+</tr>
+<tr class="even">
+<td>AdapterDrop</td>
+<td><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2010.11918.pdf">Rücklé et al. (2021)</a></td>
+<td><a target="_blank" rel="noopener" href="https://colab.research.google.com/github/Adapter-Hub/adapter-transformers/blob/master/notebooks/05_Adapter_Drop_Training.ipynb">Notebook</a></td>
+</tr>
+<tr class="odd">
+<td>MAD-X 2.0, Embedding training</td>
+<td><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2012.15562.pdf">Pfeiffer et al. (2021)</a></td>
+<td><a target="_blank" rel="noopener" href="https://docs.adapterhub.ml/embeddings.html">Docs: Embeddings</a>, <a target="_blank" rel="noopener" href="https://colab.research.google.com/github/Adapter-Hub/adapter-transformers/blob/master/notebooks/08_NER_Wikiann.ipynb">Notebook</a></td>
+</tr>
+<tr class="even">
+<td>Prefix Tuning</td>
+<td><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2101.00190.pdf">Li and Liang (2021)</a></td>
+<td><a target="_blank" rel="noopener" href="https://docs.adapterhub.ml/overview.html#prefix-tuning">Docs</a></td>
+</tr>
+<tr class="odd">
+<td>LoRA</td>
+<td><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2106.09685.pdf">Hu et al. (2021)</a></td>
+<td><a target="_blank" rel="noopener" href="https://docs.adapterhub.ml/overview.html#lora">Docs</a></td>
+</tr>
+<tr class="even">
+<td>Parallel adapters, Mix-and-Match adapters</td>
+<td><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2110.04366.pdf">He et al. (2021)</a></td>
+<td><a target="_blank" rel="noopener" href="https://docs.adapterhub.ml/overview.html#combinations-mix-and-match-adapters">Docs</a></td>
+</tr>
+<tr class="odd">
+<td>Compacter</td>
+<td><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2106.04647.pdf">Mahabadi et al. (2021)</a></td>
+<td><a target="_blank" rel="noopener" href="https://docs.adapterhub.ml/overview.html#compacter">Docs</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="moe系列">MoE系列</h2>
+<h3 id="mmoe-modeling-task-relationships-in-multi-task-learning-with-multi-gate-mixture-of-experts-2018">MMoE-<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/pdf/10.1145/3219819.3220007">Modeling Task Relationships in Multi-task Learning with Multi-gate Mixture-of-Experts</a>-2018</h3>
+<ol type="1">
+<li><strong>Spirit</strong></li>
+</ol>
+<ul>
+<li><p>不让所有任务共享一个底层网络，而是具有一组底层网络，每个底层网络都称为专家；</p></li>
+<li><p>再用门控网络（不同任务有不同门控）选择专家输出结果的结合权重。</p></li>
+</ul>
+<ol type="1">
+<li><strong>Approach</strong></li>
+</ol>
+<p>原文中每个专家都是一个前馈网络。</p>
+<p>图（b）是OMoE框架，由一个门控子网络（Gating network）和多个专家子网络（Expert model）构成，门控网络为输入x计算各个专家网络输出所占的比重，然后采取加权求和的方式得到最终的输出。</p>
+<p>图（c）为MMoE框架，为每个任务引入一个门控网络。门控网络采用输入特征并输出 softmax 门来组装具有不同权重的专家，从而允许不同的任务以不同的方式利用专家。然后将集合专家的结果传递到特定任务的塔式网络中。不同任务的门控网络可以学习不同专家聚集的混合模式，从而捕获任务关系。</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NTBkNTFjNGVjZTZmNmY1ZWU0MGM5NTc5MjAwMjNlMDhfZEQyVlVBVHpMaE1ZdWViMFU1dHVaMDdWb1dWUUh6aVZfVG9rZW46Ym94Y244SDB3a1VBTHNEOTk5ckl3QWFrZ3BlXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h3 id="switch-transformer-switch-transformers-scaling-to-trillion-parameter-models-with-simple-and-efficient-sparsity-2021">Switch Transformer-<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2101.03961">Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity</a>-2021</h3>
+<ol type="1">
+<li><strong>Spirit</strong></li>
+</ol>
+<p>用一个门控子网络对输入进行路由选择，即根据各个专家网络对应的门控值（gating value），选择出Top-K个专家子网络参与当前输入的实际计算，这样可以显著降低计算量。 基于MoE的思想，将Transformer中的前馈全连接子层（Feed-Forward Network，FFN）视为Expert，使用多个FFN代替原来单一的FFN，并且使用了最简单的路由选择策略，将K设置为1，即而新增的计算量相比较于原来的计算量而言可以忽略，这样就实现了增大模型参数的同时维持相对不变的计算量。</p>
+<ol type="1">
+<li><strong>Approach</strong></li>
+</ol>
+<p>code： <a target="_blank" rel="noopener" href="https://nn.labml.ai/transformers/switch/index.html">Switch Transformer</a></p>
+<p>1个Linear作为Router，N个FFN。不同的输入通过Router只会选择一个FFN进行计算，这样相比较于原来的MoE结构，计算量只增加了路由选择的计算量，实现了增大模型参数的同时维持相对不变的计算量。</p>
+<p><a target="_blank" rel="noopener" href="https://www.linkresearcher.com/theses/90dd50dd-a0fa-4779-bb43-74b4f9cdee47">深入解读首个万亿级语言模型Switch Transformer | 论文频道 | 领研网</a></p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MTI3NWE5YTNhYTM4ZTQ4NzUyYjU2OTExYjUyYWNlOGVfUGNhUDVBTjhka3BKM0I4Z2pYSU9Jem5nZ2I4bXgzMWFfVG9rZW46Ym94Y25DQXFVajRSN2phM2c3WlZvSEZMZTZlXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h3 id="随机expert-taming-sparsely-activated-transformer-with-stochastic-experts-2021">随机expert-<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2110.04260">Taming Sparsely Activated Transformer with Stochastic Experts</a>-2021</h3>
+<h4 id="important-conclusion-2">Important Conclusion</h4>
+<ul>
+<li>多专家模型中的门控单元实际上是没有必要的，随机平均分配数据给不同专家效果要比使用门控单元预测出来的要好。</li>
+</ul>
+<ol type="1">
+<li><strong>Approach</strong></li>
+</ol>
+<p>实验表明门控单元对这两个专家是没有某种偏爱的，会随机将数据分配到相应专家上，这种现象称之为 Random Routing。本文受此启发设计的模型结构直接跳过分配预测，暴力的随机分配数据。</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmExNjJlZjA4MmFiYmNlMDk2ZTgwYWE3Zjk0OWU5YjNfM3JoTEN2VzcxSmV2Wml0Y2hZQmxjcnM1WXJoMmxkV1JfVG9rZW46Ym94Y25uR2pMRVhZMjFxRldpVzRpdGxtNHVnXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>在训练阶段，每次通过在不同层随机选取专家来构建两个子模型，为了保证随机专家情况下不出现预测不匹配的情况，之后同时使用交叉熵来监督每个子模型最后的预测结果，以及再使用一致性来监督两者的预测 logit：</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=YmFmMzdjZWE3MzNlOGQ0ZjIwMGQ0ODQ3Y2Y2ZGYxNDJfRjA3ZkZZS0VINnhUU0FFenViM1VTa09uODdDUGlHa1BfVG9rZW46Ym94Y25JeDlVRzFzd1l1dnFUdnhBeGpvdmJjXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h2 id="moe结合adapter">MoE结合Adapter</h2>
+<h3 id="adamix-adamix-mixture-of-adapter-for-parameter-efficient-tuning-of-large-language-models-2022">AdaMix-<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2205.12410">AdaMix: Mixture-of-Adapter for Parameter-Efficient Tuning of Large Language Models</a>-2022</h3>
+<ol type="1">
+<li><strong>Spirit</strong></li>
+</ol>
+<p>受<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2110.04260">随机expert的</a>启发，把TF EncoderLayer中FFN后面接的Adapter换成MOE Layer，且进一步把Adapter中$<span class="math display">\[$W_{down}、W_{up} \]</span>$$拆开成不同专家。</p>
+<ol type="1">
+<li><strong>Approach</strong></li>
+</ol>
+<p>训练阶段：模型只考虑一个主分支（左边），将最终预测结果做损失；其次，为了保证训练高效，在确定了主分支随机选择的专家后，右分支需要满足两个 FFN 专家的选择均与主分支不同。损失函数即为主分支的交叉熵加上两个分支的 KL 一致性损失：</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MjAyZTA5YzAxZDgxYmQ5YjVhZWRlYWJjMTEzZDU3OTFfdVhORlZEeWtGa3NWNFgzT2NuMnA3WjRpVmlGeno3Rm5fVG9rZW46Ym94Y244ZThOeFBwMHN1WnRIR3ZqYmpJeTVmXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>推理阶段：把训练阶段MoE层的FFN中的参数求平均，让参数和计算量达到最小和最高效。</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MzJhZDE2Zjk2ZjBhMWFlZTU3MzlkMDcxNDU3Y2E2N2VfTjkxaTNHZEQzWFBMdHI4anZNZ1Rlclhxc1Uzelh0NmpfVG9rZW46Ym94Y243bUZ4aEdlNWV3ZVcxRWdTTmRKTmkwXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NWNlOWQzZDk4NmIyMGFkZWZjNmY4MmJhM2ZjMjMzYzdfOU05RlJFQ3I4dWw1R1QyUU9vQTh4TWZJZFZPTDl1ZHRfVG9rZW46Ym94Y25ydkZmZlpGZ0N3VHE2dFVieVE1VTFmXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MWJmYTAwNWQyMzdjZmNiMDJkYjU4YzI3NmY2OTAzYmFfOHlUVnJONzAzWXlsdm1UYkNPcXp6U25kMVViZld4TldfVG9rZW46Ym94Y25wWkNWVkg4SDJZZktvcEc0M2tqUEpkXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"></p>
+<p>训练阶段</p>
+<p>推理阶段</p>
+<h4 id="和ensemble的区别和联系">和ensemble的区别和联系</h4>
+<p>将在遍历专家后融合所有的预测值，变成融合所有专家的参数，来实现计算成本的降低。</p>
+<ol type="1">
+<li><strong>Results</strong></li>
+</ol>
+<p>效果基本上好于full fine-tune。</p>
+<p><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=N2Q5NjdiNmZjZjFiOTk3YWIwMTM1OWFjMjhiNmY4M2NfZVI4cXN2Yk9JOWx0SWpKNUZvczZIckhPekFmR1NzaW5fVG9rZW46Ym94Y24yajFRckVlVjQ5dkNGNk01cnBibkRmXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=NWJkMDkxNjUwMmUyNzYzMjI0YWVmMGE3NjQ2ZjNhMTNfYjk5ZlNOWm41OXhUWmlDOUJ3clJ1MGtIelFGczJ0RFBfVG9rZW46Ym94Y240NHBnNmc3ZGRKQW9OMnJTN1lja0FmXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZmRiNTJlZDUwNTM0MDkwNjVlMWVkOGYxOGQ5ZmE4NzZfalVYWkdSS3owOHUzbFJBU3ZZTmgwTmFKUEhBQ00yVUNfVG9rZW46Ym94Y25sWGtiYkdUd3R2c1N4TmlmOHpobHZoXzE2NTgwNDgyMzI6MTY1ODA1MTgzMl9WNA" alt="img"></p>
+<p>和baseline对比(RoBERTa-large)</p>
+<p>和baseline对比（BERT-base）</p>
+<p>AdaMix变体</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">冬于</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ifwind.github.io/2022/07/17/Parameter%20efficient%20tuning-%E8%B0%83%E7%A0%94/">https://ifwind.github.io/2022/07/17/Parameter%20efficient%20tuning-%E8%B0%83%E7%A0%94/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ifwind.github.io" target="_blank">冬于的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/fish.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/07/17/%E4%BB%8EPytorch%E6%A8%A1%E5%9E%8B%E8%90%BD%E5%9C%B0%E5%BC%80%E5%A7%8B%E8%AF%B4%E8%B5%B7/"><img class="prev-cover" src="/img/fish.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info"></div></div></a></div><div class="next-post pull-right"><a href="/2022/03/22/Pytorch%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E6%9F%A5%E6%89%8B%E5%86%8C6-%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E3%80%81%E5%8D%B7%E7%A7%AF%E5%B1%82%E3%80%81attention%E5%B1%82%E5%8F%AF%E8%A7%86%E5%8C%96/"><img class="next-cover" src="/2021/11/03/Pytorch%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E6%9F%A5%E6%89%8B%E5%86%8C1-%E5%BC%A0%E9%87%8F%E3%80%81%E8%87%AA%E5%8A%A8%E6%B1%82%E5%AF%BC%E5%92%8CGPU/Pytorch.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Pytorch与深度学习自查手册6-网络结构、卷积层、attention层可视化</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#parameter-efficient-tuning-%E8%B0%83%E7%A0%94"><span class="toc-number">1.</span> <span class="toc-text">Parameter efficient tuning-调研</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E%E9%87%8F%E5%BC%8Faddition-based"><span class="toc-number">1.2.</span> <span class="toc-text">增量式Addition-based</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#adapter-parameter-efficient-transfer-learning-for-nlp-2019"><span class="toc-number">1.2.1.</span> <span class="toc-text">Adapter-Parameter-Efficient Transfer Learning for NLP-2019</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#prefix--tuning-prefix-tuning-optimizing-continuous-prompts-for-generation-semantic-2021"><span class="toc-number">1.2.2.</span> <span class="toc-text">Prefix- tuning-Prefix-Tuning: Optimizing Continuous Prompts for Generation | Semantic-2021</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%92%8Cprompt-learning%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">和prompt learning的区别</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#adapteradapter-fusion-adapterfusion-non-destructive-task-composition-for-transfer-learning-2021"><span class="toc-number">1.2.3.</span> <span class="toc-text">Adapter+Adapter fusion-AdapterFusion: Non-Destructive Task Composition for Transfer Learning-2021</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#important-conclusion"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">Important Conclusion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E5%BC%8Fspecification-based"><span class="toc-number">1.3.</span> <span class="toc-text">指定式（Specification-based）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#bitfit"><span class="toc-number">1.3.1.</span> <span class="toc-text">BitFit</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#masking-tuning"><span class="toc-number">1.3.2.</span> <span class="toc-text">Masking Tuning</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%8F%82%E6%95%B0%E5%8C%96reparameterization"><span class="toc-number">1.4.</span> <span class="toc-text">重参数化Reparameterization</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#lora-lora-low-rank-adaptation-of-large-language-models-2021"><span class="toc-number">1.4.1.</span> <span class="toc-text">LoRA-LoRA: Low-Rank Adaptation of Large Language Models-2021</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E6%96%B9%E6%B3%95"><span class="toc-number">1.5.</span> <span class="toc-text">混合方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#mam-adapter-towards-a-unified-view-of-parameter-efficient-transfer-learning-2021"><span class="toc-number">1.5.1.</span> <span class="toc-text">MAM-Adapter-Towards a Unified View of Parameter-Efficient Transfer Learning-2021</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8E%A8%E5%AF%BC"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">推导</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#important-conclusion-1"><span class="toc-number">1.5.1.2.</span> <span class="toc-text">Important conclusion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#adapterhub"><span class="toc-number">1.6.</span> <span class="toc-text">AdapterHub</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#moe%E7%B3%BB%E5%88%97"><span class="toc-number">2.</span> <span class="toc-text">MoE系列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mmoe-modeling-task-relationships-in-multi-task-learning-with-multi-gate-mixture-of-experts-2018"><span class="toc-number">2.1.</span> <span class="toc-text">MMoE-Modeling Task Relationships in Multi-task Learning with Multi-gate Mixture-of-Experts-2018</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#switch-transformer-switch-transformers-scaling-to-trillion-parameter-models-with-simple-and-efficient-sparsity-2021"><span class="toc-number">2.2.</span> <span class="toc-text">Switch Transformer-Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity-2021</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BAexpert-taming-sparsely-activated-transformer-with-stochastic-experts-2021"><span class="toc-number">2.3.</span> <span class="toc-text">随机expert-Taming Sparsely Activated Transformer with Stochastic Experts-2021</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#important-conclusion-2"><span class="toc-number">2.3.1.</span> <span class="toc-text">Important Conclusion</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#moe%E7%BB%93%E5%90%88adapter"><span class="toc-number">3.</span> <span class="toc-text">MoE结合Adapter</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#adamix-adamix-mixture-of-adapter-for-parameter-efficient-tuning-of-large-language-models-2022"><span class="toc-number">3.1.</span> <span class="toc-text">AdaMix-AdaMix: Mixture-of-Adapter for Parameter-Efficient Tuning of Large Language Models-2022</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%92%8Censemble%E7%9A%84%E5%8C%BA%E5%88%AB%E5%92%8C%E8%81%94%E7%B3%BB"><span class="toc-number">3.1.1.</span> <span class="toc-text">和ensemble的区别和联系</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 冬于</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'E4LPmFetYyaT4NwjEGOl0u8Q-gzGzoHsz',
+      appKey: 'YKdl4HKX9W6jLSdPlypgEtDM',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: 'https://e4lpmfet.lc-cn-n1-shared.com',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/gh/HCLonely/Valine@latest/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.17.0/js/md5.min.js"></script><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getIcon = (icon, mail) => {
+    if (icon) return icon
+    let defaultIcon = '?d=monsterid'
+    let iconUrl = `https://gravatar.loli.net/avatar/${md5(mail.toLowerCase()) + defaultIcon}`
+    return iconUrl
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const getComment = () => {
+    const serverURL = 'https://e4lpmfet.lc-cn-n1-shared.com'
+
+    var settings = {
+      "method": "GET",
+      "headers": {
+        "X-LC-Id": 'E4LPmFetYyaT4NwjEGOl0u8Q-gzGzoHsz',
+        "X-LC-Key": 'YKdl4HKX9W6jLSdPlypgEtDM',
+        "Content-Type": "application/json"
+      },
+    }
+
+    fetch(`${serverURL}/1.1/classes/Comment?limit=6&order=-createdAt`,settings)
+      .then(response => response.json())
+      .then(data => {
+        const valineArray = data.results.map(function (e) {
+          return {
+            'avatar': getIcon(e.QQAvatar, e.mail),
+            'content': changeContent(e.comment),
+            'nick': e.nick,
+            'url': e.url + '#' + e.objectId,
+            'date': e.updatedAt,
+          }
+        })
+        saveToLocal.set('valine-newest-comments', JSON.stringify(valineArray), 10/(60*24))
+        generateHtml(valineArray)
+      }).catch(e => {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.innerHTML= "无法获取评论，请确认相关配置是否正确"
+      }) 
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('valine-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener toc scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

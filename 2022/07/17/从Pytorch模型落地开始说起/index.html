@@ -1,0 +1,934 @@
+<!DOCTYPE html><html class="hide-aside" lang="zh-CN" data-theme="light"><head><meta name="referrer" content="no-referrer"><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>冬于的博客 | 冬于的博客</title><meta name="author" content="冬于"><meta name="copyright" content="冬于"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="从Pytorch模型落地开始说起 模型的工业落地一般包括：  用深度学习框架训练一个模型； 模型部署； 模型调用服务的开发； 模型上线。  对于深度学习模型来说，模型部署指让训练好的模型在特定环境中运行的过程。 模型部署 把一个nn.Module模型变成可以部署上线的模型有哪些步骤？ 模型部署范式：  训练模型：使用任意一种深度学习框架来定义网络结构，并通过训练确定网络中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="冬于的博客">
+<meta property="og:url" content="https://ifwind.github.io/2022/07/17/%E4%BB%8EPytorch%E6%A8%A1%E5%9E%8B%E8%90%BD%E5%9C%B0%E5%BC%80%E5%A7%8B%E8%AF%B4%E8%B5%B7/index.html">
+<meta property="og:site_name" content="冬于的博客">
+<meta property="og:description" content="从Pytorch模型落地开始说起 模型的工业落地一般包括：  用深度学习框架训练一个模型； 模型部署； 模型调用服务的开发； 模型上线。  对于深度学习模型来说，模型部署指让训练好的模型在特定环境中运行的过程。 模型部署 把一个nn.Module模型变成可以部署上线的模型有哪些步骤？ 模型部署范式：  训练模型：使用任意一种深度学习框架来定义网络结构，并通过训练确定网络中">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ifwind.github.io/img/fish.jpg">
+<meta property="article:published_time" content="2022-07-17T09:03:22.365Z">
+<meta property="article:modified_time" content="2022-07-17T09:03:22.365Z">
+<meta property="article:author" content="冬于">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ifwind.github.io/img/fish.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://ifwind.github.io/2022/07/17/%E4%BB%8EPytorch%E6%A8%A1%E5%9E%8B%E8%90%BD%E5%9C%B0%E5%BC%80%E5%A7%8B%E8%AF%B4%E8%B5%B7/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"LVK1P2D38K","apiKey":"8cbbb0bcbb5c7448f68b4fae01d4ccd5","indexName":"DongYu","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '冬于的博客',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-07-17 17:03:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">91</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">54</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-compass"></i><span> 分类</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 类别</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-star"></i><span> Spark</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-duotone fa-user"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/fish.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">冬于的博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-compass"></i><span> 分类</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 类别</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-star"></i><span> Spark</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-duotone fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">无题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-07-17T09:03:22.365Z" title="发表于 2022-07-17 17:03:22">2022-07-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-07-17T09:03:22.365Z" title="更新于 2022-07-17 17:03:22">2022-07-17</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">13,932</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>66分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="从pytorch模型落地开始说起">从Pytorch模型落地开始说起</h1>
+<p>模型的工业落地一般包括：</p>
+<ol type="1">
+<li><p>用深度学习框架训练一个模型；</p></li>
+<li><p>模型部署；</p></li>
+<li><p>模型调用服务的开发；</p></li>
+<li><p>模型上线。</p></li>
+</ol>
+<p>对于深度学习模型来说，模型部署指让训练好的模型在特定环境中运行的过程。</p>
+<h2 id="模型部署">模型部署</h2>
+<h3 id="把一个nn.module模型变成可以部署上线的模型有哪些步骤">把一个nn.Module模型变成可以部署上线的模型有哪些步骤？</h3>
+<p>模型部署范式：</p>
+<ol type="1">
+<li><p>训练模型：使用任意一种深度学习框架来定义网络结构，并通过训练确定网络中的参数。</p></li>
+<li><p>模型转为中间表示IR：为了让模型最终能够部署到某一环境上，将模型的结构和参数转换成一种只描述网络结构的中间表示，一些针对网络结构的优化会在中间表示上进行。</p></li>
+<li><p>高性能算子替换：用面向硬件的高性能编程框架(如 CUDA，OpenCL）编写，能高效执行深度学习网络中算子的推理引擎会把中间表示转换成特定的文件格式，并在对应硬件平台上高效运行模型。</p></li>
+</ol>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MTBkMmJmNDQ4YzBiMDZhMDNjZDE5YzAyNDRmYzM4MzZfcDdzUFNjZVFqcnB0QTdGd29qeWJyajlxY0tnRTIzZzNfVG9rZW46Ym94Y244SkZvRGpIZ2d3R0JoTVcxRVhBUEVkXzE2NTgwNDgzNjE6MTY1ODA1MTk2MV9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h3 id="为什么不直接使用nn.module模型部署而要使用中间表示ir">为什么不直接使用nn.Module模型部署，而要使用中间表示IR？</h3>
+<ol type="1">
+<li><p><strong>考虑生产环境部署兼容&amp;便捷</strong>：nn.Module模型图是由 python 代码构建的，部署依赖 python 环境，可移植性和适用性无法和C++相比。使用对接深度学习框架和推理引擎的中间表示，开发者不必担心如何在新环境中运行各个复杂的框架；</p></li>
+<li><strong>考虑性能：</strong>
+<ol type="1">
+<li><strong>运行：</strong>考虑到多线程执行和性能原因，一般Python代码并不适合部署到生产环境；</li>
+<li><strong>计算图优化：</strong>Pytorch是动态建图，对于性能要求更高的应用场景而言是缺点，非固定的网络结构给网络结构分析并进行优化带来了困难。生成一个具有相对固定图结构的中间表示，更容易优化；</li>
+<li>通过中间表示的网络结构优化（torchscript）和推理引擎（onnx、tensorRT等）对运算的底层优化，模型的运算效率可以大幅提升。</li>
+</ol></li>
+<li><p><strong>考虑模型保密性：</strong>计算图由 python 代码构建的，让模型毫无保密性可言。</p></li>
+</ol>
+<h2 id="从nn.module到torchscript获取中间表示ir">从nn.Module到TorchScript：获取中间表示IR</h2>
+<p>PyTorch1.0后，可以通过torch.jit.trace和torch.jit.script创建序列化和可优化的模型，将一个Python代码转化为可以被C++所调用TorchScript文件；此外，这个导出的模型还可以继续被优化，最终在生产环境上运行。</p>
+<p>从下面几点去梳理：</p>
+<ol type="1">
+<li><p>一个能在生产环境运行的中间表示IR需要什么？</p></li>
+<li><p>torchscript是什么？能干什么?</p></li>
+<li><p>nn.Module和TorchScript模型代码对比；</p></li>
+<li><p>torchscript怎么实现的？</p></li>
+</ol>
+<h3 id="中间表示ir">中间表示IR</h3>
+<p>中间表示IR是深度学习框架到推理引擎的桥梁。为了生产环境，有几个特点：</p>
+<ol type="1">
+<li><p>可以部署到C++等环境；</p></li>
+<li><p>结构相对固定，容易优化；</p></li>
+</ol>
+<p>神经网络实际上只是描述了数据计算的过程，其结构可以用计算图表示。只需要将这个计算图以某种形式记录下来，在生产环境中可以根据输入进行正常的推理计算，再拿到输出就可以了。</p>
+<ul>
+<li><p>比如<code>a+b</code>可以用下图(1)的计算图来表示；</p></li>
+<li><p>为了加速计算，一些框架会使用对神经网络“先编译，后执行”的静态图来描述网络。静态图的缺点是难以描述控制流（比如 if-else 分支语句和 for 循环语句），直接对其引入控制语句会导致产生不同的计算图。比如循环执行 n 次 <code>a=a+b</code>，对于不同的 n，会生成不同的计算图（下图(2)(3)）。</p></li>
+</ul>
+<p>暂时无法在飞书文档外展示此内容</p>
+<h3 id="pytorch-jit">PyTorch JIT</h3>
+<p>相应的技术路线就有很多种方式，JIT模式选择了构建well-defined IR的方式。这样带来的好处有：</p>
+<ul>
+<li><p>将python runtime和计算图（model）解耦</p></li>
+<li><p>获得C++相比带GIL的Python的收益</p></li>
+<li><p>获得整个程序，拿到全局信息，来进行优化</p></li>
+<li><p>将易于调试的模式和易于部署/优化的模式进行切分（算法调参和算法部署各司其职）</p></li>
+</ul>
+<p>TorchScript是JIT模式的具体形式，是一种从PyTorch代码创建可序列化和可优化模型的方法。它可以看作Python的一个子集，Python代码会被编译成TorchScript编译器可以理解的一种格式（ScriptModule），C++的生产环境可以载入该格式的文件并用内置的JIT来执行对应的代码。</p>
+<p>暂时无法在飞书文档外展示此内容</p>
+<p>主要功能包括两个：</p>
+<ol type="1">
+<li><p>模型转化成IR&amp;计算图级别的IR优化；</p></li>
+<li><p>模型序列化。</p></li>
+<li><h4 id="模型转化计算图级别优化内部完成了计算图级别的ir优化-trace和script">模型转化&amp;计算图级别优化（内部完成了计算图级别的IR优化）-trace和script</h4></li>
+</ol>
+<p>PyTorch提供了两种将<code>torch.nn.Module</code>转化为TorchScript模型的工具：</p>
+<table>
+<colgroup>
+<col style="width: 6%">
+<col style="width: 46%">
+<col style="width: 46%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><code>torch.jit.trace</code></th>
+<th><code>torch.jit.script</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>使用example inputs执行nn.Module或Python函数，并<strong>通过记录Tensor运算的方法将nn.Module或Python函数转化为TorchScript Module/函数</strong>。</td>
+<td>script 直接解析 PyTorch 代码，通过语法分析解析代码逻辑为一棵语法树，然后转换为中间表示 IR。</td>
+</tr>
+<tr class="even">
+<td>特点&amp;限制</td>
+<td>trace 指的是进行一次模型推理，在推理的过程中记录所有经过的计算，将这些记录整合成计算图。无法记录控制流（if/for等），trace时，example inputs走哪个分支就只记录哪个分支。无法支持模型根据不同的输入动态选择模型计算图的情况（比如基础意图multi-head模型，需要根据每次输入的domainid去选择head，如果用trace就会有问题）。输入只支持<code>Tensor</code>s and lists, dictionaries, and tuples of <code>Tensors``trace</code>得到的ScriptModule无法通过<code>eval()</code>或<code>train()</code>改变状态。在优化方面：因为没有记录控制流的另外的路，trace也没办法对其进行优化。但trace深度嵌入python语言，复用了所有python的语法。</td>
+<td>只能使用<a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/jit_language_reference.html#supported-type">特定的变量类型</a>，如Tensor/List[T]/Tuple[T]等每个变量只能有一种静态类型（强类型），某些情况下必须对变量进行类型标注不支持Python Built-in Functionsscript相当于一个嵌入在Python/Pytorch的DSL，其语法只是pytorch语法的子集，存在一些op和语法script不支持，（<code>try ... except</code>等）这样在编译的时候可能会遇到问题。在优化方面：script的编译优化方式更像是CPU上的传统编译优化，重点对于图进行硬件无关优化，并对IF、loop这样的statement进行优化。</td>
+</tr>
+</tbody>
+</table>
+<p>PyTorch jit 相关 code 带来的优化一般是<strong>计算图级别优化</strong>，比如部分运算的融合，但是对具体算子（如卷积）是没有特定优化的，其依旧调用 torch 的基础算子库。</p>
+<h5 id="代码示例">代码示例</h5>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># model define</span></span><br><span class="line"><span class="keyword">import</span> torch </span><br><span class="line"><span class="keyword">from</span> torchvision.models <span class="keyword">import</span> resnet18 </span><br><span class="line"> </span><br><span class="line"><span class="comment"># 使用PyTorch model zoo中的resnet18作为例子 </span></span><br><span class="line">model = resnet18() </span><br><span class="line">model.<span class="built_in">eval</span>() </span><br><span class="line"> </span><br><span class="line"><span class="comment"># 通过trace的方法生成IR需要一个输入样例 </span></span><br><span class="line">dummy_input = torch.rand(<span class="number">1</span>, <span class="number">3</span>, <span class="number">224</span>, <span class="number">224</span>) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># IR生成 </span></span><br><span class="line"><span class="comment"># trace</span></span><br><span class="line"><span class="keyword">with</span> torch.no_grad(): </span><br><span class="line">    jit_model = torch.jit.trace(model, dummy_input) </span><br><span class="line">    </span><br><span class="line"><span class="comment"># script：需要一份模型文件py源码</span></span><br><span class="line"><span class="keyword">from</span> model_utils <span class="keyword">import</span> Model</span><br><span class="line"><span class="keyword">with</span> torch.no_grad():</span><br><span class="line">    jit_model = torhc.jit.script(Model())</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><h4 id="模型序列化">模型序列化</h4></li>
+</ol>
+<p>序列化后的模型不再与 python 相关，可以被部署到各种平台上。</p>
+<h5 id="代码示例-1">代码示例</h5>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将模型序列化 </span></span><br><span class="line">jit_model.save(<span class="string">&#x27;jit_model.pth&#x27;</span>) </span><br><span class="line"><span class="comment"># 加载序列化后的模型 </span></span><br><span class="line">jit_model = torch.jit.load(<span class="string">&#x27;jit_model.pth&#x27;</span>) </span><br></pre></td></tr></table></figure>
+<h4 id="c如何加载torch模型">C++如何加载torch模型</h4>
+<p>PyTorch 提供了可以用于 TorchScript 模型推理的 c++ API（LibTorch），序列化后的模型可以不依赖 python 进行推理：</p>
+<p>[<a target="_blank" rel="noopener" href="https://zhpmatrix.github.io/2019/03/01/c++-with-pytorch/">PyTorch]PyTorch的C++前端和模型部署</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/136585481">TorchScript 如何实现Python -&gt; C++ 代码转换</a></p>
+<ol type="1">
+<li>C++端（LibTorch）载入模型</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;torch/script.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span>* argv[])</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (argc != <span class="number">2</span>)&#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;where is your model?&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    std::shared_ptr&lt;torch::jit::script::Module&gt; <span class="keyword">module</span> = torch::jit::<span class="built_in">load</span>(argv[<span class="number">1</span>]);</span><br><span class="line">    <span class="built_in">assert</span>(<span class="keyword">module</span> != <span class="literal">nullptr</span>);</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;load successfully!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//auto module = torch::jit::load(&quot;../resnet.pt&quot;);</span></span><br><span class="line">    std::vector&lt;torch::jit::IValue&gt; inputs;</span><br><span class="line">    inputs.<span class="built_in">push_back</span>(torch::<span class="built_in">ones</span>(&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">224</span>,<span class="number">224</span>&#125;));</span><br><span class="line">    at::Tensor output = <span class="keyword">module</span>-&gt;forward(inputs).<span class="built_in">toTensor</span>();</span><br><span class="line">    std::cout &lt;&lt; output.<span class="built_in">slice</span>(<span class="number">1</span>,<span class="number">0</span>,<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li>编译C++代码</li>
+</ol>
+<p>C++中使用的关于PyTorch的头文件，主要来自PyTorch提供了一个模块libtorch。不瞒您说，libtorch就是PyTorch中C++前端最为关键的模块了。当然PyTorch的C++后端是Aten模块，基于该模块有Autograd等，主要实现是关于Tensor的各种运算等。</p>
+<ol type="1">
+<li>运行C++代码</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">./example-cpp resnet.pt</span><br></pre></td></tr></table></figure>
+<p>在上述过程中，需要编写脚本工具，链接到libtorch库，实现完整的编译过程。</p>
+<h3 id="nn.moduletorchscriptir">nn.Module/TorchScript/IR</h3>
+<h4 id="基本概念">基本概念</h4>
+<h4 id="nn.module与torchscript结构的对应关系">nn.Module与TorchScript结构的对应关系</h4>
+<blockquote>
+<p>TorchScript用Module, Method, Graph等数据结构描述一个模型。一个torch::jit::Module拥有一个或多个Method和任意多个sub-Module；每个Method对应一个Graph；每个Graph有一个由Node（顶点，对应一次op调用）和Value（边，一个抽象的变量）组成的顶级Block；Block中可以使用prim::CallMethod调用（当前Module或者sub-Module的）其它Method。因此，TorchScript中的一个模型不是一张图，而是由很多Module和Method组成的层级结构描述的。另外，在TorchScript中一个有具体值的变量（e.g. 1, True, &quot;abc&quot;和有具体值的Tensor）被称作<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/OVERVIEW.md#ivalue">IValue</a>。</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>模型代码-graph_example.py</th>
+<th>TorchScript Graph-TorchScript 模型的可视化结果</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>**import** torch.nn **as** nn **class** Model(nn.Module):    **def** __init__(self):        super(Model, self).__init__()     **def** forward(self, x):        *x = x* *** *2*        *x.add_(**0**)*        *x = x.view(-**1**)*        ***if*** *x[**0**] &gt;* *1**:*            ***return*** *x[**0**]*        ***else****:*            ***return*** *x[-**1**]*</code></td>
+<td><code>from graph_example import * import torch jit_layer1 = torch.jit.script(Model()) print(jit_layer1.graph)  #graph(%self : __torch__.graph_example.Model, #      %x.1 : Tensor): #  *%12* *: int =* *prim::Constant**[value=-1]() # graph_example.py:9:19* *#*  *%3* *: int =* *prim::Constant**[value=2]() # graph_example.py:7:16* *#  %6 : int =* *prim::Constant**[value=0]() # graph_example.py:8:15* *#  %10 : int =* *prim::Constant**[value=1]() # graph_example.py:9:20* *#  %x.3 : Tensor =* *aten::mul**(**%x.1, %3**) # graph_example.py:7:12* *#  %8 : Tensor =* *aten::add_**(%x.3,* *%6, %10**) # graph_example.py:8:8* *#  %13 : int[] =* *prim::ListConstruct**(%12)* *#  %x.6 : Tensor =* *aten::view**(%x.3, %13) # graph_example.py:9:12* *#  %17 : Tensor =* *aten::select**(%x.6,* *%6, %6**) # graph_example.py:10:11* *#  %18 : Tensor =* *aten::gt**(%17, %10) # graph_example.py:10:11* *#  %19 : bool =* *aten::Bool**(%18) # graph_example.py:10:11* *#  %40 : Tensor =* *prim::If**(%19) # graph_example.py:10:8* *#*    *block0()**:* *#      %22 : Tensor =* *aten::select**(%x.6,* *%6, %6**) # graph_example.py:11:19* *#      -&gt; (%22)* *#*   *block1()**:* *#      %31 : Tensor =* *aten::select**(%x.6,* *%6, %12**) # graph_example.py:13:19* *#      -&gt; (%31)* *#  return (%40)*</code></td>
+<td><strong>Module</strong>对标nn.Module<strong>Graph</strong>graph整体用来表示一个计算图<code>Graph</code>，定义 function 的具体实现，包括 Nodes，Blocks，Values：Graph 用来表示一个“函数”，一个 Module 中的不同函数（比如 forward 等）会被转换成不同的 Graph。Graph 拥有许多的 Node，这些 Node 由一个 Block 管理。所有 <strong>Node 组织成双向链表的形式，</strong>方便插入删除，其中<code>block_</code>的返回值节点(return_node)<code>output_</code>会作为这个双向链表的“哨兵”。<strong>双向链表通常会被拓扑排序，保证一个可以执行的线性顺序。Node</strong>第二列里 3~14 行，以及 16和19 行表示各个<code>Node</code>，一个 Node 对应一个操作。一个指令，如一次卷积运算，一次矩阵运算。操作的输入为 Value，<code>Node</code>中：kind() 表示 Node 的操作类型，<code>aten::mul</code>和<code>prim::ListConstruct</code>等都是对应 Node 的 kind。<strong>它只是个字符串，因此修改这个字符串也就意味着修改了操作。FunctionSchema</strong> 指对这个函数的接口的描述，格式类似函数声明。另外可以添加一些标记表示某个 Tensor 是否是另一个 Tensor 的 Alias 等等（别名分析是保证优化结果正确的依据），可以作为 peelhole-optimize 的时候的检索依据。常用的函数的 schema 可以在<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/aten/src/ATen/native/native_functions.yaml">aten/src/ATen/native/native_functions.yaml</a>中查看。以<code>Tensor.add_</code>函数为例：<code>*// add_是一个inplace运算，因此输出和self共享相同的内存空间*  *// FunctionSchema中标注了这种别名关系，保证了输出的正确性*  &quot;add_.Scalar(Tensor(a!) self, Scalar other, Scalar alpha=1) -&gt; Tensor(a!)&quot;  &quot;select_scatter(Tensor self, Tensor src, int dim, int index) -&gt; Tensor&quot;</code>Block控制语句 if，loop + list of nodes等通常会被表示为block，特别的，一个graph对应一个顶级block：*top-Block**<code>%12 : int = prim::Constant[value=-1]()</code>*开始的是<code>self.forward</code>的顶级<code>Block</code>。<strong>sub-Block</strong><code>prim::If</code>的true branch和false branch各对应一个子<code>Block</code>。<strong>Value</strong><code>Value</code><strong>是 Node 的输入输出</strong>，可以是 Tensor 也可以是容器或其他类型，可以通过<code>type()</code>判断。Value 对象维护了一个 use_list，只要这个 Value 成为某个 Node 的输入，那么这个 Node 就要加入到它的 use_list 中。通过这个 use_list，解决新加入的 Node 与其他 Node 的输入输出关系。注意：Value 是用来表述 Graph 的结构的，与 Runtime 无关！<strong>真正在推理时用到的是 IValue 对象，IValue 中有运行时的真实数据</strong>。</td>
+</tr>
+</tbody>
+</table>
+<h5 id="pass"><strong>Pass</strong></h5>
+<p>pass 是一个来源于编译原理的概念，它会<strong>接收一种中间表示（IR），遍历它并且进行一些变换，生成满足某种条件的新 IR</strong>。</p>
+<p>TorchScript 中定义了许多 pass 来优化 Graph。比如对于常规编译器很常见的 DeadCodeElimination（DCE）等等；也有一些针对深度学习的融合优化，比如 FuseConvBN 等；还有针对特殊任务的 pass，ONNX 的导出就是其中一类 pass。</p>
+<blockquote>
+<p><em>ONNX</em>(Open Neural Network Exchange)，开放神经网络交换，是一种模型IR，用于在各种深度学习训练和推理框架（ONNX runtime）转换的一个中间表示格式。</p>
+</blockquote>
+<h3 id="如何实现">如何实现？</h3>
+<p>现代的深度学习推理框架通常遵循编译器的范式，将模型的中间表示（IR）会分为两部分：包括与硬件、环境等无关的前端（frontend）以及针对特定环境的后端（backend）。</p>
+<p>在 PyTorch 的 jit 中源码中，也包含前端与后端（进程通信相关的内容）的部分。</p>
+<p>生成IR和pass主要涉及前端部分。<a href="https://link.zhihu.com/?target=https%3A//github.com/pytorch/pytorch/tree/master/torch/csrc/jit/frontend">frontend</a> 目录下有对 Graph IR 的定义，function_schema 的解析工具，以及将 torchscript 转换成 SSA（static single assignment）形式的转换器等等。</p>
+<h4 id="jit.trace"><a href="https://link.zhihu.com/?target=https%3A//github.com/pytorch/pytorch/blob/9f541aa3aca768e7fbfa4a9d648b554f22b261f7/torch/csrc/jit/frontend/tracer.cpp%23L457">jit.trace</a></h4>
+<p>trace将模型对输入进行的操作逐一记录下来，并对应到 IR 的操作，从而得到原本模型 forward 的 IR。</p>
+<h5 id="python接口--c">python接口-&gt; c++</h5>
+<p>python调用<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/de7219e8a7f3b2f8e20162f3b5af338df2e110c1/torch/jit/_trace.py#L587">jit.trace</a>方法：</p>
+<ul>
+<li><p>输入是一个<code>func</code>+一个<code>example inputs</code></p></li>
+<li><p>输出是一个<code>scriptModule</code></p></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># trace内包一层_create_function_from_trace  </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">trace</span>(<span class="params">func,example_inputs,optimize=<span class="literal">None</span>,check_trace=<span class="literal">True</span>,check_inputs=<span class="literal">None</span>,check_tolerance=<span class="number">1e-5</span>,strict=<span class="literal">True</span>,_force_outplace=<span class="literal">False</span>,_module_class=<span class="literal">None</span>,_compilation_unit=_python_cu,</span>):</span></span><br><span class="line">    <span class="comment"># ....</span></span><br><span class="line">    <span class="comment"># 通过torch._C进行C++代码对func进行trace</span></span><br><span class="line">    traced = torch._C._create_function_from_trace(name, func, example_inputs, var_lookup_fn, strict, _force_outplace)</span><br><span class="line">    <span class="comment"># ....</span></span><br></pre></td></tr></table></figure>
+<h5 id="c部分">C++部分</h5>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><em><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/c0a7c1d02e193de79a99b049b1075f2f6ef9eb52/torch/csrc/jit/python/script_init.cpp#L1631">jit/python/script_init.cpp</a></em></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/88f8f2ab947f33f2eef5c15b86161001cb72059b/torch/csrc/jit/python/python_tracer.cpp#L72">createGraphByTracing</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/f7ee061638aa2011191caeff4438fa8aff5bfec3/torch/csrc/jit/frontend/tracer.cpp#L463">trace</a></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>*// _create_function_from_trace是Python和C++的接口* *// 建图、创建compilation_unit、创建返回的函数* m.def(      &quot;_create_function_from_trace&quot;,      [](const std::string&amp; qualname,         const py::function&amp; func,         const py::tuple&amp; input_tuple,         const py::function&amp; var_name_lookup_fn,         bool strict,         bool force_outplace,         const std::vector&lt;std::string&gt;&amp; argument_names) &#123;        auto typed_inputs = toTraceableStack(input_tuple);        std::shared_ptr&lt;Graph&gt; graph = std::get&lt;0&gt;(tracer::createGraphByTracing(            func,            typed_inputs,            var_name_lookup_fn,            strict,            force_outplace,            /*self=*/nullptr,            argument_names));         auto cu = get_python_cu();        auto name = c10::QualifiedName(qualname);        auto result = cu-&gt;create_function(            std::move(name), std::move(graph), /*shouldMangle=*/true);        StrongFunctionPtr ret(std::move(cu), result);        didFinishEmitFunction(ret);        return ret;      &#125;,</code></td>
+<td><code>std::pair&lt;std::shared_ptr&lt;Graph&gt;, Stack&gt; createGraphByTracing(    const py::function&amp; func,    Stack trace_inputs,    const py::function&amp; var_name_lookup_fn,    bool strict,    bool force_outplace,    Module* self,    const std::vector&lt;std::string&gt;&amp; argument_names) &#123;  C10_LOG_API_USAGE_ONCE(&quot;torch.tracer&quot;);   auto lookup_fn_adapter =      [var_name_lookup_fn](const Variable&amp; var) -&gt; std::string &#123;    pybind11::gil_scoped_acquire ag;    return py::cast&lt;std::string&gt;(var_name_lookup_fn(var));  &#125;;   auto outs = tracer::trace(      std::move(trace_inputs),      [&amp;func](Stack inputs) -&gt; Stack &#123;        size_t num_func_inputs = inputs.size();        py::tuple py_inputs(num_func_inputs);        for (const auto i : c10::irange(num_func_inputs)) &#123;          py_inputs[i] = py::cast(inputs[i]);        &#125;        auto out = func(*py_inputs);        if (out.ptr() == Py_None) &#123;          AT_ERROR(              &quot;The traced function didn't return any values! Side-effects are not &quot;              &quot;captured in traces, so it would be a no-op.&quot;);        &#125;        return &#123;toTypeInferredIValue(out)&#125;;      &#125;,      lookup_fn_adapter,      strict,      force_outplace,      self,      argument_names);  return std::make_pair(std::get&lt;0&gt;(outs)-&gt;graph, std::get&lt;1&gt;(outs)); &#125;</code></td>
+<td>创建新的<code>TracingState</code>对象，该对象会维护 trace 的 Graph 以及一些必要的环境参数<code>auto state = std::make_shared&lt;TracingState&gt;()</code>;根据 trace 时的模型输入参数，生成 Graph 的输入节点<code>insertInput</code>/<code>addInput</code>。利用example inputs进行模型推理，同时生成 Graph 中的各个元素（插入计算node/block等）。<code>auto out_stack = traced_fn(inputs);</code>生成 Graph 的输出节点<code>registerOutput</code>。进行一些简单的优化（计算图级别，如函数内联inline等）。<code>std::pair&lt;std::shared_ptr&lt;TracingState&gt;, Stack&gt; trace(    Stack inputs,    const std::function&lt;Stack(Stack)&gt;&amp; traced_fn,    std::function&lt;std::string(const Variable&amp;)&gt; var_name_lookup_fn,    bool strict,    bool force_outplace,    Module* self,    const std::vector&lt;std::string&gt;&amp; argument_names) &#123;  try &#123;    // Start tracing, treating 'inputs' as inputs to the trace, which can be    // varied on subsequent invocations of the trace.  Any other variables    // will be treated as constants.    if (isTracing()) &#123;      AT_ERROR(&quot;Tracing can't be nested&quot;);    &#125;    // setTracingState 将state 这个实例set下来，在之后计算节点get出来insert计算过程     auto state = std::make_shared&lt;TracingState&gt;();    setTracingState(state);     // if we are a module, then make sure the modules parameters are in the map    // and mapped to accesses to the self object    if (self) &#123;      Value* self_value = state-&gt;graph-&gt;insertInput(0, &quot;self&quot;)-&gt;setType(          self-&gt;_ivalue()-&gt;type());      gatherParametersAndBuffers(state, self_value, *self, &#123;&quot;__module&quot;&#125;);    &#125;     // When enough argument name hints are provided, use them as debug names    // for traced function/modules.    // Here argument_names is allowed to have more names than needed because    // some arguments may have valid default values, therefore they don't need    // example inputs.    if (argument_names.size() &gt;= inputs.size()) &#123;      for (size_t i = 0, e = inputs.size(); i &lt; e; ++i) &#123;        IValue&amp; input = inputs[i];        input = addInput(            state,            input,            input.type(),            state-&gt;graph-&gt;addInput(argument_names[i]));      &#125;    &#125; else &#123;      for (IValue&amp; input : inputs) &#123;        input = addInput(state, input, input.type(), state-&gt;graph-&gt;addInput());      &#125;    &#125;     auto graph = state-&gt;graph;     getTracingState()-&gt;lookup_var_name_fn = std::move(var_name_lookup_fn);    getTracingState()-&gt;strict = strict;    getTracingState()-&gt;force_outplace = force_outplace;     // Invoke the traced function    // 开始forward，在计算发生时，会把计算记录到state中    auto out_stack = traced_fn(inputs);     // Exit a trace, treating 'out_stack' as the outputs of the trace.  These    // are the variables whose values will be computed upon subsequent    // invocations of the trace.    size_t i = 0;    for (auto&amp; output : out_stack) &#123;      // NB: The stack is in &quot;reverse&quot; order, so when we pass the diagnostic      // number we need to flip it based on size.      state-&gt;graph-&gt;registerOutput(          state-&gt;getOutput(output, out_stack.size() - i));      i++;    &#125;    setTracingState(nullptr);     if (getInlineEverythingMode()) &#123;      Inline(*graph);    &#125;    FixupTraceScopeBlocks(graph, self);    NormalizeOps(graph);    return &#123;state, out_stack&#125;;  &#125; catch (...) &#123;    tracer::abandon();    throw;  &#125; &#125;</code></td>
+</tr>
+</tbody>
+</table>
+<h6 id="traced_fn建图">traced_fn建图</h6>
+<p>显式建图只包含了输入输出的insertNode，所有中间节点都在<code>auto out_stack = traced_fn(inputs)</code>。</p>
+<p>traced_fn调用模板生成的op建图，形成trace状态下的路径。</p>
+<p>traced_fn建图逻辑：</p>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/30fb2c4abaaaa966999eab11674f25b18460e609/torch/csrc/autograd/TraceTypeManual.cpp#L161">general_trace_function</a></th>
+<th><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/386876377">【Pytorch 源码 Detail 系列】Pytorch 中 dispatch 机制及其实现</a></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>``auto out = func(*py_inputs)``;</code>-&gt;<code>const py::function&amp; func</code><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/f7ee061638aa2011191caeff4438fa8aff5bfec3/tools/autograd/templates/python_variable_methods.cpp#L1140">映射到了torch自带的一个python接口</a><code>// Wrapper converts a raised TypeError into returning NotImplemented // Used to implement binary arithmetic operators template &lt;PyObject* (*Func)(PyObject*, PyObject*, PyObject*)&gt; static PyObject * TypeError_to_NotImplemented_(PyObject* self, PyObject* args, PyObject* kwargs) &#123;   PyObject* ret = Func(self, args, kwargs);  if (!ret &amp;&amp; PyErr_ExceptionMatches(PyExc_TypeError)) &#123;    PyErr_Clear();    Py_INCREF(Py_NotImplemented);    ret = Py_NotImplemented;  &#125;  return ret; &#125;</code>编译的时候自动生成算子的调用；</td>
+<td>在具体运算发生时，会使用 getTracingState() 得到 forward 开始去创建的 state；然后看到根据 <strong>op.schema().name()</strong> 得到计算类型（比如相加）；根据计算类型通过 createNone 方法创建一个计算节点，然后创建计算输入，最后把计算 node insert 到 graph 中，完成一次对计算的记录。<code>void general_trace_function(const c10::OperatorHandle&amp; op, Stack* stack) &#123;  const auto input_size = op.schema().arguments().size();  const auto output_size = op.schema().returns().size();   Node* node = nullptr;  std::shared_ptr&lt;tracer::TracingState&gt; tracer_state;   // trace the input before unwrapping, otherwise we may lose  // the input information  if (tracer::isTracing()) &#123;    tracer_state = tracer::getTracingState();    auto symbol = Symbol::fromQualString(op.schema().name());    const auto&amp; graph = tracer::getTracingState()-&gt;graph;    node = graph-&gt;create(symbol, 0);    tracer::recordSourceLocation(node);    const auto&amp; args = op.schema().arguments();    int i = 0;    for (auto iter = stack-&gt;end() - input_size; iter != stack-&gt;end();         ++iter, ++i) &#123;      // TODO we need to refactor graph APIs (e.g., addInputs)      // appropriately; after that, we can get rid of the giant if-else      // block we will clean this tech debt together in the following PRs      auto type = args[i].type();      if (type-&gt;kind() == TypeKind::OptionalType) &#123;        if (iter-&gt;isNone()) &#123;          Value* none = graph-&gt;insertNode(graph-&gt;createNone())-&gt;output();          node-&gt;addInput(none);          continue;        &#125; else &#123;          type = type-&gt;expectRef&lt;OptionalType&gt;().getElementType();        &#125;      &#125;      if (type-&gt;isSubtypeOf(*TensorType::get())) &#123;        AT_ASSERT(iter-&gt;isTensor());        tracer::addInputs(node, args[i].name().c_str(), iter-&gt;toTensor());      &#125; else if (type-&gt;kind() == TypeKind::FloatType) &#123;        AT_ASSERT(iter-&gt;isDouble());        tracer::addInputs(node, args[i].name().c_str(), iter-&gt;toDouble());      &#125; else if (type-&gt;kind() == TypeKind::IntType) &#123;        AT_ASSERT(iter-&gt;isInt());        tracer::addInputs(node, args[i].name().c_str(), iter-&gt;toInt());      &#125; else if (type-&gt;kind() == TypeKind::BoolType) &#123;        AT_ASSERT(iter-&gt;isBool());        tracer::addInputs(node, args[i].name().c_str(), iter-&gt;toBool());      &#125; else if (type-&gt;kind() == TypeKind::StringType) &#123;        AT_ASSERT(iter-&gt;isString());        tracer::addInputs(node, args[i].name().c_str(), iter-&gt;toStringView());      &#125; else if (type-&gt;kind() == TypeKind::NumberType) &#123;        tracer::addInputs(node, args[i].name().c_str(), iter-&gt;toScalar());      &#125; else if (type-&gt;kind() == TypeKind::ListType) &#123;        const auto&amp; elem_type = type-&gt;expectRef&lt;ListType&gt;().getElementType();        if (elem_type-&gt;isSubtypeOf(*TensorType::get())) &#123;          AT_ASSERT(iter-&gt;isTensorList());          auto list = iter-&gt;toTensorVector();          tracer::addInputs(node, args[i].name().c_str(), list);        &#125; else if (auto class_type = elem_type-&gt;cast&lt;ClassType&gt;()) &#123;          AT_ASSERT(iter-&gt;isList());          auto list = iter-&gt;toList();          std::vector&lt;c10::intrusive_ptr&lt;c10::ivalue::Object&gt;&gt; objects;          for (IValue iv : list) &#123;            objects.emplace_back(std::move(iv).toObject());          &#125;          tracer::addInputs(node, args[i].name().c_str(), objects, class_type);        &#125; else if (elem_type-&gt;kind() == TypeKind::FloatType) &#123;          AT_ASSERT(iter-&gt;isDoubleList());          // NB: now, tracer doesn't support tracing double list. We add          // special handling here, since in our case, we assume that all the          // doubles in the list are constants          auto value = iter-&gt;toDoubleVector();          std::vector&lt;Value*&gt; info(value.size());          for (const auto value_index : c10::irange(value.size())) &#123;            info[value_index] = graph-&gt;insertConstant(value[value_index]);            tracer::recordSourceLocation(info[value_index]-&gt;node());          &#125;          node-&gt;addInput(              graph-&gt;insertNode(graph-&gt;createList(FloatType::get(), info))                  -&gt;output());        &#125; else if (elem_type-&gt;kind() == TypeKind::IntType) &#123;          AT_ASSERT(iter-&gt;isIntList());          tracer::addInputs(              node,              args[i].name().c_str(),              c10::IntArrayRef(iter-&gt;toIntVector()));        &#125; else if (elem_type-&gt;kind() == TypeKind::BoolType) &#123;          AT_ASSERT(iter-&gt;isBoolList());          tracer::addInputs(              node, args[i].name().c_str(), iter-&gt;toBoolList().vec());        &#125; else &#123;          throw std::runtime_error(              &quot;unsupported input list type: &quot; + elem_type-&gt;str());        &#125;      &#125; else if (iter-&gt;isObject()) &#123;        tracer::addInputs(node, args[i].name().c_str(), iter-&gt;toObject());      &#125; else &#123;        throw std::runtime_error(&quot;unsupported input type: &quot; + type-&gt;str());      &#125;    &#125;    graph-&gt;insertNode(node);     tracer::setTracingState(nullptr);  &#125;   op.callBoxed(stack);   if (tracer_state) &#123;    tracer::setTracingState(std::move(tracer_state));    int i = 0;    for (auto iter = stack-&gt;end() - output_size; iter != stack-&gt;end();         ++iter, ++i) &#123;      const auto&amp; type = op.schema().returns()[i].type();      if (type-&gt;isSubtypeOf(*TensorType::get())) &#123;        AT_ASSERT(iter-&gt;isTensor());        tracer::addOutput(node, iter-&gt;toTensor());      &#125; else if (type-&gt;kind() == TypeKind::ListType) &#123;        const auto&amp; elem_type = type-&gt;expectRef&lt;ListType&gt;().getElementType();        if (elem_type-&gt;isSubtypeOf(*TensorType::get())) &#123;          AT_ASSERT(iter-&gt;isTensorList());          tracer::addOutput(node, iter-&gt;toTensorList());        &#125; else &#123;          throw std::runtime_error(              &quot;unsupported ouptut list type: &quot; + elem_type-&gt;str());        &#125;      &#125; else if (type-&gt;kind() == TypeKind::ClassType) &#123;        AT_ASSERT(iter-&gt;isObject());        tracer::addOutput(node, iter-&gt;toObject());      &#125; else &#123;        throw std::runtime_error(            &quot;unsupported output type: &quot; + type-&gt;str() +            &quot;, from operator: &quot; + toString(op.operator_name()));      &#125;    &#125;  &#125; &#125;``  Node* insertNode(Node* n) &#123;    AT_ASSERT(        insert_before_-&gt;inBlockList() &amp;&amp;        &quot;insert point node is no longer in a block list&quot;);    return n-&gt;insertBefore(insert_before_);  &#125;``Node* Node::insertBefore(Node* n) &#123;  AT_ASSERT(n-&gt;inBlockList());  insertAfter(n-&gt;prev());  return this; &#125;</code></td>
+<td>在 Pytorch 中，当使用一个 operator 时会发现从 <em>pytorch</em> <em>python</em> <em>front</em> 开始到这个 operator 的逻辑的C++实现，在对应的函数调用栈中程序总会在 <em>Dispatch.h</em> 等文件的几个固定函数中以一个固定的模式“转一圈”。这些代码都很简短且只起到转调的作用并不涉及到 operator 相关逻辑的实现（在这个过程中，需要计算的参数像 cargo 一样一直不断的被转发）。这其实就是 Pytorch 对每一个 operator 进行的调度，目的就是为了将 operator 的调用 dispatch(派遣)到正确的 <em>kernel 函数</em> （逻辑实现处）上。这个调度发生的地方被抽象成了 Dispatcher。schema 是一个重要的概念，它描述了一个operator 的名字，参数，返回值等。在 dispatch 时通过它来得到当前环境下 operator 调用时对应的 <em>DispatchKey</em>，进而才能从 kf表中索引到正确的KernelFunction。schema 对应的实现是 FunctionSchema， 实现于 <a href="https://link.zhihu.com/?target=https%3A//github.com/pytorch/pytorch/blob/v1.5.0/aten/src/ATen/core/function_schema.h">aten/src/ATen/core/function_schema.h</a> 中。整个dispatch过程可分为三步：根据 <em>pytorch</em> <em>python</em> <em>front -</em>operator 名找到对应的 <em>OperatorHandle</em>。通过 <em>OperatorHandle</em> 查找相应的 <em>KernelFunction</em>。调用 <em>KernelFunction</em> 中的存放的核心，也就是最终的调用的 backend kernel。operatorLookupTable 根据函数名，查找对应的 <em>OperatorHandle</em> 实例，位于 <em>Dispatcher</em> 中；我们在此称其为 oph(short for OperatorHandle) 表。kernelFunctionTable 根据 <em>DispatchKey</em>，查找对应的 KernelFunction 实例，位于<em>OperatorHandle中</em>；我们在此称其为 kf(KernelFunction) 表。通过 oph， kf 两张表即可从给定 operator 函数名索引到对应的包含了 <em>backend kernel functor</em> <em>的</em> <em>KernelFunction</em> ，从而完成 dispatch。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="jit.script"><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/09be44de7b56495bcb5ad1d47376200cbb853097/torch/jit/_script.py">jit.script</a></h4>
+<p>jit.script直接走编译优化的路线，将python代码翻译为TorchScript的IR。</p>
+<h5 id="编译过程">编译过程</h5>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=MmRiNDBiZjAwNjk1NDQxZmQ3OGJlYzRhMTc5ZWZmYWFfa3ZQdE1aRVd3R3pKb1JsU2ltazgyckM3STM2aDdnZlVfVG9rZW46Ym94Y25IRW1aNFJJd2padUJTSkZMYURDVTZOXzE2NTgwNDg0MzY6MTY1ODA1MjAzNl9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<h6 id="词法分析">词法分析</h6>
+<p>从字符串创建图的过程与编译器生成中间代码的方式很相似，需要<code>词法分析器</code>作为工具。 词法分析器的作用是通过“字符序列”生成 token。token 是一个二元组，形如<code>(&lt;token_type&gt;, &lt;string&gt;)</code>记录了这个字符序列类型以及字符串本身。</p>
+<p>PyTorch 在 <a href="https://link.zhihu.com/?target=https%3A//github.com/pytorch/pytorch/blob/master/torch/csrc/jit/frontend/lexer.h">lexer.h</a> 中提供了一个词法分析器<code>Lexer</code>，其中能生成的 token 大致可以分成四类：</p>
+<ol type="1">
+<li><p>数字类 token，通常代表一个数字常量，比如<code>(TK_NUMBER，3.14159)</code></p></li>
+<li><p>字符串类 token，通常代表一个字符串常量，由双引号或三个双引号组成，比如<code>(TK_STRINGLITERAL，&quot;OpenMMLab is so cool!!!&quot;)</code></p></li>
+<li><p>标识符类 token，由数字、字母、下划线组成，第一位不能是数字，并且不是预定义的关键字。这类 token 可能是是变量名、函数名、类型名等，比如<code>(TK_IDENT，x)</code>,<code>(TK_IDENT，matmul)</code></p></li>
+<li><p>预定义的关键字 token，比如控制流里的<code>iffor</code>，运算符<code>+&lt;=</code>等都是这一类，比如<code>(TK_IF_EXPR, if)</code>，<code>(TK_RETURN，return)</code>，<code>(+，+)</code>等。</p></li>
+</ol>
+<p>为了方便进行关键字类型 token 的检索，Lexer 中会维护一个查找树，以<code>&lt;</code>，<code>&lt;=</code>，<code>&lt;&lt;</code>等符号为例：</p>
+<figure>
+<img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZGM4YTQ5NzJkZWVkYmM1NTM2NjI2NmRjMmE1MjA4Y2NfeDNnNUFZNVI0YUN0QWhBMWIxVFRzVHdwZG1qSThhY3VfVG9rZW46Ym94Y25tZXFsOU9zQVFJOFA0R0hHdFBhR21oXzE2NTgwNDg0MzY6MTY1ODA1MjAzNl9WNA" alt="img"><figcaption>img</figcaption>
+</figure>
+<p>当拿到一个非数字或字符串常量的字符序列时，会从树根起沿着路径前进，比如<code>&gt;=</code>的话，首先是访问根节点，读到<code>&gt;</code>号后向右侧节前前进，再读到<code>=</code>号时向左侧前进，得到 token 类型 为<code>TK_GE</code>。 为了方便后续构建子图的分析过程，Lexer 提供了数个函数帮助生成 token 以及做必要的检查：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 读取字符串中一个token，然后将准备下一个token，作用相当于一个迭代器 </span></span><br><span class="line"><span class="function">Token <span class="title">next</span><span class="params">()</span></span>; </span><br><span class="line"> </span><br><span class="line"><span class="comment">// 与next类似，不过会检查当前返回的token是不是制定的类型，不满足则抛出异常 </span></span><br><span class="line"><span class="function">Token <span class="title">expect</span><span class="params">(<span class="keyword">int</span> kind)</span></span>; </span><br><span class="line"> </span><br><span class="line"><span class="comment">// 查看next即将返回的那个token </span></span><br><span class="line"><span class="function">Token&amp; <span class="title">cur</span><span class="params">()</span></span>; </span><br></pre></td></tr></table></figure>
+<p>case：解析形如<code>%TK_RETURN TK_IDENT(%</code> <code>TK_IDENT)</code>这样的句式：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 待查询的字符串为 return abs(%x) </span></span><br><span class="line">lexer.<span class="built_in">expect</span>(TK_RETURN);    <span class="comment">// 检查并返回token(TK_RETURN, &quot;return&quot;)  </span></span><br><span class="line">lexer.<span class="built_in">next</span>();    <span class="comment">// 返回token(TK_IDENT, &quot;abs&quot;)  </span></span><br><span class="line">lexer.<span class="built_in">expect</span>(<span class="built_in"><span class="keyword">int</span></span>(<span class="string">&#x27;(&#x27;</span>));    <span class="comment">// 检查并返回token(int(&#x27;(&#x27;), &#x27;(&#x27;) </span></span><br><span class="line">lexer.<span class="built_in">next</span>();    <span class="comment">// 返回token(TK_IDENT, &quot;x&quot;)  </span></span><br><span class="line">lexer.<span class="built_in">expect</span>(<span class="built_in"><span class="keyword">int</span></span>(<span class="string">&#x27;)&#x27;</span>));    <span class="comment">// 检查并返回token(int(&#x27;)&#x27;), &#x27;)&#x27;) </span></span><br></pre></td></tr></table></figure>
+<p>这些查询到的 token 以及检查工具给子图构建打下了基础。</p>
+<h5 id="python接口-c">python接口-&gt;C++</h5>
+<p>使用parser_def解析代码文件，进行Python AST构造，传入<code>_jit_script_compile</code>：</p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/de7219e8a7f3b2f8e20162f3b5af338df2e110c1/torch/jit/_script.py#L1039">script</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/de7219e8a7f3b2f8e20162f3b5af338df2e110c1/torch/jit/frontend.py#L247">get_jit_def</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/de7219e8a7f3b2f8e20162f3b5af338df2e110c1/torch/jit/frontend.py#L325">build_def</a></th>
+<th>case：生成的一个语法树示例<code>a = a + 2</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>def script(obj, optimize=None, _frames_up=0, _rcb=None):    # 如果是已经 scripted 过的对象则直接返回    if isinstance(obj, ScriptFunction):        return obj                    # this is a decorated fn, and we need to the underlying fn and its rcb    if hasattr(obj, &quot;__script_if_tracing_wrapper&quot;):        obj = obj.__original_fn        _rcb = _jit_internal.createResolutionCallbackFromClosure(obj)                    # 检查是否有重载，因为 function 是根据函数名寻找函数的    _check_directly_compile_overloaded(obj)        # 检查之前是否编译过了    maybe_already_compiled_fn = _try_get_jit_cached_function(obj)    if maybe_already_compiled_fn:        return maybe_already_compiled_fn          # 获得抽象语法树    ast = get_jit_def(obj, obj.__name__)    if _rcb is None:        _rcb = _jit_internal.createResolutionCallbackFromClosure(obj)        # 调用 C++ 函数，根据抽象语法树获得 IR    fn = torch._C._jit_script_compile(        qualified_name, ast, _rcb, get_default_args(obj)    )    # Forward docstrings    fn.__doc__ = obj.__doc__        # 将编译结果缓存    _set_jit_function_cache(obj, fn)    return fn</code></td>
+<td><code>def get_jit_def(fn, def_name, self_name=None, is_classmethod=False):    # 从py文件里解析字符串成py_ast    parsed_def = parse_def(fn) if not isinstance(fn, _ParsedDef) else fn    type_line = torch.jit.annotations.get_type_line(parsed_def.source)    fn_def = parsed_def.ast.body[0]     if is_classmethod:        arg_name = fn_def.args.args[0].arg        # Insert a statement that assigns the first argument to the class        assign_stmt = ast.parse(f&quot;&#123;arg_name&#125; = &#123;self_name&#125;&quot;).body[0]        fn_def.body.insert(0, assign_stmt)     # Swap out the function signature and body if it is unused    if should_drop(fn):        unused_fn_def = ast.parse(&quot;def unused_fn(self: Any):\n\traise RuntimeError(\&quot;Cannot call @unused methods\&quot;)&quot;)        if len(unused_fn_def.body) != 1 or not isinstance(unused_fn_def.body[0], ast.FunctionDef):            raise RuntimeError(f&quot;Expected a single top-level function: &#123;parsed_def.filename&#125;:&#123;parsed_def.file_lineno&#125;&quot;)        unused_def = unused_fn_def.body[0]        fn_def.body = unused_def.body        # kwarg/vararg not supported by</code>build_def<code>fn_def.args.kwarg = fn_def.args.vararg = None        for arg in fn_def.args.args + fn_def.args.kwonlyargs:            # Replace potentially unsupported type annotations by &quot;Any&quot;            arg.annotation = unused_def.args.args[0].annotation     # If MonkeyType is installed, get all the consolidated type traces    # for the arguments from type_trace_db    type_trace_db = torch.jit._script._get_type_trace_db()    pdt_arg_types = None    if monkeytype_trace and not isinstance(fn, _ParsedDef):        qualname = get_qualified_name(fn)        pdt_arg_types = type_trace_db.get_args_types(qualname)     return build_def(parsed_def.ctx, fn_def, type_line, def_name, self_name=self_name, pdt_arg_types=pdt_arg_types)</code></td>
+<td><code>def build_def(ctx, py_def, type_line, def_name, self_name=None, pdt_arg_types=None):    body = py_def.body    r = ctx.make_range(py_def.lineno + len(py_def.decorator_list),                       py_def.col_offset,                       py_def.col_offset + len(&quot;def&quot;))     param_list = build_param_list(ctx, py_def.args, self_name, pdt_arg_types)    return_type = None    if getattr(py_def, 'returns', None) is not None:        return_type = build_expr(ctx, py_def.returns)     decl = Decl(r, param_list, return_type)    is_method = self_name is not None    if type_line is not None:        type_comment_decl = torch._C.parse_type_comment(type_line)        decl = torch._C.merge_type_from_type_comment(decl, type_comment_decl, is_method)     return Def(Ident(r, def_name),               decl,               # 对语法树进行递归调用，stmt 是 statement（语句）的简写               build_stmts(ctx, body))</code></td>
+<td>简化版<strong><code>py_ast</code></strong>：<code>ast.body[0]    _ast.Assign        op: _ast.Add        left: _ast.Name            id: a        right: _ast.Num            id: 2    _ast.Return        value: _ast.Name            id: a</code>AST树：<code>(def  (ident my_func)  (decl    (list      (param        (ident a)        (option (variable (ident int)))        (option)        (False)))    (option (variable (ident int))))  (list    (assign      (list (variable (ident a)))      (option        (+          (variable (ident a))          (const 2)))      (option))    (return (variable (ident a)))))</code></td>
+</tr>
+</tbody>
+</table>
+<h5 id="c部分-1">C++部分</h5>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/c0a7c1d02e193de79a99b049b1075f2f6ef9eb52/torch/csrc/jit/python/script_init.cpp#L1595">_jit_script_compile</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/c0a7c1d02e193de79a99b049b1075f2f6ef9eb52/torch/csrc/jit/python/script_init.cpp#L399">script_compile_function</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/4c04f6da74b53b41fd0fe8374fddcee8b8a9b1c1/torch/csrc/jit/frontend/ir_emitter.cpp#L5363">cu-&gt;define</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/4c04f6da74b53b41fd0fe8374fddcee8b8a9b1c1/torch/csrc/jit/frontend/ir_emitter.cpp#L5305">define</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/4c04f6da74b53b41fd0fe8374fddcee8b8a9b1c1/torch/csrc/jit/frontend/ir_emitter.cpp#L642">to_ir</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/4c04f6da74b53b41fd0fe8374fddcee8b8a9b1c1/torch/csrc/jit/frontend/ir_emitter.cpp#L754">emitDef</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/4c04f6da74b53b41fd0fe8374fddcee8b8a9b1c1/torch/csrc/jit/frontend/ir_emitter.cpp#L1089">emitStatements</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/6dae1e419ea4e30be0efaf6cfdf5b1bf3de1a054/torch/csrc/jit/frontend/lexer.h">lexer.h TC_FORALL_TOKEN_KINDS</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/4c04f6da74b53b41fd0fe8374fddcee8b8a9b1c1/torch/csrc/jit/frontend/ir_emitter.cpp#L2261">emitIf</a></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>m.def(      &quot;_jit_script_compile&quot;,      [](const std::string&amp; qualname,         const Def&amp; def, // AST         const ResolutionCallback&amp; rcb,         const FunctionDefaults&amp; defaults) &#123;        C10_LOG_API_USAGE_ONCE(&quot;torch.script.compile&quot;);        const auto name = c10::QualifiedName(qualname);        TORCH_INTERNAL_ASSERT(name.name() == def.name().name());        return script_compile_function(name, def, defaults, rcb);      &#125;);</code></td>
+<td><code>static StrongFunctionPtr script_compile_function(    const c10::QualifiedName&amp; name,    const Def&amp; def,    const FunctionDefaults&amp; defaults,    const ResolutionCallback&amp; rcb) &#123;  auto cu = get_python_cu();  auto defined_functions = cu-&gt;define(      QualifiedName(name.prefix()),      /*properties=*/&#123;&#125;,      /*propResolvers=*/&#123;&#125;,      &#123;def&#125;,      &#123;pythonResolver(rcb)&#125;,      nullptr,      true);  TORCH_INTERNAL_ASSERT(defined_functions.size() == 1);  auto&amp; defined = defined_functions[0];  defined-&gt;setSchema(getSchemaWithNameAndDefaults(      def.range(), defined-&gt;getSchema(), def.name().name(), defaults));  StrongFunctionPtr ret(std::move(cu), defined);  didFinishEmitFunction(ret);  return ret; &#125;</code></td>
+<td><code>// for historic reasons, these are defined in ir_emitter.cpp // Returns the list of Functions just defined. std::vector&lt;Function*&gt; CompilationUnit::define(  const c10::optional&lt;c10::QualifiedName&gt;&amp; prefix,  const std::vector&lt;Property&gt;&amp; properties,  const std::vector&lt;ResolverPtr&gt;&amp; propResolvers,  const std::vector&lt;Def&gt;&amp; definitions,  // 这个是 torch 抽象语法树  const std::vector&lt;ResolverPtr&gt;&amp; defResolvers,  // determines how we handle free variables in each definition  const Self* self,  // if non-null, the first argument to each def, is bound to this value  bool shouldMangle = false  /* see [name mangling] */) &#123;  TORCH_INTERNAL_ASSERT(definitions.size() == defResolvers.size());  TORCH_INTERNAL_ASSERT(properties.size() == propResolvers.size());  std::vector&lt;Function*&gt; functions;  std::unordered_map&lt;std::string, Function*&gt; function_table;   // Records fn in function_table, functions and with register_function.  // This is done several times below, so this lambda helps avoid repeating  // code.  auto record_function = [&amp;](std::unique_ptr&lt;Function&gt; fn) &#123;    function_table[fn-&gt;name()] = fn.get();    functions.emplace_back(fn.get());    this-&gt;register_function(std::move(fn));  &#125;;   for (size_t i = 0; i &lt; properties.size(); i++) &#123;    PropertyPair property_fns = define_property(        prefix,        properties[i],        propResolvers[i],        self,        function_table,        shouldMangle);     auto&amp; getter_fn = property_fns.getGetter();    auto&amp; setter_fn = property_fns.getSetter();     record_function(std::move(getter_fn));     if (setter_fn) &#123;      record_function(std::move(setter_fn));    &#125;  &#125;   // torch 抽象语法树传给了 define 函数的另一个重载  for (size_t i = 0; i &lt; definitions.size(); i++) &#123;    auto fn = define(        prefix,        definitions[i],        defResolvers[i],        self,        function_table,        shouldMangle,        CompilationUnit::FunctionType::Method);     // fn 包含了 creator 函数，其功能是将 AST 转为 IR    record_function(std::move(fn));  &#125;   // We need to compile</code><strong>init</strong><code>first, since it can determine what attributes  // are available to other methods. So reorder the definitions accordingly.  for (auto&amp; kv : function_table) &#123;    if (kv.first == &quot;__init__&quot;) &#123;      kv.second-&gt;ensure_defined();    &#125;  &#125;   for (Function* function : functions) &#123;    // 调用 function 中保存的 creator，通过 AST 创建 IR，存入 function 中    function-&gt;ensure_defined();  &#125;   return functions; &#125; void GraphFunction::ensure_defined() &#123;  if (function_creator_) &#123;    auto creator = function_creator_;    function_creator_ = placeholderCreator;    creator(*this);    function_creator_ = nullptr;  &#125;  check_single_output(); &#125;</code></td>
+<td>在 <code>define</code> 函数中，<code>function</code> 中保存的 <code>creator</code> 被调用，其通过 AST 创建 IR，存入 <code>function</code> 中。<code>creator</code> 函数会调用 <code>to_ir</code> 创建 IR。<code>std::unique_ptr&lt;Function&gt; CompilationUnit::define(    const c10::optional&lt;QualifiedName&gt;&amp; prefix,    const Def&amp; def,    const ResolverPtr&amp; resolver,    const Self* self,    const std::unordered_map&lt;std::string, Function*&gt;&amp; function_table,    bool shouldMangle,    CompilationUnit::FunctionType type,    c10::optional&lt;size_t&gt; operator_set_version) const &#123;  TORCH_INTERNAL_ASSERT(resolver);  auto _resolver = resolver;  if (!self) &#123;    // if self is defined, then these are methods and do not go into the    // global namespace otherwise, they get defined together so we add them to    // the function table so the methods can see each other    _resolver =        std::make_shared&lt;FunctionResolver&gt;(resolver.get(), function_table);  &#125;  //creator 将 def（存有 torch 抽象语法树）通过 FunctionResolver 转成 IR 存入 method 中  auto creator = [def, _resolver, self](GraphFunction&amp; method) &#123;    // Store the function name so that it can be referenced if there is an error    // while compiling this function    std::string call_name = method.qualname().name();    if (self) &#123;      auto atoms = method.qualname().atoms();      // There should be at least a ClassName.method_name      TORCH_INTERNAL_ASSERT(atoms.size() &gt;= 2);      call_name = atoms.at(atoms.size() - 2) + &quot;.&quot; + atoms.at(atoms.size() - 1);    &#125;    ErrorReport::CallStack call(call_name, def.range());    to_ir(def, _resolver, self, method);  &#125;;  auto name = prefix ? QualifiedName(*prefix, def.name().name())                     : QualifiedName(def.name().name());  if (shouldMangle) &#123;    // If</code>shouldMangle<code>is set, we should generate a unique name for this    // function if there is already an existing one.    if (find_function(name)) &#123;      name = mangle(name);    &#125;  &#125;   auto graph = std::make_shared&lt;Graph&gt;();  graph-&gt;set_op_version(operator_set_version);   auto fn = torch::make_unique&lt;GraphFunction&gt;(std::move(name), graph, creator);  if (self) &#123;    // Register this as a method on</code>self<code>'s type    if (type == CompilationUnit::FunctionType::Hook) &#123;      self-&gt;getClassType()-&gt;addForwardHook(fn.get());    &#125; else if (type == CompilationUnit::FunctionType::PreHook) &#123;      self-&gt;getClassType()-&gt;addForwardPreHook(fn.get());    &#125; else &#123;      self-&gt;getClassType()-&gt;addMethod(fn.get());    &#125;  &#125;  return fn; &#125;</code></td>
+<td><code>struct to_ir &#123;  to_ir(      const Def&amp; def,      ResolverPtr resolver_,      const Self* self,      GraphFunction&amp; method) // method being constructed      : method(method),        graph(method.graph()),        resolver(std::move(resolver_)),        typeParser_(resolver),        environment_stack(nullptr) &#123;    AT_ASSERT(resolver);    pushFrame(graph-&gt;block(), /*starts_def=*/true);     // Type annotations exclude explicitly typing the &quot;self&quot; parameter, so in    // the case that this is a method with self we expect one fewer parameter    // annotation than the number of parameters this Def takes.    if (self &amp;&amp; def.decl().params().size() == 0) &#123;      throw ErrorReport(def.decl().params().range())          &lt;&lt; &quot;methods must have a self argument&quot;;    &#125;    method.setSchema(emitDef(def, self, graph-&gt;block())); #if ENABLE_UPGRADERS    // At this point, we might have received a graph that is compiled with    // old operator schemas that might not exist in the system anymore.    // Therefore, we replace such ops with its' valid upgrader.    ReplaceOldOperatorsWithUpgraders(graph); #endif     // NB ORDERING: SSA conversion has to occur before    // lifting of closures and forks, this way closures are converted    // to SSA while part of their original graph, and closures are ready to    // be inlined into forked closures    ConvertToSSA(graph);     // convert loops with an iter and body condition specified to    // python-recognize while loops. we do this so they can be exported,    // and run the pass early to avoid jitter. Like conversion to SSA,    // it only needs to run once.    CanonicalizeModifiedLoops(graph);     // Convert Ops to a Normalized Form    NormalizeOps(graph);     runCleanupPasses(graph);  &#125;</code></td>
+<td>在 <code>emitStatements</code> 函数中，语句根据其类型被 emit 到 <code>Graph</code> 中。<code>FunctionSchema emitDef(const Def&amp; def, const Self* self, Block* block) &#123;    auto schema = typeParser_.parseSchemaFromDef(def, bool(self));    // TODO need guards on init returning none    if (schema.returns().size() == 1) &#123;      def_stack_.back().declared_return_type_ = schema.returns().at(0).type();    &#125;    std::vector&lt;Argument&gt; arguments =        emitFormalArguments(def, self, schema, block);     // body    auto stmts_list = def.statements();    emitStatements(stmts_list.begin(), stmts_list.end());    handleMaybeNoReturn(def, block);    std::vector&lt;Argument&gt; returns = &#123;emitOutput(def.range(), schema, block)&#125;;    return &#123;def.name().name(), &quot;&quot;, std::move(arguments), std::move(returns)&#125;;  &#125;</code></td>
+<td><code>emit&quot;X&quot;</code>函数会调用 <code>graph-&gt;insert</code> 将各种 <code>Node</code> 插入到 <code>Graph</code> 中。<code>void emitStatements(      List&lt;Stmt&gt;::const_iterator begin,      List&lt;Stmt&gt;::const_iterator end) &#123;    for (; begin != end; ++begin) &#123;      auto stmt = *begin;      ErrorReport::CallStack::update_pending_range(stmt.range());      switch (stmt.kind()) &#123;        case TK_IF:          emitIf(If(stmt));          break;        case TK_WHILE:          emitWhile(While(stmt));          break;        case TK_FOR:          emitFor(For(stmt));          break;        case TK_ASSIGN:          emitAssignment(Assign(stmt));          break;        case TK_AUG_ASSIGN:          emitAugAssignment(AugAssign(stmt));          break;        case TK_EXPR_STMT: &#123;          auto expr = ExprStmt(stmt).expr();          emitSugaredExpr(expr, 0);        &#125; break;        case TK_RAISE:          emitRaise(Raise(stmt));          break;        case TK_ASSERT:          emitAssert(Assert(stmt));          break;        case TK_RETURN: &#123;          emitReturn(Return(stmt));        &#125; break;        case TK_CONTINUE: &#123;          emitContinue(Continue(stmt));        &#125; break;        case TK_BREAK: &#123;          emitBreak(Break(stmt));        &#125; break;        case TK_PASS:          // Emit nothing for pass          break;        case TK_DEF:          emitClosure(Def(stmt));          break;        case TK_DELETE:          emitDelete(Delete(stmt));          break;        case TK_WITH:          emitWith(With(stmt));          break;        default:          throw ErrorReport(stmt)              &lt;&lt; &quot;Unrecognized statement kind &quot; &lt;&lt; kindToString(stmt.kind());      &#125;      // Found an exit statement in this block. The remaining statements aren't      // reachable so we don't emit them.      if (exit_blocks.count(environment_stack-&gt;block()))        return;    &#125;  &#125;</code></td>
+<td><code>#define TC_FORALL_TOKEN_KINDS(_)                 \  // ...  _(TK_DEF, &quot;def&quot;, &quot;def&quot;)                        \  _(TK_EQUIVALENT, &quot;equivalent&quot;, &quot;&lt;=&gt;&quot;)          \  _(TK_IDENT, &quot;ident&quot;, &quot;&quot;)   // ....   _(TK_ATTRIBUTE, &quot;attribute&quot;, &quot;&quot;)               \  _(TK_IF, &quot;if&quot;, &quot;if&quot;)                           \  _(TK_ELSE, &quot;else&quot;, &quot;else&quot;)   // ...</code></td>
+<td><code>void emitIf(const If&amp; stmt) &#123;    Expr cond = stmt.cond();    CondValue cond_value = emitCondExpr(cond);    emitIfElseBlocks(        stmt.range(), cond_value, stmt.trueBranch(), stmt.falseBranch());  &#125;</code> <a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/4c04f6da74b53b41fd0fe8374fddcee8b8a9b1c1/torch/csrc/jit/frontend/ir_emitter.cpp#L1913">emitIfElseBlocks</a><code>void emitIfElseBlocks(      const SourceRange&amp; loc,      const CondValue&amp; cond_value,      const List&lt;Stmt&gt;&amp; trueBranch,      const List&lt;Stmt&gt;&amp; falseBranch) &#123;    // this is a static if statement: that is, it contains a subset    // of operators where we are willing to specialize the if statement    // to be only the true or false branch when the condition is statically    // known. This is used to meta-program modules, for instance, when a    // submodule is absent, an is None check can be used to ensure the    // accesses to the None check, which would error, are not compiled.    if (cond_value.staticIf()) &#123;      if (*cond_value.staticIf()) &#123;        insertRefinements(loc, cond_value.refinements());        emitStatements(trueBranch);      &#125; else &#123;        insertRefinements(loc, cond_value.refinements().Not());        emitStatements(falseBranch);      &#125;      return;    &#125;     Node* n = graph-&gt;insertNode(create(prim::If, loc, 0));    n-&gt;addInput(cond_value.value());    auto* true_block = n-&gt;addBlock();    auto* false_block = n-&gt;addBlock();     // Emit both blocks once to get the union of all mutated values    auto save_true =        emitSingleIfBranch(true_block, trueBranch, cond_value.refinements());    auto save_false = emitSingleIfBranch(        false_block, falseBranch, cond_value.refinements().Not());     bool true_exits = exit_blocks.count(true_block);    bool false_exits = exit_blocks.count(false_block);    if (true_exits &amp;&amp; false_exits) &#123;      exit_blocks.insert(n-&gt;owningBlock());    &#125;    # .....</code></td>
+</tr>
+</tbody>
+</table>
+<p><a target="_blank" rel="noopener" href="https://zasdfgbnm.github.io/2018/09/20/PyTorch-JIT-Source-Code-Read-Note/">PyTorch JIT Source Code Read Note</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.zh0ngtian.tech/posts/b1864870.html">TorchScript 原理篇(上) - 保存模型 | PyTorch - zhongtian' s blog</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cvmart.net/community/detail/4576">PyTorch 源码解读之即时编译篇</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/410507557">PyTorch系列「一」PyTorch JIT —— trace/ script的代码组织和优化方法</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/489090393">TorchScript 解读（二）：Torch jit tracer 实现解析</a></p>
+<h4 id="计算图级别的中间表示优化">计算图级别的中间表示优化</h4>
+<blockquote>
+<p>完成 Tracing 后，会对 Graph 进行一些简单的优化，包括如下数个 passes：</p>
+<ul>
+<li><a href="https://link.zhihu.com/?target=https%3A//github.com/pytorch/pytorch/blob/f883ed9095b26ba042509785f14076188a452c01/torch/csrc/jit/passes/inliner.cpp">Inline</a>(Optional)：网络定义经常会包含很多嵌套结构，比如<code>Resnet</code>会由很多<code>BottleNeck</code>组成。这就会涉及到对 sub module 的调用，这种调用会生成<code>prim::CallMethod</code>等 Node。Inline 优化会将 sub module 的 Graph 内联到当前的 Graph 中，消除 CallMethod、CallFunction 等节点。</li>
+</ul>
+</blockquote>
+<p>举个例子：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inline_pass</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;test_pass&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    inline_pass()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;test_main&#x27;</span>)</span><br><span class="line"></span><br><span class="line">inline优化后变成：</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;test_pass&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;test_main&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>使用<code>_jit_pass_inline</code>可以把sub module的调用可视化出来（之前讨论的拿到模型文件能不能解析结构的问题）：</p>
+<blockquote>
+<ul>
+<li><p><a href="https://link.zhihu.com/?target=https%3A//github.com/pytorch/pytorch/blob/f883ed9095b26ba042509785f14076188a452c01/torch/csrc/jit/passes/fixup_trace_scope_blocks.cpp">FixupTraceScopeBlock</a>：处理一些与 scope 相关的 node，比如将诸如<code>prim::TracedAttr[scope=&quot;__module.f.param&quot;]()</code>这样的 Node 拆成数个<code>prim::GetAttr</code>的组合。</p></li>
+<li><p><a href="https://link.zhihu.com/?target=https%3A//github.com/pytorch/pytorch/blob/f883ed9095b26ba042509785f14076188a452c01/torch/csrc/jit/passes/normalize_ops.cpp">NormalizeOps</a>：有些不同名 Node 可能有相同的功能，比如<code>aten::absolute</code>和<code>aten::abs</code>，N ormalizeOps 会把这些 Node 的类型名字统一（通常为较短的那个）。</p></li>
+</ul>
+</blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/bf60c6e71b2a62549183bbb4187fa5641267948c/torch/csrc/jit/passes/dead_code_elimination.cpp#L453">EliminateDeadCode</a>：死码消除
+<ul>
+<li>减少代码的长度，增加可读性</li>
+<li>避免执行不必要的操作，提高了运行的效率,减少了运行时间</li>
+<li>节省不必要的资源分配,优化空间</li>
+</ul></li>
+<li><p>例子：</p></li>
+<li><ul>
+<li>```C++ int func(){ int a=1,b=2,c=3; c+=a; return c; b+=a; return b ; } 死码消除后： int func(){ int a=1,b=2,c=3; c+=a; return c; } <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">### 如何扩展-[自定义C++运算扩展TorchScript](https://cugtyt.github.io/blog/effective-pytorch/20190914.html)</span><br><span class="line"></span><br><span class="line">[Extending TorchScript with Custom C++ Operators - PyTorch Tutorials 1.12.0+cu102 documentation](https://pytorch.org/tutorials/advanced/torch_script_custom_ops.html)</span><br><span class="line"></span><br><span class="line">[Making Native Android Application that uses PyTorch prebuilt libraries ‒ PyTorch Tutorials 1.12.0+cu](https://pytorch.org/tutorials/recipes/android_native_app_with_custom_op.html#preparing-torchscript-model-with-custom-c-operator)</span><br><span class="line"></span><br><span class="line">使用RegisterOperators把已经实现的warp_perspective算子注册到torch.ops中：</span><br><span class="line"></span><br><span class="line">```C++</span><br><span class="line">static auto registry =  torch::RegisterOperators(&quot;my_ops::warp_perspective&quot;, &amp;warp_perspective);</span><br></pre></td></tr></table></figure></li>
+</ul></li>
+</ul>
+<p>经过编译以后：通过加载.so获取自定义的ops：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line">torch.ops.<span class="built_in">load_library</span>(<span class="string">&quot;./libwarp_perspective.so&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(torch.ops.my_ops.warp_perspective)</span><br></pre></td></tr></table></figure>
+<h2 id="从torchscript到onnx高性能算子替换">从TorchScript到ONNX：高性能算子替换</h2>
+<p>根据编译器的习惯，对 IR 的变换通常被组织成 pass。所谓 pass 就是指对 IR 的一次遍历，通过这次遍历完成某种对 IR 的变换。pass阶段会做一些与机器无关的IR优化的操作，比如pytorch中<code>ToONNX</code>就会将 torchscript Graph 变换成 ONNX Graph，然后可以在ONNX runtime上进行高性能计算。</p>
+<p>PyTorch 本身定义了非常多的 pass，用来解决各种问题。子图重写是其中一个常用范式。</p>
+<h3 id="pass范式之一-子图重写">pass范式之一-子图重写</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/493955209">TorchScript 解读（三）：jit 中的 subgraph rewriter</a></p>
+<p>子图替换如其名字所示，根据特定的子图模式 P，对计算图 G 进行匹配，将找到的子图实例替换为另一种模式 R 的实例。一个实际的例子，下面是 <a href="https://link.zhihu.com/?target=https%3A//github.com/NVIDIA/Torch-TensorRT/blob/master/core/lowering/passes/unpack_addmm.cpp">Torch-TensorRT</a> （用于支持 torchscript 到 TensorRT 转换）中的代码片段，用于将<code>addmm</code>运算展开成数个算子，方便后续映射 TensorRT 算子：</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">UnpackAddMM</span><span class="params">(std::shared_ptr&lt;torch::jit::Graph&gt;&amp; graph)</span> </span>&#123; </span><br><span class="line">  <span class="comment">// TensorRT implicitly adds a flatten layer in front of FC layers if necessary </span></span><br><span class="line">  <span class="comment">// 用于匹配的模式 </span></span><br><span class="line">  std::string addmm_pattern = <span class="string">R&quot;IR( graph(%b, %x, %w, %beta, %alpha): </span></span><br><span class="line"><span class="string">      %out: Tensor = aten::addmm(%b, %x, %w, %beta, %alpha) </span></span><br><span class="line"><span class="string">      return (%out))IR&quot;</span>; <span class="comment">// 用于替换的模式 </span></span><br><span class="line">  std::string mm_add_pattern = <span class="string">R&quot;IR( graph(%b, %x, %w, %beta, %alpha): </span></span><br><span class="line"><span class="string">      %mm: Tensor = aten::matmul(%x, %w) </span></span><br><span class="line"><span class="string">      %bias: Tensor = aten::mul(%b, %beta) </span></span><br><span class="line"><span class="string">      %out: Tensor = aten::add(%bias, %mm, %alpha) </span></span><br><span class="line"><span class="string">      return (%out))IR&quot;</span>; <span class="comment">// 创建子图重写器并注册匹配模式和替换模式 </span></span><br><span class="line">  torch::jit::SubgraphRewriter unpack_addmm; </span><br><span class="line">  unpack_addmm.<span class="built_in">RegisterRewritePattern</span>(addmm_pattern, mm_add_pattern); </span><br><span class="line">  <span class="comment">// 遍历graph，完成重写 </span></span><br><span class="line">  unpack_addmm.<span class="built_in">runOnGraph</span>(graph); </span><br><span class="line">  <span class="built_in">LOG_GRAPH</span>(<span class="string">&quot;Post unpack addmm: &quot;</span> &lt;&lt; *graph); </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+<p>重写器完成了数项工作，包括：</p>
+<ol type="1">
+<li><p>读取并解析匹配图与替换图的 pattern 定义，生成匹配图 P 和替换图 R 的图结构（词法分析+子图构建）</p></li>
+<li><p>根据生成的匹配图 P，对计算图 G 进行匹配（子图匹配）</p></li>
+<li><p>将匹配到的计算图 G 进行替换（子图替换）</p></li>
+</ol>
+<p>暂时无法在飞书文档外展示此内容</p>
+<h4 id="词法分析子图构建">词法分析+子图构建</h4>
+<p>用前面提到的词法分析器Lexer，从给定的 pattern 字符串中创建匹配图 P 与替换图 R。</p>
+<p>有了词法分析器 Lexer 作为工具，就可以解析 pattern 字符串生成<code>Graph</code>。PyTorch 中 <a href="https://link.zhihu.com/?target=https%3A//github.com/pytorch/pytorch/blob/master/torch/csrc/jit/ir/irparser.cpp">IRParser</a>来完成pass过程中的子图构建，下面会以一个简单的例子来介绍分析过程。</p>
+<figure class="highlight perl"><table><tr><td class="code"><pre><span class="line">graph(%b, %x, %w, %beta, %alpha):  </span><br><span class="line">      %mm: Tensor = aten::matmul(%x, %w) </span><br><span class="line">      %bias: Tensor = aten::mul(%b, %beta) </span><br><span class="line">      %out: Tensor = aten::add(%bias, %mm, %alpha) </span><br><span class="line"> <span class="keyword">return</span> (%out) </span><br><span class="line"> </span><br><span class="line"><span class="comment"># 对应kind()的token序列 </span></span><br><span class="line">TK_IDENT(%TK_IDENT, %TK_IDENT, %TK_IDENT, %TK_IDENT, %TK_IDENT):  </span><br><span class="line">    %TK_IDENT: TK_IDENT = TK_IDENT::TK_IDENT(%TK_IDENT, %TK_IDENT)  </span><br><span class="line">    %TK_IDENT: TK_IDENT = TK_IDENT::TK_IDENT(%TK_IDENT, %TK_IDENT) </span><br><span class="line">    %TK_IDENT: TK_IDENT = TK_IDENT::TK_IDENT(%TK_IDENT, %TK_IDENT, %TK_IDENT) </span><br><span class="line"> TK_RETURN (%TK_IDENT) </span><br></pre></td></tr></table></figure>
+<p>通过下面一系列 parse 函数，例子中的 <strong>token 序列就可以被转换成对应的 Graph</strong>。</p>
+<table>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/ir/irparser.cpp#L105">irparse</a><code>/parse()</code>创建了初始的空的<code>Graph</code> <code>g</code>后，会按次序调用下面的三个 parse 过程：parseGraphInputs：负责解析 Graph 的输入（1，8）parseOperatorsList：负责解析 Graph 中的各个 Ops（2-4，9-11）parseReturnOperator：负责解析 Graph 的输出（5，12）三个 parse 处理的就是上面内容中与代码块中的行数一致的部分。用<code>Node</code>和<code>Value</code>填充<code>Graph</code>，直到完成建图。另外，还会创建一个类型为<code>std::unordered_map&lt;std::string, Value*&gt;</code>的<code>vmap</code>对象，把<code>Graph</code>中的<strong><code>Value</code>和它对应 pattern 中的名字映射起来</strong>，方便后续的检索与替换。</th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/ir/irparser.cpp#L535">parseGraphInputs</a>这个解析函数使用词法分析器解析<code>(%TK_IDENT, %TK_IDENT, ....)</code>这样格式的 token 序列。对于每个读到的kind()==<code>TK_IDENT</code>的 token，创建<code>Value</code>对象，插入<code>Graph</code>中作为图的输入，然后填充 vmap。</th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/ir/irparser.cpp#L461">parseOperatorsList</a>这一步所有形如<code>%TK_IDENT: TK_IDENT = TK_IDENT::TK_IDENT(%TNIDENT, ...)</code>的 token 序列，调用parseOperator 函数来生成对应的 Node 以及 Value。<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/ir/irparser.cpp#L159">parseOperatorOutputs</a>：负责解析 operator 的输出<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/ir/irparser.cpp#L468">parseOperatorName</a>：负责解析 domain 以及运算类型，创建出对应这个 operator 的Node<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/ir/irparser.cpp#L399">parseOperatorInputs</a>：负责解析 operator 输入</th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/ir/irparser.cpp#L550">parseReturnOperator</a>完成 operator 的解析并且确认下一个 token 为<code>TK_RETURN</code>后，就可以开始返回值的解析。返回值的解析方法与 GraphInputs 很像，解析到输出的 name 后，就可以查找<code>vmap</code>，得到对应的<code>Value</code>，注册成 Graph 的输出。</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>void parseIR(    const std::string&amp; str,    torch::jit::Graph* graph,    std::unordered_map&lt;std::string, Value*&gt;&amp; vmap,    bool parse_tensor_constants) &#123;  torch::jit::IRParser p(str, graph, vmap, parse_tensor_constants);  p.parse(); &#125; void IRParser::parse() &#123;  // Parse graph definition, it should look like the following:  // graphName (input1, input2, ... inputN):  std::string graphName = L.expect(TK_IDENT).text();  parseGraphInputs();  L.expect(':');   // After the definition we should have a list of statements, parse it:  parseOperatorsList(g-&gt;block());   // The last statement should be return, which specifies graph outputs  parseReturnOperator();   for (Node* n : deferred_tensor_value_initializations_) &#123;    auto type = n-&gt;output()-&gt;type()-&gt;expect&lt;TensorType&gt;();    auto tt = n-&gt;output()-&gt;type()-&gt;cast&lt;TensorType&gt;();    TORCH_INTERNAL_ASSERT(tt, &quot;expected tensor output &quot;, *n);    auto sizes = tt-&gt;sizes().concrete_sizes();    TORCH_INTERNAL_ASSERT(sizes);    auto strides = tt-&gt;strides().concrete_sizes();    TORCH_INTERNAL_ASSERT(strides);    auto device = tt-&gt;device();    TORCH_INTERNAL_ASSERT(device);    auto dtype = tt-&gt;scalarType();    TORCH_INTERNAL_ASSERT(dtype);    auto options = at::TensorOptions(*device).dtype(*dtype);    auto t = n-&gt;t_(attr::value, at::empty_strided(*sizes, *strides, options));    (void)t;  &#125;   for (Node* n : deferred_empty_container_initializations_) &#123;    auto type = n-&gt;output()-&gt;type();    IValue val;    if (type-&gt;kind() == TypeKind::ListType) &#123;      val = c10::impl::GenericList(type-&gt;containedType(0));    &#125; else if (type-&gt;kind() == TypeKind::DictType) &#123;      val = c10::impl::GenericDict(          type-&gt;containedType(0), type-&gt;containedType(1));    &#125;    n-&gt;ival_(attr::value, val);  &#125; &#125;</code></td>
+<td><code>void IRParser::parseGraphInputs() &#123;  parseList('(', ',', ')', [&amp;] &#123;    VarWithType v = parseVarWithType();    // If the name isn't valid, don't use it    std::string uniq_name = Value::isValidName(v.name) ? v.name : &quot;&quot;;    vmap[v.name] = g-&gt;addInput(uniq_name);    vmap[v.name]-&gt;setType(v.type);  &#125;); &#125; void IRParser::parseList(    int begin,    int sep,    int end,    const std::function&lt;void()&gt;&amp; callback) &#123;  if (begin != TK_NOTHING) &#123;    L.expect(begin);  &#125;  if (L.cur().kind != end) &#123;    do &#123;      callback();    &#125; while (L.nextIf(sep));  &#125;  if (end != TK_NOTHING) &#123;    L.expect(end);  &#125; &#125;</code></td>
+<td><code>void IRParser::parseOperator(Block* b) &#123;  // Parse lefthand side.  std::vector&lt;VarWithType&gt; outs;  parseOperatorOutputs(&amp;outs);   // Parse the name and create the corresponding node in the graph.  auto source_range = L.cur().range;  // 创建出对应这个 operator 的Node  std::string name = parseOperatorName();  Node* n = g-&gt;create(Symbol::fromQualString(name), &#123;&#125;, outs.size())                -&gt;setSourceRange(source_range);   // Parse attributes and inputs.  // **在vmap中查找这个Node的输入Value**  parseOperatorInputs(n);   const FunctionSchema* schema = n-&gt;maybeSchema();   // Register outputs.  // 根据 1 把Node的输出Value填充进vmap中  int idx = 0;  for (const VarWithType&amp; v : outs) &#123;    vmap[v.name] = n-&gt;outputs()[idx];    if (schema &amp;&amp; !schema-&gt;is_varret()) &#123;      auto schema_return_type = schema-&gt;returns().at(idx).type();      if (!v.type) &#123;        vmap[v.name]-&gt;setType(schema_return_type);      &#125; else &#123;        // Don't currently support checking against type variables        // TODO: support?        if (!schema_return_type-&gt;hasFreeVariables() &amp;&amp;            !v.type-&gt;isSubtypeOf(*schema_return_type)) &#123;          throw ErrorReport(source_range)              &lt;&lt; &quot;Annotated type &quot; &lt;&lt; v.type-&gt;repr_str()              &lt;&lt; &quot; does not match schema type &quot;              &lt;&lt; schema_return_type-&gt;repr_str() &lt;&lt; &quot; for operator &quot; &lt;&lt; *schema;        &#125;        vmap[v.name]-&gt;setType(v.type);      &#125;    &#125; else &#123;      vmap[v.name]-&gt;setType(v.type ? v.type : TensorType::get());    &#125;    idx++;  &#125;   // Insert the new node into block B.  b-&gt;appendNode(n);   // If the statement has nested blocks, parse them:  if (L.cur().kind == TK_INDENT) &#123;    parseBlocks(n);  &#125;  L.nextIf(TK_NEWLINE); &#125;``void IRParser::parseOperatorOutputs(std::vector&lt;VarWithType&gt;* outs) &#123;  if (L.cur().kind != '%') &#123;    return;  &#125;  parseList(TK_NOTHING, ',', TK_NOTHING, [&amp;] &#123;    outs-&gt;push_back(parseVarWithType(true));  &#125;);  L.expect('='); &#125; std::string IRParser::parseOperatorName() &#123;  std::string name = L.expect(TK_IDENT).text();  L.expect(':');  L.expect(':');  name += &quot;::&quot; + L.expect(TK_IDENT).text();  return name; &#125; void IRParser::parseOperatorInputs(Node* n) &#123;  if (L.cur().kind == '[') &#123;    parseAttrs(n);  &#125;  parseList('(', ',', ')', [&amp;] &#123;    std::string var_name = parseVar();    n-&gt;addInput(findValueInVMap(var_name));  &#125;); &#125;</code></td>
+<td><code>void IRParser::parseReturnOperator() &#123;  L.expect(TK_RETURN);   // Parse output names and types  parseList('(', ',', ')', [&amp;] &#123;    std::string var_name = parseVar();    g-&gt;registerOutput(findValueInVMap(var_name));  &#125;);   // Consume ending tokens  if (L.cur().kind != TK_EOF) &#123;    L.expect(TK_NEWLINE);    L.expect(TK_DEDENT);  &#125; &#125;</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="子图匹配">子图匹配</h4>
+<p>有了上面的 parser，就可以创建检索用的匹配图 P，查找计算图 G 中匹配的子图实例。匹配的入口为<code>findPatternMatches</code>，大致过程如下：</p>
+<ol type="1">
+<li><p>初始化<code>Match队列</code>为空队列</p></li>
+<li>对于 G 中每个节点：
+<ol type="1">
+<li>选择一个尚未被选为<code>anchor</code>的<code>Node</code>，如果没有则跳到步骤 3</li>
+<li>将该节点选为<code>anchor</code>，作为 n1，匹配图中产出返回值的 Node 当作 n2</li>
+<li>比较 n1 与 n2 的 kind、输入输出数量、属性等是否相同，如果不匹配则回到 a（<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/ir/subgraph_matcher.cpp#L238">matchNodes</a>）</li>
+<li>将这次匹配中 G 与 P 中对应的 Node 记录在<code>Match</code>中写入<code>Match队列</code>，回到 a</li>
+</ol></li>
+<li><p>匹配结束，返回<code>Match队列</code>。</p></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">std::vector&lt;Match&gt; <span class="title">findPatternMatches</span><span class="params">(<span class="keyword">const</span> Graph&amp; pattern, Graph&amp; graph)</span> </span>&#123;</span><br><span class="line">  <span class="built_in">AT_ASSERT</span>(<span class="built_in">patternGraphIsValid</span>(pattern));</span><br><span class="line">  <span class="built_in">GRAPH_DUMP</span>(<span class="string">&quot;Pattern graph: &quot;</span>, &amp;pattern);</span><br><span class="line">  <span class="built_in">GRAPH_DUMP</span>(<span class="string">&quot;Target graph: &quot;</span>, &amp;graph);</span><br><span class="line"></span><br><span class="line">  <span class="function">SubgraphMatcher <span class="title">m</span><span class="params">(pattern)</span></span>;</span><br><span class="line">  std::vector&lt;Match&gt; matches;</span><br><span class="line">  std::stack&lt;Block*&gt; blocks_to_visit;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Iterate over all nodes in the graph (including nodes in subblocks) trying</span></span><br><span class="line">  <span class="comment">// to match the pattern each node.</span></span><br><span class="line">  blocks_to_visit.<span class="built_in">push</span>(graph.<span class="built_in">block</span>());</span><br><span class="line">  <span class="keyword">while</span> (!blocks_to_visit.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">    Block* block = blocks_to_visit.<span class="built_in">top</span>();</span><br><span class="line">    blocks_to_visit.<span class="built_in">pop</span>();</span><br><span class="line">    <span class="keyword">for</span> (Node* n : block-&gt;<span class="built_in">nodes</span>()) &#123;</span><br><span class="line">      <span class="keyword">if</span> (m.<span class="built_in">matchesSubgraphFromAnchorNode</span>(n)) &#123;</span><br><span class="line">        matches.<span class="built_in">push_back</span>(&#123;n, m.<span class="built_in">nodes_map</span>(), m.<span class="built_in">values_map</span>()&#125;);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">for</span> (Block* subblock : n-&gt;<span class="built_in">blocks</span>()) &#123; <span class="comment">// 把当前node的subblock加到栈里面</span></span><br><span class="line">        blocks_to_visit.<span class="built_in">push</span>(subblock);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> matches;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><img src="https://bytedance.feishu.cn/space/api/box/stream/download/asynccode/?code=ZTBiZWNhNzU5NWFhZjM0Y2NiOWUxM2FjNTAxYzUzNTNfRXVnZVYzSVg1SmFpSm1CRWFUUlFNTWtLT3RNbVptVVVfVG9rZW46Ym94Y245V0FwMllGZElGRlR1WUE3cWZ6aGNiXzE2NTgwNDg0OTM6MTY1ODA1MjA5M19WNA" alt="img"></th>
+<th>左图与右图分别为计算图 G 与匹配图 P，为了方便描述对节点添加了标记。首先是节点 1 被选为 anchor，与<strong>匹配图中节点 c</strong> 进行比较，不匹配，跳过，节点 2 也同理跳过。节点 3 为 anchor 时与节点 c 匹配成功，然后是 2 和 b、1 和 a 的比较，全部成功，创建新<code>Match(&#123;a:1, b:2, c:3&#125;)</code>，加入 Match 队列。4 和 5 由于 anchor 匹配失败会被跳过，6 的 anchor 可以匹配成功，但是在进行 1 和 a 的 weight 匹配时失败（注意，weight 通常是一个 constant Node）因此也会被跳过。7~11由于 anchor 匹配失败都会被跳过，12 尽管anchor匹配成功，但是 11 和 b 匹配失败，因此跳过。最终，输出 Match 队列<code>[Match(&#123;a:1, b:2, c:3&#125;)]</code> 。</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="子图替换">子图替换</h4>
+<p>在上面的工具的帮助下，可以定义自己的 pattern 来编辑计算图。</p>
+<p>PyTorch 中管理图替换的接口为<code>SubgraphRewriter</code>类，该类提供了注册 pattern 以及替换子图的方法。</p>
+<ul>
+<li>pattern注册：<a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/passes/subgraph_rewrite.cpp#L51">RegisterRewritePattern</a></li>
+</ul>
+<p>注册匹配图 P 与替换图 R 的 pattern、以及一个<code>value_name_pairs</code>。<code>value_name_pairs</code>对象是一个<code>pair&lt;string,string&gt;</code>的数组，用来将替换图 R 中的 Node 映射到匹配图 P中。 注册过程仅仅是将它们保存在一个名为<code>RewritePatternDescr</code>的结构体中，保存下来方便后续使用。注册过程可以重复执行，<strong>注册多组 pattern，之后会一起进行匹配</strong>。 注意：注册之间存在先后顺序，先替换的子图可能会影响后续其他的替换。</p>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/passes/subgraph_rewrite.cpp#L51">RegisterRewritePattern</a></th>
+<th>https://github.com/pytorch/pytorch/blob/ba8d5f6f75bd2ec6156c75eb0f35408106251638/torch/csrc/jit/passes/xnnpack_rewrite.cpp#L276</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>void SubgraphRewriter::RegisterRewritePattern(    const std::string&amp; pattern,    const std::string&amp; replacement,    const std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt;&amp; value_name_pairs) &#123;  std::unordered_map&lt;std::string, std::string&gt; value_name_map(      value_name_pairs.begin(), value_name_pairs.end());  RewritePatternDescr d = &#123;pattern, replacement, value_name_map&#125;;  patterns_.push_back(d); &#125;</code></td>
+<td><code>std::string conv2d_prepack_run_relu_fused = R&quot;(    graph(%input, %weight, %bias, %stride:int[], %padding:int[],          %dilation:int[], %groups:int, %dummy_min_max):        %output_min: float = prim::Constant[value=0.0]()        %output_max: None = prim::Constant()        %packed_weight_bias : __torch__.torch.classes.xnnpack.Conv2dOpContext = prepacked::conv2d_clamp_prepack(            %weight, %bias, %stride, %padding, %dilation, %groups,            %output_min, %output_max)        %res = prepacked::conv2d_clamp_run(%input, %packed_weight_bias)        return (%res) )&quot;;   std::string linear_prepack_run_relu = R&quot;(    graph(%input, %weight, %bias, %dummy_min_max):        %packed_weight_bias = prepacked::linear_clamp_prepack(            %weight, %bias, %dummy_min_max, %dummy_min_max)        %linear_res = prepacked::linear_clamp_run(%input, %packed_weight_bias)        %res = aten::relu(%linear_res)        return (%res))&quot;;   std::vector&lt;std::pair&lt;std::string, std::string&gt;&gt; value_mappings(      &#123;&#123;"output_min", "packed_weight_bias"&#125;,       &#123;"output_max", "packed_weight_bias"&#125;,       &#123;"packed_weight_bias", "packed_weight_bias"&#125;,       &#123;"res", "res"&#125;&#125;);   rewriter.RegisterRewritePattern(      linear_prepack_run_relu, linear_prepack_run_relu_fused, value_mappings);</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>替换子图实现：</li>
+</ul>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/master/torch/csrc/jit/passes/subgraph_rewrite.cpp#L78">rewriteSinglePatternOnGraph</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/4b6ba340e211503b758ea6c3c173e1e7bbd9c11c/torch/csrc/jit/ir/ir.cpp">insertGraph</a></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>实际用于替换的接口方法为<code>runOnModule</code>或<code>runOnGraph</code>，分别对 Module 或 Graph 进行子图替换，<strong>按照注册时的顺序</strong>，逐个使用<code>RewritePatternDescr</code>中的 pattern 调用<code>rewriteSinglePatternOnGraph</code>进行替换。 这个函数接收 3 个参数，计算图 graph，匹配与替换用 pattern，以及一个用于过滤匹配结果的 filter。具体步骤：解析pattern，生成匹配图 P 与替换图 R，以及他们的 vmap 对象（名字与<code>Value</code>的映射），同子图构建。 如果注册时<code>value_name_pairs</code>非空，则生成<code>pattern_node_map</code>对象 匹配与检查：对图进行匹配， 进行必要的检查，记录哪些 Value 需要被重写，哪些 Node 需要被删除等等 匹配的过程就和之前子图匹配一样。在得到匹配结果后，需要对匹配结果进行检查，以确定匹配是否满足需求，具体检查的内容包括：是否能够满足所有 MatchFilter该 Match 结果是否未被先前的 Match 所使用查找替换图的插入点以及替换图在计算图中的输入节点，并确认插入点是否合法 在上述的检查全部通过，并且正确设置 Node 的属性后，就可以用之前找到的插入点，将替换图 R 插入计算图 G。注意插入后 R 还处于“悬空”状态，R 的输出尚未与 G 连接。 因此还要记录 R 的输出节点应该连接的位置<code>values_to_rewrite</code>，以及需要删除的节点<code>nodes_to_delete_</code>。 重写及删除： 根据 3 中记录的信息，进行重写以及删除。 到这里为止 G 处于匹配图 P 与替换图 R 共存的状态，为了完成替换，需要进行一些清理工作：将<code>values_to_rewrite</code>中记录的 R 的输出连接到 G 中断开<code>nodes_to_delete_</code>中节点与 G 的输入连接删除<code>nodes_to_delete_</code>中的节点 至此，替换正式完成。</td>
+<td><code>void SubgraphRewriter::rewriteSinglePatternOnGraph(    std::shared_ptr&lt;Graph&gt;&amp; graph,    const RewritePatternDescr&amp; pattern,    const std::vector&lt;MatchFilter&gt;&amp; filters) &#123;  std::unordered_map&lt;Value*, Value*&gt; rewrite_map;  std::vector&lt;Value*&gt; values_to_rewrite;   Graph pattern_graph;  std::unordered_map&lt;std::string, Value*&gt; vmap;  parseIR(pattern.pattern, &amp;pattern_graph, vmap);   Graph replacement_graph;  std::unordered_map&lt;std::string, Value*&gt; vmap_replacement;  parseIR(pattern.replacement, &amp;replacement_graph, vmap_replacement);   // First construct map of Node*-to-Node*  // This maps Nodes in replacement graph to nodes in pattern graph  // given the value_name_map, which maps value names from repalcement  // pattern to value name in pattern  std::unordered_map&lt;Node*, Node*&gt; pattern_node_map;  std::set&lt;const Node*&gt; pattern_input_nodes;  for (auto&amp; it : vmap_replacement) &#123;    const auto&amp; replacement_value_name = it.first;    Node* replacement_value_node = it.second-&gt;node();    if (pattern.value_name_map.count(replacement_value_name)) &#123;      const auto&amp; pattern_value_name =          pattern.value_name_map.at(replacement_value_name);      TORCH_CHECK(          vmap.count(pattern_value_name),          &quot;Value must be found in the replacement graph.&quot;);      Node* pattern_value_node = vmap.at(pattern_value_name)-&gt;node();      pattern_node_map.emplace(replacement_value_node, pattern_value_node);    &#125;  &#125;   const auto&amp; matches = findPatternMatches(pattern_graph, *graph);  for (const Match&amp; match : matches) &#123; // 过滤掉filter_pattern里面的pattern    if (!std::all_of(filters.begin(), filters.end(), [&amp;](const MatchFilter&amp; f) &#123;          return f(match, vmap);        &#125;)) &#123;      continue;    &#125;    // Matches might overlap with each other, in that case some of the nodes in    // the current match might have already been used in another folded pattern.    // We need to skip such matches.    // 如果当前的match和之前的有重叠，跳过    if (overlapsWithPreviousMatches(&amp;match)) &#123;      continue;    &#125;     // Figure out what values we need to use as inputs and outputs for the    // replacement subgraph and where the replacement subgraph needs to be    // inserted.    // 找出需要使用哪些值作为输入和输出替换子图，（插入点在第一个input-node前面）    // 以及替换子图需要在哪里插入。    Node* ins_point = nullptr;    std::vector&lt;Value*&gt; inputs, outputs;    for (Value* v : pattern_graph.inputs()) &#123;      Value* input = match.values_map.at(v);      if (!ins_point || ins_point-&gt;isBefore(input-&gt;node())) &#123;        ins_point = input-&gt;node();      &#125;      inputs.push_back(input);    &#125;    AT_ASSERT(ins_point);     // Check that the insertion point we've chosen precedes all the uses of the    // outputs - otherwise the replacement is incorrect and we have to skip it.    // 检查我们选择的插入点是否在所有输出使用之前    // 否则替换不正确，跳过。    bool ins_point_before_uses = true;    for (Value* v : pattern_graph.outputs()) &#123;      Value* output = match.values_map.at(v);      outputs.push_back(match.values_map.at(v));       for (const Use&amp; u : output-&gt;uses()) &#123;        if (u.user-&gt;isBefore(ins_point)) &#123;          ins_point_before_uses = false;          break;        &#125;      &#125;    &#125;     if (!ins_point_before_uses) &#123;      continue;    &#125;     // Before rewriting the graph, update source range and callstack    // info of the replacement pattern graph so that the rewritten graph    // has the updated info    update_source_range_and_cs_ptr(        pattern_input_nodes, match, pattern_node_map);    // Insert a clone of replacement subgraph.    //</code>inputs<code>vector holds values that we would use as incoming values to the    // new subgraph, and we will get</code>new_outputs<code>vector containing values    // produced by this new subgraph - we will then rewrite old outputs with the    // new ones.    WithInsertPoint insert_point(ins_point-&gt;next());    std::vector&lt;Value*&gt; new_outputs =        insertGraph(*graph, replacement_graph, inputs);     // Record all planned rewritings    AT_ASSERT(outputs.size() == new_outputs.size());    for (const auto idx : c10::irange(outputs.size())) &#123;      values_to_rewrite.push_back(outputs[idx]);      rewrite_map[outputs[idx]] =          new_outputs[idx]-&gt;setType(outputs[idx]-&gt;type());    &#125;    // Record all planned deletions    for (Node* pattern_n : pattern_graph.nodes()) &#123;      if (match.nodes_map.count(pattern_n)) &#123;        Node* n = match.nodes_map.at(pattern_n);        nodes_to_delete_.insert(n);      &#125;    &#125;  &#125;   // Perform planned rewritings  for (auto v : values_to_rewrite) &#123;    v-&gt;replaceAllUsesWith(rewrite_map.at(v));  &#125;   // Perform planned deletions  for (auto n : nodes_to_delete_) &#123;    n-&gt;removeAllInputs();  &#125;  for (auto n : nodes_to_delete_) &#123;    n-&gt;destroy();  &#125;  nodes_to_delete_.clear(); &#125;</code></td>
+<td><code>std::vector&lt;Value*&gt; new_outputs =        insertGraph(*graph, replacement_graph, inputs);``std::vector&lt;Value*&gt; insertGraph(    Graph&amp; g, //原始graph    Graph&amp; callee, //replacement_graph    ArrayRef&lt;Value*&gt; inputs,    std::unordered_map&lt;Value*, Value*&gt;&amp; value_map) &#123;  auto value_map_func = [&amp;](Value* v) &#123; return value_map.at(v); &#125;;  AT_ASSERT(callee.inputs().size() == inputs.size());  for (const auto i : c10::irange(inputs.size())) &#123;    value_map[callee.inputs()[i]] = inputs[i];  &#125;  for (auto* node : callee.nodes()) &#123;    auto* new_node = g.insertNode(g.createClone(node, value_map_func));    for (size_t i = 0; i &lt; node-&gt;outputs().size(); ++i) &#123;      value_map[node-&gt;outputs()[i]] = new_node-&gt;outputs()[i];    &#125;  &#125;   std::vector&lt;Value*&gt; outputs;  for (auto* output : callee.outputs()) &#123;    outputs.push_back(value_map_func(output));  &#125;   return outputs; &#125;</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="代码case子图重写">代码case：子图重写</h4>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>构建一个简单的网络并生成 jit 模型</th>
+<th>运算节点 2 是<code>aten::pow(%x, %1)。</code>如果因为某些原因我们不希望使用平方计算，就可以尝试用乘法来替换平方。 子图的定义很容易写，以 <code>graph (...)</code>开头，<code>return (...)</code>结尾，中间每一个变量都以百分号<code>%</code>开头，每行一个计算 Node。如果 Node 存在一些固定的属性，则加在 Node 名后的方括号内。</th>
+<th>然后调用替换接口，PyTorch 提供了 python 侧的封装<code>_jit_pass_custom_pattern_based_rewrite_graph``。</code>（实际上调用了<code>subgraph_rewriter.RegisterRewritePattern(</code> <code>pattern, fused_node_name, value_name_pairs);</code> <code>subgraph_rewriter.runOnGraph(g);</code>）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>import torch  def origin_func(x):     x = x**2     x = x**3     return x      x = torch.rand(1, 2, 3, 4)  jit_model = torch.jit.trace(origin_func, x)  print(jit_model.graph)   *# graph(%x.1 : Float(1, 2, 3, 4, strides=[24, 12, 4, 1], requires_grad=0, device=cpu)):*  *#   %1 : int = prim::Constant[value=2]() # rewriter_test.py:5:0*  *#   %x : Float(1, 2, 3, 4, strides=[24, 12, 4, 1], requires_grad=0, device=cpu) =* *aten::pow(%x.1, %1)* *# rewriter_test.py:5:0*  *#   %3 : int = prim::Constant[value=3]() # rewriter_test.py:6:0*  *#   %4 : Float(1, 2, 3, 4, strides=[24, 12, 4, 1], requires_grad=0, device=cpu) = aten::pow(%x, %3) # rewriter_test.py:6:0*  *#   return (%4)*</code></td>
+<td>定义了两个子图，一个用于匹配，一个用于替换：<code># 匹配用的子图定义，注意常量必须为[value=2]属性  pattern = &quot;&quot;&quot;     graph(%x):         %const_2 = prim::Constant[value=2]()         %out = aten::pow(%x, %const_2)         return (%out)  &quot;&quot;&quot;   # 替换用的子图定义  replacement = &quot;&quot;&quot;     graph(%x):         %out = aten::mul(%x, %x)         return (%out)  &quot;&quot;&quot;</code></td>
+<td><code>*# 使用刚才定义的 pattern与replacement来编辑graph*  torch._C._jit_pass_custom_pattern_based_rewrite_graph(pattern, replacement,                                                       jit_model.graph)   *# 结果可视化，pow(x,2)被正确替换为mul(x,x)，pow(x,3)则保留原样不受影响。*  print(jit_model.graph)  *# graph(%x.1 : Float(1, 2, 3, 4, strides=[24, 12, 4, 1], requires_grad=0, device=cpu)):*  *#   %5 : Tensor =* *aten::mul(%x.1, %x.1)*  *#   %3 : int = prim::Constant[value=3]() # rewriter_test.py:7:0*  *#   %4 : Float(1, 2, 3, 4, strides=[24, 12, 4, 1], requires_grad=0, device=cpu) = aten::pow(%5, %3) # rewriter_test.py:7:0*  *#   return (%4)*</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="toonnx">toONNX</h3>
+<p>toONNX也是其中一种pass，经过这个pass后，可以将torch的算子替换成ONNX的算子。</p>
+<p>opset_version 表示 ONNX 算子集的版本。深度学习的发展会不断诞生新算子，为了支持这些新增的算子，ONNX会经常发布新的算子集。</p>
+<ol type="1">
+<li><p>加载 ops 的 symbolic 函数，主要是 torch 中预定义的 symbolic。</p></li>
+<li><p>设置环境，包括 opset_version，是否折叠常量等等。</p></li>
+<li><p>使用 jit trace 生成 Graph。</p></li>
+<li><p>将 Graph 中的 Node 映射成 ONNX 的 Node，并进行必要的优化。</p></li>
+<li><p>将模型导出成 ONNX 的序列化格式。</p></li>
+</ol>
+<p>ToONNX 的 python 接口为<code>torch._C.``_jit_pass_onnx</code>。它会遍历 Graph 中所有的 Node，生成对应的 ONNX Node，插入新的 Graph 中：</p>
+<table>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>torch._C.``_jit_pass_onnx</code></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/9f541aa3aca768e7fbfa4a9d648b554f22b261f7/torch/csrc/jit/passes/onnx.cpp#L181">BlockToONNX</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/9f541aa3aca768e7fbfa4a9d648b554f22b261f7/torch/csrc/jit/passes/onnx.cpp#L231">NodeToONNX</a>通过<code>callPySymbolicFunction</code>和<code>callPySymbolicMethod</code>，就可以生成一个由 ONNX（或自定义的 domain 下的 Node）组成的新 Graph。</th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/563c2719bff5a13d7cd1e3c492a4d01edfc307eb/torch/csrc/jit/passes/onnx.cpp#L430">callPySymbolicMethod</a></th>
+<th><a target="_blank" rel="noopener" href="https://github.com/pytorch/pytorch/blob/563c2719bff5a13d7cd1e3c492a4d01edfc307eb/torch/csrc/jit/passes/onnx.cpp#L430">callPySymbolicMethod</a></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>// Transform PythonOps into Nodes that match ONNX semantics. std::shared_ptr&lt;Graph&gt; ToONNX(    std::shared_ptr&lt;Graph&gt;&amp; graph,    ::torch::onnx::OperatorExportTypes operator_export_type) &#123;  auto constant_value_map = ConstantValueMap::getInstance();  ConstantValueMap::ClearMaps();  auto new_graph = std::make_shared&lt;Graph&gt;(graph-&gt;current_scope());  std::unordered_map&lt;Value*, Value*&gt; env;  BlockToONNX(graph-&gt;block(), new_graph-&gt;block(), operator_export_type, env);  GRAPH_DUMP(&quot;after ToONNX: &quot;, new_graph);  ConstantValueMap::ClearMaps();  return new_graph; &#125;</code></td>
+<td><code>// BlockToONNX. // is_sub_block = true means the old_block (aten graph) is in the sub block // (e.g., if sub block), and we want to convert it into its parent block in onnx // graph. In this case, we don't register the input/output or eliminate the dead // code. std::unordered_map&lt;Value*, Value*&gt; BlockToONNX(    Block* old_block,    Block* new_block,    ::torch::onnx::OperatorExportTypes operator_export_type,    std::unordered_map&lt;Value*, Value*&gt;&amp; env,    bool is_sub_block) &#123;  torch::autograd::SymbolicContext ctx&#123;&#125;;  ctx.block = new_block;   GRAPH_DEBUG(      &quot;BlockToONNX: graph of old block: &quot;,      old_block-&gt;owningGraph()-&gt;toString());   // Initialize context and environment  if (!is_sub_block) &#123;    for (auto input : old_block-&gt;inputs()) &#123;      auto n = ctx.block-&gt;addInput()-&gt;copyMetadata(input);      env[input] = n;    &#125;  &#125;   // Finally, visit all nodes in the graph  for (auto node : old_block-&gt;nodes()) &#123;    NodeToONNX(node, ctx.block, operator_export_type, env);  &#125;   if (is_sub_block) &#123;    return env;  &#125;   // 注册输出  for (auto output : old_block-&gt;outputs()) &#123;    ctx.block-&gt;registerOutput(env.at(output));  &#125;  // Run dce to clean-up unused functional and inplace ops.  EliminateDeadCode(      ctx.block,      true,      DCESideEffectPolicy::ALLOW_DELETING_NODES_WITH_SIDE_EFFECTS);   return &#123;&#125;; &#125;</code></td>
+<td><code>void NodeToONNX( //...  auto k = old_node-&gt;kind();    /*/ 取得Node的ops类型*   if (k.is_caffe2()) &#123;     /*/ ToONNX之前的会有一些对caffe2算子的pass*     /*/ 因此这里只要直接clone到新的graph中即可*     cloneNode(old_node);   &#125; else if (k == prim::PythonOp) &#123;     /*/ 如果是Python自定义的函数，比如继承自torch.autograd.Function的函数*     /*/ 就会查找并调用对应的symbolic函数进行转换*     callPySymbolicMethod(static_cast&lt;ConcretePythonOp*&gt;(old_node));   &#125; else &#123;     /*/ 如果是其他情况（通常是aten的算子）调用步骤1加载的symbolic进行转换*     callPySymbolicFunction(old_node);   &#125;   // ...</code></td>
+<td>当 Node 的类型为 PyTorch 的内置类型时，会调用这个函数来处理。该函数会调用 python 侧的 <a href="https://link.zhihu.com/?target=https%3A//github.com/pytorch/pytorch/blob/9f541aa3aca768e7fbfa4a9d648b554f22b261f7/torch/onnx/utils.py%23L1045">torch.onnx.utils._run_symbolic_function</a> 函数，将 Node 进行转换，并插入新的 Graph。<code>_run_symbolic_function</code>会调用<code>torch.onnx.``symbolic_registry</code>中的<code>_find_symbolic_in_registry</code>函数，查找<code>_symbolic_versions</code>中是否存在满足条件的映射，如果存在，就会进行如上图中的转换。一个case：<code>graph = torch._C.Graph()  *# 创建Graph*  [graph.addInput() for _ in range(2)]  *# 插入两个输入*  node = graph.create('aten::add', list(graph.inputs()))  *# 创建节点*  node = graph.insertNode(node)  *# 插入节点*  graph.registerOutput(node.output())  *# 注册输出*  print(f'old graph:\n &#123;graph&#125;')   new_graph = torch._C.Graph()  *# 创建新的Graph用于ONNX*  [new_graph.addInput() for _ in range(2)]  *# 插入两个输入*  _run_symbolic_function(     new_graph, node, inputs=list(new_graph.inputs()),     env=&#123;&#125;)  *# 将aten Node转换为onnx Node， 插入新的Graph*  print(f'new graph:\n &#123;new_graph&#125;')</code>结果：Old graph<code>graph(%0 : Tensor,       %1 : Tensor):   %2 : Tensor = aten::add(%0, %1)   return (%2)</code>New graph<code>graph(%0 : Tensor,       %1 : Tensor):   %2 : Tensor = onnx::Add(%0, %1)   return ()</code>原来的<code>aten::add</code>节点已经被替换为了<code>onnx::Add</code>。注意：转换的新 Graph 中没有输出 Value，这是因为这部分是在 ToONNX 的 c++ 代码中实现，<code>_run_symbolic_function</code>仅负责 Node 的映射。</td>
+<td>一些非 pytorch 原生的计算会被标记为 PythonOp。碰到这种 Node 时，会有三种可能的处理方式：如果这个 PythonOp 带有名为 symbolic 的属性，那么就会尝试使用这个 symbolic当作映射函数，生成 ONNX 节点如果没有 symbolic 属性，但是在步骤 1 的时候注册了 prim::PythonOp 的 symbolic 函数，那么就会使用这个函数生成节点。如果都没有，则直接 clone PythonOp 节点到新的 Graph。symbolic 函数的写法很简单，基本上就是调用 python bind 的 Graph接口创建新节点，比如：<code>class CustomAdd(torch.autograd.Function):      @staticmethod     def forward(ctx, x, val):         return x + val      @staticmethod     def symbolic(g, x, val):         *# g.op 可以创建新的Node*         *# Node的名字 为 &lt;domain&gt;::&lt;node_name&gt;，如果domain为onnx，可以只写node_name*         *# Node可以有很多属性，这些属性名必须有_&lt;type&gt;后缀，比如val如果为float类型，则必须有_f后缀*         return g.op(&quot;custom_domain::add&quot;, x, val_f=val)</code>实际在使用上面的函数时，就会生成<code>custom_domain::add</code>这个 Node。能否被用于推理这就要看推理引擎的支持情况了。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="小总结">小总结</h2>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">冬于</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://ifwind.github.io/2022/07/17/%E4%BB%8EPytorch%E6%A8%A1%E5%9E%8B%E8%90%BD%E5%9C%B0%E5%BC%80%E5%A7%8B%E8%AF%B4%E8%B5%B7/">https://ifwind.github.io/2022/07/17/%E4%BB%8EPytorch%E6%A8%A1%E5%9E%8B%E8%90%BD%E5%9C%B0%E5%BC%80%E5%A7%8B%E8%AF%B4%E8%B5%B7/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://ifwind.github.io" target="_blank">冬于的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/fish.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/07/17/Parameter%20efficient%20tuning-%E8%B0%83%E7%A0%94/"><img class="next-cover" src="/img/fish.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info"></div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%8Epytorch%E6%A8%A1%E5%9E%8B%E8%90%BD%E5%9C%B0%E5%BC%80%E5%A7%8B%E8%AF%B4%E8%B5%B7"><span class="toc-number">1.</span> <span class="toc-text">从Pytorch模型落地开始说起</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2"><span class="toc-number">1.1.</span> <span class="toc-text">模型部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%8A%E4%B8%80%E4%B8%AAnn.module%E6%A8%A1%E5%9E%8B%E5%8F%98%E6%88%90%E5%8F%AF%E4%BB%A5%E9%83%A8%E7%BD%B2%E4%B8%8A%E7%BA%BF%E7%9A%84%E6%A8%A1%E5%9E%8B%E6%9C%89%E5%93%AA%E4%BA%9B%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.1.1.</span> <span class="toc-text">把一个nn.Module模型变成可以部署上线的模型有哪些步骤？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8nn.module%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2%E8%80%8C%E8%A6%81%E4%BD%BF%E7%94%A8%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BAir"><span class="toc-number">1.1.2.</span> <span class="toc-text">为什么不直接使用nn.Module模型部署，而要使用中间表示IR？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8Enn.module%E5%88%B0torchscript%E8%8E%B7%E5%8F%96%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BAir"><span class="toc-number">1.2.</span> <span class="toc-text">从nn.Module到TorchScript：获取中间表示IR</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BAir"><span class="toc-number">1.2.1.</span> <span class="toc-text">中间表示IR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pytorch-jit"><span class="toc-number">1.2.2.</span> <span class="toc-text">PyTorch JIT</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E8%BD%AC%E5%8C%96%E8%AE%A1%E7%AE%97%E5%9B%BE%E7%BA%A7%E5%88%AB%E4%BC%98%E5%8C%96%E5%86%85%E9%83%A8%E5%AE%8C%E6%88%90%E4%BA%86%E8%AE%A1%E7%AE%97%E5%9B%BE%E7%BA%A7%E5%88%AB%E7%9A%84ir%E4%BC%98%E5%8C%96-trace%E5%92%8Cscript"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">模型转化&amp;计算图级别优化（内部完成了计算图级别的IR优化）-trace和script</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.2.2.1.1.</span> <span class="toc-text">代码示例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">模型序列化</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B-1"><span class="toc-number">1.2.2.2.1.</span> <span class="toc-text">代码示例</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c%E5%A6%82%E4%BD%95%E5%8A%A0%E8%BD%BDtorch%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">C++如何加载torch模型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nn.moduletorchscriptir"><span class="toc-number">1.2.3.</span> <span class="toc-text">nn.Module&#x2F;TorchScript&#x2F;IR</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#nn.module%E4%B8%8Etorchscript%E7%BB%93%E6%9E%84%E7%9A%84%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">nn.Module与TorchScript结构的对应关系</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#pass"><span class="toc-number">1.2.3.2.1.</span> <span class="toc-text">Pass</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.4.</span> <span class="toc-text">如何实现？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#jit.trace"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">jit.trace</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#python%E6%8E%A5%E5%8F%A3--c"><span class="toc-number">1.2.4.1.1.</span> <span class="toc-text">python接口-&gt; c++</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#c%E9%83%A8%E5%88%86"><span class="toc-number">1.2.4.1.2.</span> <span class="toc-text">C++部分</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#traced_fn%E5%BB%BA%E5%9B%BE"><span class="toc-number">1.2.4.1.2.1.</span> <span class="toc-text">traced_fn建图</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jit.script"><span class="toc-number">1.2.4.2.</span> <span class="toc-text">jit.script</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.4.2.1.</span> <span class="toc-text">编译过程</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">1.2.4.2.1.1.</span> <span class="toc-text">词法分析</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#python%E6%8E%A5%E5%8F%A3-c"><span class="toc-number">1.2.4.2.2.</span> <span class="toc-text">python接口-&gt;C++</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#c%E9%83%A8%E5%88%86-1"><span class="toc-number">1.2.4.2.3.</span> <span class="toc-text">C++部分</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%9B%BE%E7%BA%A7%E5%88%AB%E7%9A%84%E4%B8%AD%E9%97%B4%E8%A1%A8%E7%A4%BA%E4%BC%98%E5%8C%96"><span class="toc-number">1.2.4.3.</span> <span class="toc-text">计算图级别的中间表示优化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8Etorchscript%E5%88%B0onnx%E9%AB%98%E6%80%A7%E8%83%BD%E7%AE%97%E5%AD%90%E6%9B%BF%E6%8D%A2"><span class="toc-number">1.3.</span> <span class="toc-text">从TorchScript到ONNX：高性能算子替换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pass%E8%8C%83%E5%BC%8F%E4%B9%8B%E4%B8%80-%E5%AD%90%E5%9B%BE%E9%87%8D%E5%86%99"><span class="toc-number">1.3.1.</span> <span class="toc-text">pass范式之一-子图重写</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90%E5%AD%90%E5%9B%BE%E6%9E%84%E5%BB%BA"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">词法分析+子图构建</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%90%E5%9B%BE%E5%8C%B9%E9%85%8D"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">子图匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%90%E5%9B%BE%E6%9B%BF%E6%8D%A2"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">子图替换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81case%E5%AD%90%E5%9B%BE%E9%87%8D%E5%86%99"><span class="toc-number">1.3.1.4.</span> <span class="toc-text">代码case：子图重写</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#toonnx"><span class="toc-number">1.3.2.</span> <span class="toc-text">toONNX</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">小总结</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By 冬于</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'E4LPmFetYyaT4NwjEGOl0u8Q-gzGzoHsz',
+      appKey: 'YKdl4HKX9W6jLSdPlypgEtDM',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: 'https://e4lpmfet.lc-cn-n1-shared.com',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/gh/HCLonely/Valine@latest/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.17.0/js/md5.min.js"></script><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getIcon = (icon, mail) => {
+    if (icon) return icon
+    let defaultIcon = '?d=monsterid'
+    let iconUrl = `https://gravatar.loli.net/avatar/${md5(mail.toLowerCase()) + defaultIcon}`
+    return iconUrl
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom.innerHTML= result
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const getComment = () => {
+    const serverURL = 'https://e4lpmfet.lc-cn-n1-shared.com'
+
+    var settings = {
+      "method": "GET",
+      "headers": {
+        "X-LC-Id": 'E4LPmFetYyaT4NwjEGOl0u8Q-gzGzoHsz',
+        "X-LC-Key": 'YKdl4HKX9W6jLSdPlypgEtDM',
+        "Content-Type": "application/json"
+      },
+    }
+
+    fetch(`${serverURL}/1.1/classes/Comment?limit=6&order=-createdAt`,settings)
+      .then(response => response.json())
+      .then(data => {
+        const valineArray = data.results.map(function (e) {
+          return {
+            'avatar': getIcon(e.QQAvatar, e.mail),
+            'content': changeContent(e.comment),
+            'nick': e.nick,
+            'url': e.url + '#' + e.objectId,
+            'date': e.updatedAt,
+          }
+        })
+        saveToLocal.set('valine-newest-comments', JSON.stringify(valineArray), 10/(60*24))
+        generateHtml(valineArray)
+      }).catch(e => {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.innerHTML= "无法获取评论，请确认相关配置是否正确"
+      }) 
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('valine-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener toc scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
